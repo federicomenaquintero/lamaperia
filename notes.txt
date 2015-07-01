@@ -1,0 +1,47 @@
+-*- org -*-
+
+* Mapa para bicis
+
+** Propósito
+
+Mapas para gente que va en bicicleta por los alrededores rurales de
+Xalapa.
+
+** Qué quieres ver en el mapa
+
+Dar importancia a los caminos bicicleteables de tierra.
+
+Muchos marcadores para saber dónde estás:  altares al lado del camino,
+puentes, riachuelos, bardas/rejas, muros de contención.  Plantíos.
+Construcciones aisladas y fáciles de identificar.  Cuerpos de agua.
+
+Letreros en el camino, como el de "Rincón de Piedra".
+
+¿Lugares de encharcamiento?
+
+Lugares para aprovisionarse.  Changarros, tiendas, fondas.
+
+Talleres de bicicletas en los pueblos.
+
+Lugares de peligro.  Vías pavimentadas estrechas, curvas ciegas,
+subidas ciegas.
+
+Lugares con vistas bonitas.
+
+Lugares para descansar - buena sombra.
+
+Indicación de la pendiente del camino.
+
+Curvas de nivel.
+
+Calidad y superficie del camino.
+
+* Letreros para el campo
+
+** Postes de direcciones en los cruceros, a la europea
+
+Foto en http://wiki.openstreetmap.org/wiki/Tag:information%3Dguidepost
+
+** Letreritos en los puentes para indicar qué río cruzan
+
+Ejemplos en http://www.gettingaroundgermany.info/zeichen2.shtml#info
