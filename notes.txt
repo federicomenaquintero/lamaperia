@@ -36,6 +36,10 @@ Curvas de nivel.
 
 Calidad y superficie del camino.
 
+** Referencias
+
+https://wiki.openstreetmap.org/wiki/User:Frederik_Ramm/Freiburg_Map
+
 * Letreros para el campo
 
 ** Postes de direcciones en los cruceros, a la europea
