@@ -57,3 +57,50 @@ Foto en http://wiki.openstreetmap.org/wiki/Tag:information%3Dguidepost
 ** Letreritos en los puentes para indicar qué río cruzan
 
 Ejemplos en http://www.gettingaroundgermany.info/zeichen2.shtml#info
+
+* Blog post
+
+Two of my current obsessions are related to each other:  bicycling
+on the rural roads around Xalapa, and mapping them in OpenStreetMap.
+
+Bicycling is the fun, visceral, right-brain part.  We have absolutely
+wonderful terrain here; Xalapa is on a mountainside, it is part of a
+cloud forest, and there are coffee plantations all over the place.
+
+Mapping is the left-brain, meticulous part.  A common exercise among
+local cyclists is to load up Google Earth and browse around to find
+interesting rural roads.  However, not all of them are shown on the
+map, and if they happen to be surrounded by trees, they will be hard
+to make out on the satellite view.
+
+I've been populating OpenStreetMap with our rural roads and paths
+among the plantations.  Some are easy to make out on the satellite
+view; others really require one to go about with a GPS and record a
+track to trace later into the map.  Along the way I've been locating
+useful landmarks like buildings, isolated houses, small bodies of
+water, small bridges over creeks, and the ubiquitous wayside shrines
+that people build here.  This has proved to be an interesting process.
+
+Some days I'll do a two or three-hour ride with a specific route in
+mind:  "explore the rural road that starts by that bus stop along the
+highway", or "explore the interesting-looking path that starts where
+Google Street View reaches its limit".  I'll turn on a GPS recorder
+on my phone and get going.  I have an offline editor for
+OpenStreetMap on my phone, so if I run into an interesting landmark,
+I'll be able to notate its position right there.
+
+There are some convoluted paths around here, and without a GPS it is
+hard to know exactly where one is since one is frequently surrounded
+by trees or sugarcane fields.  I've gotten lost a couple of times,
+but fortunately the GPS told me where I was *and* my mapping app had
+saved a few tiles of the satellite view for offline use.
+
+(Protip: exploring downhill is perilous; as you get tired you'll have
+a harder time going back uphill.  Especially when the path ends and
+your only way out is to carry the bike on your shoulder across an
+muddy/unridable coffee plantation.)
+
+One thing I want to do is to make a nice printed map, the kind that
+you would carry with you on a bike.  I've been learning Mapbox Studio
+as a way to style a map out of OpenStreetMap data and make it
+suitable for printing.  The learning curve is rather steep.
