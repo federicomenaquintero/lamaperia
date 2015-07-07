@@ -40,6 +40,14 @@ Calidad y superficie del camino.
 
 https://wiki.openstreetmap.org/wiki/User:Frederik_Ramm/Freiburg_Map
 
+http://www.transportparadise.co.uk/cyclemap/ - "quiet route",
+"connecting quiet route", etc.
+
+https://www.mapbox.com/blog/outdoors-design/
+
+http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
+
+
 * Letreros para el campo
 
 ** Postes de direcciones en los cruceros, a la europea
