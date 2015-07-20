@@ -73,7 +73,7 @@ Ejemplos en http://www.gettingaroundgermany.info/zeichen2.shtml#info
 Two of my current obsessions are related to each other:  bicycling
 on the rural roads around Xalapa, and mapping them in OpenStreetMap.
 
-Bicycling is the fun, visceral, right-brain part.  We have absolutely
+Bicycling is the fun, visceral, right-brain part.  There is absolutely
 wonderful terrain here; Xalapa is on a mountainside, it is part of a
 cloud forest, and there are coffee plantations all over the place.
 
@@ -83,13 +83,13 @@ interesting rural roads.  However, not all of them are shown on the
 map, and if they happen to be surrounded by trees, they will be hard
 to make out on the satellite view.
 
-I've been populating OpenStreetMap with our rural roads and paths
+I've been populating OpenStreetMap with the rural roads and paths
 among the plantations.  Some are easy to make out on the satellite
 view; others really require one to go about with a GPS and record a
 track to trace later into the map.  Along the way I've been locating
 useful landmarks like buildings, isolated houses, small bodies of
-water, small bridges over creeks, and the ubiquitous wayside shrines
-that people build here.  This has proved to be an interesting process.
+water, small bridges over creeks, and the ubiquitous wayside shrines.
+This has proved to be an interesting process.
 
 Some days I'll do a two or three-hour ride with a specific route in
 mind:  "explore the rural road that starts by that bus stop along the
@@ -108,11 +108,30 @@ saved a few tiles of the satellite view for offline use.
 (Protip: exploring downhill is perilous; as you get tired you'll have
 a harder time going back uphill.  Especially when the path ends and
 your only way out is to carry the bike on your shoulder across an
-muddy/unridable coffee plantation.)
+muddy/unridable sections.)
 
 One thing I want to do is to make a nice printed map, the kind that
 you would carry with you on a bike.  I've been learning Mapbox Studio
 as a way to style a map out of OpenStreetMap data and make it
 suitable for printing.  The learning curve is rather steep, but the
 process is interesting.
+
+The area that I've mapped with the most detail so far is the "circle"
+that goes between the southern edge of Xalapa and the old, two-lane
+highway to Coatepec.  Inside that circle there are lots of hills, a
+few small towns, lots of coffee and sugarcane plantations, and many
+rural paths and tracks.  And the railroad, which appears and
+disappears among the trees.
+
+
+
+Tools
+
+Go Map!! - an iOS app for editing OpenStreetMap.  Supports adding and
+modifying ways, POIs, and areas.  Stores satellite and vector tiles
+offline, automatically.
+
+Motion GPS - seems to record "better" GPS tracks than other apps I've
+tried.  Displays maps using OpenStreetMap.
+
 
