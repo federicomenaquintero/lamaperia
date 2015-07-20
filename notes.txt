@@ -38,6 +38,16 @@ Calidad y superficie del camino.
 
 ** Referencias
 
+http://ma.juii.net/blog/printable-osm-city-map
+
+http://www.britishideas.com/2009/09/22/map-scales-and-printing-with-mapnik/
+
+http://blog.systemed.net/post/10 - An ingenious German cycle map
+
+http://blog.systemed.net/post/4 - The lost map scale 1:100,000
+
+http://ugeographics.com/mulberry_river.html
+
 https://wiki.openstreetmap.org/wiki/User:Frederik_Ramm/Freiburg_Map
 
 http://www.transportparadise.co.uk/cyclemap/ - "quiet route",
@@ -103,4 +113,6 @@ muddy/unridable coffee plantation.)
 One thing I want to do is to make a nice printed map, the kind that
 you would carry with you on a bike.  I've been learning Mapbox Studio
 as a way to style a map out of OpenStreetMap data and make it
-suitable for printing.  The learning curve is rather steep.
+suitable for printing.  The learning curve is rather steep, but the
+process is interesting.
+
