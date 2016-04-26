@@ -36,6 +36,14 @@ Curvas de nivel.
 
 Calidad y superficie del camino.
 
+** Toponimia
+
+*** ¿De dónde vienen los nombres de lugares?  ¿Puedes descubrir algo a partir de los nombres?
+
+tepec / tepetl = cerro
+
+Ver Lost Lanes Wales, a ver qué dice sobre toponimia galesa.
+
 ** Referencias
 
 http://ma.juii.net/blog/printable-osm-city-map
@@ -57,6 +65,26 @@ https://www.mapbox.com/blog/outdoors-design/
 
 http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
 
+
+** TODO:
+
+*** Decidir zoom / escala.  Lost Lanes Wales usa 1:100,000 pero es libro
+
+*** Probar impresión a 1:50,000
+
+*** Probar impresión a 1:25,000
+
+*** Cemetery - muy oscuro (ver el de Estanzuela - Pacho Nuevo)
+
+*** Parks - verde raro
+
+*** Pitch - verde raro
+
+*** School - café raro
+
+*** agriculture layer - needs a pattern; create one with little plants?
+
+*** Should the colors of wood and agriculture be the same?  Different pattern?
 
 * Letreros para el campo
 
@@ -125,13 +153,195 @@ disappears among the trees.
 
 
 
-Tools
-
-Go Map!! - an iOS app for editing OpenStreetMap.  Supports adding and
-modifying ways, POIs, and areas.  Stores satellite and vector tiles
-offline, automatically.
-
-Motion GPS - seems to record "better" GPS tracks than other apps I've
-tried.  Displays maps using OpenStreetMap.
 
 
+
+
+* Mapbox API:
+
+My access token:
+pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ
+
+
+GET
+/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}{@2x}
+
+curl https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/1/1/0
+
+curl 'https://api.mapbox.com/styles/v1/federicomenaquintero/cil44s8ep000c9jm18x074iwv/tiles/{z}/{x}/{y}{@2x}&access_token=pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ'
+
+curl https://api.mapbox.com/styles/v1/federicomenaquintero/cil44s8ep000c9jm18x074iwv/tiles/15/7565/14576&access_token=pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ
+
+
+http://dev.opentopomap.org/15/16025/10690.png
+http://dev.opentopomap.org/15/7565/14576.png
+
+montage -geometry +0+0 \
+15-7565-14576-2x.png 15-7566-14576-2x.png 15-7567-14576-2x.png 15-7568-14576-2x.png \
+15-7565-14577-2x.png 15-7566-14577-2x.png 15-7567-14577-2x.png 15-7568-14577-2x.png \
+15-7565-14578-2x.png 15-7566-14578-2x.png 15-7567-14578-2x.png 15-7568-14578-2x.png \
+15-7565-14579-2x.png 15-7566-14579-2x.png 15-7567-14579-2x.png 15-7568-14579-2x.png \
+-tile 4x4 output.png
+
+for x in `seq 7565 7568`; do for y in `seq 14576 14579`; do curl "https://api.mapbox.com/styles/v1/federicomenaquintero/cil44s8ep000c9jm18x074iwv/tiles/15/$x/$y?&access_token=pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ" > 15-$x-$y.png; done; done
+
+
+* Elevation profiles
+
+https://graphhopper.com/api/1/docs/routing/
+
+* Map generation
+
+** Data that is not in mapbox-streets-v7:
+
+*** High-voltage towers, power lines, substations - power=*
+
+    power=tower
+    power=line
+    power=sub_station
+
+*** Wayside shrines and crosses
+
+    historic=wayside_shrine
+    historic=wayside_cross
+
+*** Municipal boundaries
+
+    See the existing admin-3-4-boundaries layer
+
+    boundary=administrative
+    admin_level=6 (municipios)
+
+*** Natural
+
+    natural=tree
+
+    natural=peak without name - only those with names are included
+    (but not at zoom <= 14?)
+
+    waterway=drain
+
+    waterway=waterfall (points) - put a little waterfall icon?
+
+*** Miscellaneous
+
+    landuse=residential
+
+    landuse=industrial
+
+    place=farm
+
+    barrier=gate  (for points - there is already a "gates" layer with line data)
+
+    amenity=kindergarten  (names are imported into poi_label; lines/areas are not)
+
+    ruins=yes  (buildings are imported; the ruin status is not)
+
+** Data that is in mapbox-streets-v7 but is not rendered properly/nicely:
+
+*** amenity=parking   - This is in the landuse layer, class=parking type=parking
+
+*** agriculture layer - landuse=farmland
+                        crop={sugarcane,coffee} - rendered all the same; how to distinguish by crop?
+
+*** agriculture layer - landuse=orchard - needs little trees or something
+
+*** POIs - screen-oriented low-contrast icons; need high-contrast small icons
+
+*** Sports pitches - soccer, baseball - how to distinguish?
+
+*** Cemeteries need little crosses
+
+*** Cliffs need better pattern.  barrier-line layer, class=cliff
+
+
+*** River flow?  Downstream = downhill!
+
+*** Wide rivers need casing
+
+    They are in the water layer - need a layer for casing.  How does
+    this affect lakes?
+
+*** Streets at low zoom levels
+
+    Look at z=13; residential streets are white.  They should be black (or gray), no casing.
+
+** Fixed things
+
+*** highway=pedestrian area=yes - in the roads layer, not rendered
+
+    Added a road-pedestrian-area layer; made light gray with 1px black outline.
+
+*** Rivers need casing; need to be wider
+    See dev.opentopomap.org
+
+    Removed the waterway-small layer.
+
+    Added waterway-case and waterway layers; made them dark and light
+    blue, respectively.
+
+    Added waterway-stream layer.
+
+* Math
+
+  https://wiki.openstreetmap.org/wiki/Zoom_levels
+  https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Resolution_and_Scale
+
+The distance represented by one pixel (S) is given by
+
+        S=C*cos(y)/2^(z+8)
+
+where...
+
+    C is the (equatorial) circumference of the Earth
+    z is the zoom level
+    y is the latitude of where you're interested in the scale.
+
+600 dpi : 1:50,000
+
+dpcm
+
+(/ 600 2.54)
+236.2204724409449 ppcm
+
+0.5 Km -> 236.2204724409449 ppcm (2 Km -> 1 cm)
+
+50000 cm -> 236.2204724409449 ppcm
+
+(/ 50000 236.2204724409449)
+211.66666666666666 cm -> 1 px
+
+40075.016686 Km = circunferencia en el ecuador
+
+4007501668.6 cm en el ecuador
+
+topomap: 211.6666666 cm = 4007501668.6 cm * cos(latitud) / 2^(z + 8)
+mapbox: 211.6666666 cm = 4007501668.6 cm * cos(latitud) / 2^(z + 9)
+
+cos(latitud) = cos(19.53333 deg) = 0.9424471500714777
+
+2^(z + 8) = 4007501668.6 cm * 0.9424471500714777 / 211.6666666 cm
+
+2^(z + 8) = 17843426.114968456
+
+2^17
+
+tile = C * cos(lat) / 2^z
+
+(defun get-map-scale (dpi tile-size zoom latitude)
+  (let* ((circumference-at-equator 40075016.686)
+	 (meridian-length (* circumference-at-equator
+			     (cos (degrees-to-radians latitude))))
+	 (tiles-around-the-earth (exp (* (log 2) zoom)))
+	 (pixels-around-the-earth (* tiles-around-the-earth tile-size))
+
+	 (meters-per-pixel (/ meridian-length pixels-around-the-earth))
+
+	 (meters-in-inch-of-pixels (* meters-per-pixel dpi))
+	 (meters-in-cm-of-pixels (/ meters-in-inch-of-pixels 2.54)))
+    (* meters-in-cm-of-pixels 100)))
+
+
+* Strava
+
+Predicting ridership - Strava vs. manual counts: http://www.sciencedirect.com/science/article/pii/S0966692316301168
