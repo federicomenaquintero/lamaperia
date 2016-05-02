@@ -281,6 +281,15 @@ tile = C * cos(lat) / 2^z
 	 (meters-in-cm-of-pixels (/ meters-in-inch-of-pixels 2.54)))
     (* meters-in-cm-of-pixels 100)))
 
+(defun mm-to-points (mm)
+  (* (/ mm 25.4) 72))
+
+(defun points-to-mm (pt)
+  (* 25.4 (/ pt 72.0)))
+
+(defun points-to-pixels (points dpi)
+  (* points (/ dpi 72.0)))
+
 
 * Strava
 
