@@ -290,6 +290,12 @@ tile = C * cos(lat) / 2^z
 (defun points-to-pixels (points dpi)
   (* points (/ dpi 72.0)))
 
+(get-map-scale 564 512 15 19.491)
+49999.98873075085  ; !!!!!!!
+
+(get-map-scale 564 1024 14 19.491)
+49999.988730750854
+
 
 * Strava
 
