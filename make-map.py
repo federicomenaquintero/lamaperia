@@ -34,3 +34,13 @@ def get_tile_png (access_params, z, x, y):
                       params = { 'access_token' : access_params['access_token'] })
 
     return r.content
+
+# stolen from https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+#
+# returns (x, y) pair
+def coordinates_to_tile_number (z, lat, lon):
+    lat_rad = math.radians(lat)
+    n = 2.0 ** z
+    xtile = int ((lon + 180.0) / 360.0 * n)
+    ytile = int ((1.0 - math.log (math.tan (lat) + (1 / math.cos (lat))) / math.pi) / 2.0 * n)
+    return (xtile, ytile)
