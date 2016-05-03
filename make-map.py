@@ -61,19 +61,35 @@ def find_tile_size_from_png_data (png_data):
 def validate_args (args):
     valid = True
 
-    if args.lat == None:
-        print ("Missing --lat=FLOAT argument")
+    if args.from_lat == None:
+        print ("Missing --from-lat=FLOAT argument")
         valid = False
 
-    if args.lon == None:
-        print ("Missing --lon=FLOAT argument")
+    if args.from_lon == None:
+        print ("Missing --from-lon=FLOAT argument")
         valid = False
 
-    if args.width_tiles == None:
-        print ("Missing --width-tiles=N argument")
+    have_to_lon = args.to_lon != None
+    have_to_lat = args.to_lat != None
+
+    have_width_tiles  = args.width_tiles != None
+    have_height_tiles = args.height_tiles != None
+
+    if not ((have_to_lon and have_to_lat and not have_width_tiles and not have_height_tiles)
+            or (not have_to_lon and not have_to_lat and have_width_tiles and have_height_tiles)):
+        print (
+            """Expecting either:
+            --to-lon=FLOAT --to-lat=FLOAT
+            or:
+            --width-tiles=N --height-tiles=N""")
         valid = False
-    elif args.width_tiles < 1:
+
+    if have_width_tiles and args.width_tiles < 1:
         print ("--width-tiles expects an integer greater than zero")
+        valid = False
+
+    if have_height_tiles and args.height_tiles < 1:
+        print ("--height-tiles expects an integer greater than zero")
         valid = False
 
     if args.zoom == None:
@@ -81,13 +97,6 @@ def validate_args (args):
         valid = False
     elif args.zoom < 0 or args.zoom > 20:
         print ("--zoom-tiles expects an integer in the [0, 20] range")
-        valid = False
-
-    if args.height_tiles == None:
-        print ("Missing --height-tiles=N argument")
-        valid = False
-    elif args.width_tiles < 1:
-        print ("--height-tiles expects an integer greater than zero")
         valid = False
 
     if args.output == None:
@@ -102,36 +111,59 @@ def validate_args (args):
 parser = argparse.ArgumentParser (description = "Make a map from Mapbox tiles",
                                   formatter_class = argparse.MetavarTypeHelpFormatter)
 
-parser.add_argument ("--lat", type=float)
-parser.add_argument ("--lon", type=float)
-parser.add_argument ("--zoom", type=int)
+parser.add_argument ("--from-lat", type=float)
+parser.add_argument ("--from-lon", type=float)
+parser.add_argument ("--to-lat", type=float)
+parser.add_argument ("--to-lon", type=float)
 parser.add_argument ("--width-tiles", type=int)
 parser.add_argument ("--height-tiles", type=int)
+parser.add_argument ("--zoom", type=int)
 parser.add_argument ("--output", type=argparse.FileType("wb"))
 
 args = parser.parse_args ()
 
 validate_args (args)
 
-(leftmost_tile, topmost_tile) = coordinates_to_tile_number (args.zoom, args.lat, args.lon)
+(leftmost_tile, topmost_tile) = coordinates_to_tile_number (args.zoom, args.from_lat, args.from_lon)
+
+if args.width_tiles != None and args.height_tiles != None:
+    width_tiles = args.width_tiles
+    height_tiles = args.height_tiles
+elif args.to_lat != None and args.to_lon != None:
+    (rightmost_tile, bottommost_tile) = coordinates_to_tile_number (args.zoom, args.to_lat, args.to_lon)
+    width_tiles = rightmost_tile - leftmost_tile + 1
+    height_tiles = bottommost_tile - topmost_tile + 1
+
+    if width_tiles < 1 or height_tiles < 1:
+        print ("Please specify --from-lat/--from-lon and --to-lat/--to-lon so that they are the top left and bottom right of the area to render, respectively")
+        sys.exit (1)
 
 have_tile_size = False
 tile_size = 0
 image_surf = None
 cr = None
 
-for y in range (0, args.height_tiles):
-    for x in range (0, args.width_tiles):
+print ("Downloading {0} tiles ({1} * {2}) at zoom={3}...".format (width_tiles * height_tiles, width_tiles, height_tiles, args.zoom))
+
+tiles_downloaded = 0
+
+for y in range (0, height_tiles):
+    for x in range (0, width_tiles):
         tile_x = x + leftmost_tile
         tile_y = y + topmost_tile
 
-        print ("Downloading z={0}, x={1}, y={2}".format (args.zoom, x, y))
+        tiles_downloaded += 1
+        print ("Downloading tile {0}".format(tiles_downloaded), end='\r', flush=True)
+
         png_data = get_tile_png (mapbox_access_params, args.zoom, tile_x, tile_y)
 
         if not have_tile_size:
             have_tile_size = True
             tile_size = find_tile_size_from_png_data (png_data)
-            image_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * args.width_tiles, tile_size * args.height_tiles)
+
+            print ("Final image will be {0} * {1} pixels in size".format (tile_size * width_tiles, tile_size * height_tiles))
+
+            image_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
             cr = cairo.Context (image_surf)
 
         tile_xpos = x * tile_size
@@ -141,6 +173,8 @@ for y in range (0, args.height_tiles):
 
         cr.set_source_surface (tile_surf, tile_xpos, tile_ypos)
         cr.paint ()
+
+print ("")
 
 print ("Writing {0}".format (args.output))
 image_surf.write_to_png (args.output)
