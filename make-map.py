@@ -22,7 +22,7 @@ def get_mapbox_uri_for_tile (access_params, z, x, y):
     username     = access_params['username']
     style_id     = access_params['style_id']
 
-    uri = "https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}".format (
+    uri = "https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}@2x".format (
         username = username,
         style_id = style_id,
         z = z,
