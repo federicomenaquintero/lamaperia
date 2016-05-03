@@ -11,8 +11,6 @@ import io
 import cairo
 import tempfile
 
-opensuse_ca = "/etc/ssl/ca-bundle.pem"
-
 mapbox_access_params = {
     'access_token' : 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
     'username'     : 'federicomenaquintero',
@@ -37,7 +35,6 @@ def get_tile_png (access_params, z, x, y):
     url = get_mapbox_uri_for_tile (access_params, z, x, y)
 
     r = requests.get (url,
-                      verify = opensuse_ca,
                       params = { 'access_token' : access_params['access_token'] })
 
     return r.content
