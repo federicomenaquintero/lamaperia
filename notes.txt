@@ -297,6 +297,12 @@ tile = C * cos(lat) / 2^z
 49999.988730750854
 
 
+* Printers
+
+Xerox Workcentre 7765 - 2400x2400 DPI - up to 13" x 19"
+
+Canon IPF670 - 2400x1200 DPI - 60 cm wide
+
 * Strava
 
 Predicting ridership - Strava vs. manual counts: http://www.sciencedirect.com/science/article/pii/S0966692316301168
