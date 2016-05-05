@@ -108,17 +108,16 @@ def validate_args (args):
 
 ####################################################################
 
-parser = argparse.ArgumentParser (description = "Make a map from Mapbox tiles",
-                                  formatter_class = argparse.MetavarTypeHelpFormatter)
+parser = argparse.ArgumentParser (description = "Make a map from Mapbox tiles")
 
-parser.add_argument ("--from-lat", type=float)
-parser.add_argument ("--from-lon", type=float)
-parser.add_argument ("--to-lat", type=float)
-parser.add_argument ("--to-lon", type=float)
-parser.add_argument ("--width-tiles", type=int)
-parser.add_argument ("--height-tiles", type=int)
-parser.add_argument ("--zoom", type=int)
-parser.add_argument ("--output", type=argparse.FileType("wb"))
+parser.add_argument ("--from-lat", type=float, metavar="FLOAT")
+parser.add_argument ("--from-lon", type=float, metavar="FLOAT")
+parser.add_argument ("--to-lat", type=float, metavar="FLOAT")
+parser.add_argument ("--to-lon", type=float, metavar="FLOAT")
+parser.add_argument ("--width-tiles", type=int, metavar="INT")
+parser.add_argument ("--height-tiles", type=int, metavar="INT")
+parser.add_argument ("--zoom", type=int, metavar="INT")
+parser.add_argument ("--output", type=argparse.FileType("wb"), metavar="FILENAME")
 
 args = parser.parse_args ()
 
