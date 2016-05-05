@@ -317,3 +317,55 @@ Casas del Migrante / albergues en Huixtla, Arriaga (ya), Tapachula, Palenque,
 Comitán, Frontera Comalapa.
 
 La Trinitaria
+
+* Mapbox Cycle Map ChangeLog:
+
+** Pending
+
+Copy the width of bridge-{primary,secondary,tertiary} into the gap of
+bridge-{primary,secondary,tertiary}-case, plus a little more (look at
+bridge-street-case).  Blog about this!
+
+Remove structure=none from road-{primary,secondary,tertiary}, as in
+road-street for casing inside bridges.  See how this plays with
+tunnels.  Should tunnels be gray?  Or dashed?
+
+Figure out bridge-rail, bridge-rail-tracks.
+
+** 2016/may/03
+
+Split road-secondary-tertiary into road-secondary and road-tertiary.
+Split road-secondary-tertiary-case into road-secondary-case and road-tertiary-case.
+
+Split tunnel-secondary-tertiary and tunnel-secondary-tertiary-case in
+the same fashion.
+
+Renamed "road-service-link-case" and "road-service-link"
+to "road-service-case" and "road-service", respectively.  Removed
+"class = link" and "type != trunk_link" from both.
+
+Renamed tunnel-service-link-track-case to tunnel-service-track-case;
+removed the same as above.
+
+Renamed bridge-service-link-case to bridge-service-case; as above.
+
+Added:
+road-tertiary-link-case, road-secondary-link-case, road-primary-link-case,
+road-tertiary-link, road-secondary-link, road-primary-link,
+all with "class=link" and "type=tertiary_link" (or other type) as appropriate.
+This is so service roads and highway links are not rendered the same
+(as service roads), and so that highway links are rendered the same as
+their corresponding highways.
+
+Added tunnel-{primary,secondary-tertiary}-link-case,
+tunnel-{primary,secondary-tertiary}-link, in the same fashion.
+
+Added bridge-{primary,secondary-tertiary}-link-case,
+bridge-{primary,secondary-tertiary}-link, in the same fashion.
+
+From road-street-case, removed "structure=none".  This lets bridges
+in residential roads have the normal road casing, plus the bridge
+casing-with-gap.
+
+Made the gap in bridge-street-case equal to the line width in
+bridge-street, plus a little more.
