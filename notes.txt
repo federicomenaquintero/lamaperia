@@ -322,15 +322,33 @@ La Trinitaria
 
 ** Pending
 
-Copy the width of bridge-{primary,secondary,tertiary} into the gap of
-bridge-{primary,secondary,tertiary}-case, plus a little more (look at
-bridge-street-case).  Blog about this!
+Copy the widths to tunnels, as you did for bridges.
+Should tunnels be gray?  Or dashed?
 
-Remove structure=none from road-{primary,secondary,tertiary}, as in
-road-street for casing inside bridges.  See how this plays with
-tunnels.  Should tunnels be gray?  Or dashed?
+Figure out bridge-rail, bridge-rail-tracks.  Use a double-line
+bridge-rail with otherwise normal bridge-rail-tracks; remove the
+outer casing?
 
-Figure out bridge-rail, bridge-rail-tracks.
+Can we make waterway labels appear more frequently?
+
+** 2016/May/06
+
+Went from z=14 @2x to z=15 witout @2x.  This gives us mountain peak
+labels, which do not appear in z=14.  General strategy is "use zoom
+which at default scaling will give us the desired map scale"; then
+later "use @2x scaling if more printed resolution is available".  As
+a result, had to double the sizes of everything:
+
+Copied all the road-* widths and line gaps to bridge-*.  Tunnels are
+yet to be done.  Added bridge-*-outer-case in general.
+
+Adjusted sizes of place-* text labels, contour index labels, waterway
+labels.  These last ones are not appearing as frequently as I'd like; why?
+
+Doubled width of a lot of things: water/waterways and their casings;
+hedges, fences, building outlines.
+
+Made cliffs gray and wider.  Need triangle pattern!
 
 ** 2016/may/03
 
