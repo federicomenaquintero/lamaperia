@@ -387,6 +387,12 @@ casing-with-gap.
 
 Made the gap in bridge-street-case equal to the line width in
 bridge-street, plus a little more.
+
+* Locations
+
+Pedazo de carta INEGI Coatepec 19" x 13"
+python3 make-map.py --from-lat=19d30m --from-lon=-97d --to-lat=19d22m --to-lon=-96d47m  --output=output15.png
+
 * Story of script
 
 Initially, --lon --lat --width-tiles --height-tiles arguments.
