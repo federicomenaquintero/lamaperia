@@ -22,7 +22,7 @@ def get_mapbox_uri_for_tile (access_params, z, x, y):
     username     = access_params['username']
     style_id     = access_params['style_id']
 
-    uri = "https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}@2x".format (
+    uri = "https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}".format (
         username = username,
         style_id = style_id,
         z = z,
@@ -116,7 +116,7 @@ parser.add_argument ("--to-lat", type=float, metavar="FLOAT")
 parser.add_argument ("--to-lon", type=float, metavar="FLOAT")
 parser.add_argument ("--width-tiles", type=int, metavar="INT")
 parser.add_argument ("--height-tiles", type=int, metavar="INT")
-parser.add_argument ("--zoom", type=int, metavar="INT")
+parser.add_argument ("--zoom", type=int, metavar="INT", default=15)
 parser.add_argument ("--output", type=argparse.FileType("wb"), metavar="FILENAME")
 
 args = parser.parse_args ()

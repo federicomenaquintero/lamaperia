@@ -369,3 +369,30 @@ casing-with-gap.
 
 Made the gap in bridge-street-case equal to the line width in
 bridge-street, plus a little more.
+* Story of script
+
+Initially, --lon --lat --width-tiles --height-tiles arguments.
+
+Later, when I downloaded INEGI maps with UTM grid, I found out that it
+would be useful to specify the area as coordinates, not
+upper-left-coordinate plus number-of-tiles.  I can use the UTM grid
+in the government's maps to easily find an area of interest.  Added
+--from-lon --from-lat --to-lon --to-lat arguments.
+
+I had been using z=14 @2x, for 1024-pixel tiles.  This gives me
+1:49,999.99 scale at 564 DPI.
+
+I had been styling my Mapbox style explicitly to z=14.
+
+Discovered that (e.g.) mountain peak labels don't appear at z=14, only
+at z=15 and up.  So, switched to z=15, no @2x.  This means I need
+twice the tiles at half the size; still at 564 DPI to obtain
+1:49,999.99 scale.
+
+Had to restyle everything for z=15, sort of.  It's easier now that I
+know the pixel sizes I want; they stay the same from z=14 to z=15
+(same number of pixels, at the same resolution, for the same resulting
+line widths).
+
+Interestingly, some POI names start appearing at z=15 as well.
+
