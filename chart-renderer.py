@@ -16,6 +16,24 @@ def pt_to_mm (pt):
 def set_source_rgb(cr, color):
     cr.set_source_rgb (color[0], color[1], color[2])
 
+def rectangle_thickness_outside (cr, x, y, width, height, thickness):
+    cr.set_line_join (cairo.LINE_JOIN_MITER)
+    cr.set_line_width (thickness)
+    cr.rectangle (x - thickness / 2.0,
+                  y - thickness / 2.0,
+                  width + thickness,
+                  height + thickness)
+    cr.stroke ()
+
+def rectangle_thickness_inside (cr, x, y, width, height, thickness):
+    cr.set_line_join (cairo.LINE_JOIN_MITER)
+    cr.set_line_width (thickness)
+    cr.rectangle (x + thickness / 2.0,
+                  y + thickness / 2.0,
+                  width - thickness,
+                  height - thickness)
+    cr.stroke ()
+
 class ChartRenderer:
     def __init__ (self):
         self.paper_width_mm = 0.0
@@ -65,21 +83,19 @@ class ChartRenderer:
 
         thickness_mm = pt_to_mm (self.frame_outline_thickness_pt)
 
-        cr.set_line_join (cairo.LINE_JOIN_MITER)
-        cr.set_line_width (thickness_mm)
-        set_source_rgb (cr, self.frame_color_rgb)
+        rectangle_thickness_outside (cr,
+                                     self.map_to_left_margin_mm,
+                                     self.map_to_top_margin_mm,
+                                     self.map_width_mm,
+                                     self.map_height_mm,
+                                     thickness_mm)
 
-        cr.rectangle (self.map_to_left_margin_mm - thickness_mm / 2.0,
-                      self.map_to_top_margin_mm - thickness_mm / 2.0,
-                      self.map_width_mm + thickness_mm,
-                      self.map_height_mm + thickness_mm)
-        cr.stroke ()
-
-        cr.rectangle (self.map_to_left_margin_mm - self.frame_width_mm + thickness_mm / 2.0,
-                      self.map_to_top_margin_mm - self.frame_width_mm + thickness_mm / 2.0,
-                      self.map_width_mm + 2 * self.frame_width_mm - thickness_mm / 2.0,
-                      self.map_height_mm + 2 * self.frame_width_mm - thickness_mm / 2.0)
-        cr.stroke ()
+        rectangle_thickness_inside (cr,
+                                    self.map_to_left_margin_mm - self.frame_width_mm,
+                                    self.map_to_top_margin_mm - self.frame_width_mm,
+                                    self.map_width_mm + 2 * self.frame_width_mm,
+                                    self.map_height_mm + 2 * self.frame_width_mm,
+                                    thickness_mm)
 
         cr.restore ()
 
