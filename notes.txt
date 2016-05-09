@@ -70,7 +70,6 @@ http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
 
 *** Decidir zoom / escala.  Lost Lanes Wales usa 1:100,000 pero es libro
 
-*** Probar impresión a 1:50,000
 
 *** Probar impresión a 1:25,000
 
@@ -85,6 +84,10 @@ http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
 *** agriculture layer - needs a pattern; create one with little plants?
 
 *** Should the colors of wood and agriculture be the same?  Different pattern?
+
+*** Power lines/towers/substations: power=*
+
+*** Shrines and crosses: historic=wayside_shrine or historic=wayside_cross
 
 * Letreros para el campo
 
@@ -158,8 +161,6 @@ https://graphhopper.com/api/1/docs/routing/
 
     natural=peak without name - only those with names are included
     (but not at zoom <= 14?)
-
-    waterway=drain
 
     waterway=waterfall (points) - put a little waterfall icon?
 
@@ -331,6 +332,19 @@ outer casing?
 
 Can we make waterway labels appear more frequently?
 
+** 2016/May/08
+
+Installed python3-pyproj - for coordinate conversions - https://github.com/jswhit/pyproj
+
+"OpenStreetMap uses the WGS-84 coordinate system" - https://wiki.openstreetmap.org/wiki/Software_comparison/Converting_to_WGS84
+
+INEGI - Elipsoide GRS80
+Datum horizontal - ITRF92
+
+Otro para conversiones, sencillito, no muy exacto: https://pypi.python.org/pypi/utm
+
+View UTM grid: http://www.mappingsupport.com/p/recreation/utm_coordinates_topo_map.html
+
 ** 2016/May/06
 
 Went from z=14 @2x to z=15 witout @2x.  This gives us mountain peak
@@ -420,3 +434,22 @@ line widths).
 
 Interestingly, some POI names start appearing at z=15 as well.
 
+** Started downloading data that is not in mapbox-streets-v7
+
+High-voltage power lines, towers, substations.
+
+Wayside shrines and crosses.
+
+** UTM grid
+
+Python "utm" package uses simple trigonometry; it's not exact at all.
+
+We need real geodetic conversions.  Entering the world of "I have no
+idea what I'm doing".  Downloaded pyproj, which is a wrapper for a
+venerable library called Proj.4 - (older than 1996!) which has a ton
+of coordinate systems, and ellipsoids, and stuff.  At least the values
+that it spits match my government's official maps.
+
+http://wiki.gis.com/wiki/index.php/Universal_Transverse_Mercator
+
+http://www.mappingsupport.com/p/recreation/utm_coordinates_topo_map.html
