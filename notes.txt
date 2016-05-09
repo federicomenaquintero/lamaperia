@@ -137,7 +137,7 @@ https://graphhopper.com/api/1/docs/routing/
 
 ** Data that is not in mapbox-streets-v7:
 
-*** High-voltage towers, power lines, substations - power=*
+*** DONE - High-voltage towers, power lines, substations - power=*
 
     power=tower
     power=line
@@ -323,6 +323,8 @@ La Trinitaria
 
 ** Pending
 
+Research http://www.gdal.org/ - geospatial data abstraction library 
+
 Copy the widths to tunnels, as you did for bridges.
 Should tunnels be gray?  Or dashed?
 
@@ -331,6 +333,15 @@ bridge-rail with otherwise normal bridge-rail-tracks; remove the
 outer casing?
 
 Can we make waterway labels appear more frequently?
+
+Make proper icons for the wayside-shrine and wayside-cross layers.
+
+** 2016/May/09
+
+Added layers power-substations, power-lines, power-towers, from a new
+"power" tileset created from an Overpass Turbo query.
+
+Added layers wayside-shrine, wayside-cross.  They need better icons.
 
 ** 2016/May/08
 
@@ -453,3 +464,11 @@ that it spits match my government's official maps.
 http://wiki.gis.com/wiki/index.php/Universal_Transverse_Mercator
 
 http://www.mappingsupport.com/p/recreation/utm_coordinates_topo_map.html
+
+* Learning Cartography
+
+http://www.geography.wisc.edu/courses/geog370/
+
+https://en.wikipedia.org/wiki/Transverse_Mercator_projection
+
+https://en.wikipedia.org/wiki/Transverse_Mercator_projection#Normal_and_transverse_graticules
