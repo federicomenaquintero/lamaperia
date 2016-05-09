@@ -1,0 +1,777 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2016-05-09T01:48:02Z",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "way/354422699",
+      "properties": {
+        "@id": "way/354422699",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -96.8782415,
+              19.4746264
+            ],
+            [
+              -96.8781854,
+              19.4745046
+            ],
+            [
+              -96.8781479,
+              19.4745897
+            ],
+            [
+              -96.8782415,
+              19.4746264
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/363222151",
+      "properties": {
+        "@id": "way/363222151",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -96.9976112,
+              19.4161307
+            ],
+            [
+              -96.9975858,
+              19.4161109
+            ],
+            [
+              -96.9975792,
+              19.4161297
+            ],
+            [
+              -96.9976112,
+              19.4161307
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/399728963",
+      "properties": {
+        "@id": "way/399728963",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -96.9142158,
+              19.4323489
+            ],
+            [
+              -96.9142014,
+              19.4323267
+            ],
+            [
+              -96.9141762,
+              19.4323412
+            ],
+            [
+              -96.9141906,
+              19.4323634
+            ],
+            [
+              -96.9142158,
+              19.4323489
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3133612506",
+      "properties": {
+        "@id": "node/3133612506",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8379927,
+          19.5083661
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3366556027",
+      "properties": {
+        "@id": "node/3366556027",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9341989,
+          19.5804275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3536399752",
+      "properties": {
+        "@id": "node/3536399752",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9344231,
+          19.5255899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3545066531",
+      "properties": {
+        "@id": "node/3545066531",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8907054,
+          19.4710579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3545066532",
+      "properties": {
+        "@id": "node/3545066532",
+        "historic": "wayside_shrine",
+        "name": "San Antonio"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8616448,
+          19.4812044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3545184976",
+      "properties": {
+        "@id": "node/3545184976",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9479881,
+          19.5896792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3584018390",
+      "properties": {
+        "@id": "node/3584018390",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8829697,
+          19.4701412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3584018577",
+      "properties": {
+        "@id": "node/3584018577",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9055496,
+          19.449271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3607904093",
+      "properties": {
+        "@id": "node/3607904093",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8776832,
+          19.6567666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3643542266",
+      "properties": {
+        "@id": "node/3643542266",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8984191,
+          19.45955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3649815231",
+      "properties": {
+        "@id": "node/3649815231",
+        "historic": "wayside_shrine",
+        "name": "La Virgen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8526166,
+          19.4971118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3658405765",
+      "properties": {
+        "@id": "node/3658405765",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8559796,
+          19.468458
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3658405784",
+      "properties": {
+        "@id": "node/3658405784",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8571632,
+          19.4619377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3658405788",
+      "properties": {
+        "@id": "node/3658405788",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8568302,
+          19.4615397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3707377868",
+      "properties": {
+        "@id": "node/3707377868",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8847229,
+          19.4249228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3717369009",
+      "properties": {
+        "@id": "node/3717369009",
+        "historic": "wayside_shrine",
+        "name": "Virgen de Guadalupe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9271961,
+          19.5730465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3765887353",
+      "properties": {
+        "@id": "node/3765887353",
+        "historic": "wayside_shrine",
+        "name": "Virgen de Santa Lucía"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8147463,
+          19.5342449
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3765887356",
+      "properties": {
+        "@id": "node/3765887356",
+        "historic": "wayside_shrine",
+        "name": "Virgen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.7907343,
+          19.5054111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3807169125",
+      "properties": {
+        "@id": "node/3807169125",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.873351,
+          19.4734314
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3856580680",
+      "properties": {
+        "@id": "node/3856580680",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9353856,
+          19.5545447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3866197639",
+      "properties": {
+        "@id": "node/3866197639",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.95252,
+          19.5016463
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3941583665",
+      "properties": {
+        "@id": "node/3941583665",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8393076,
+          19.4718842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3946554205",
+      "properties": {
+        "@id": "node/3946554205",
+        "historic": "wayside_shrine",
+        "name": "Viegen de la Candelaria"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8317268,
+          19.4680425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3946554214",
+      "properties": {
+        "@id": "node/3946554214",
+        "historic": "wayside_shrine",
+        "name": "Jesús"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8196711,
+          19.4884252
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3967313229",
+      "properties": {
+        "@id": "node/3967313229",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0012947,
+          19.573906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3967313261",
+      "properties": {
+        "@id": "node/3967313261",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0367421,
+          19.5766276
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3978961462",
+      "properties": {
+        "@id": "node/3978961462",
+        "historic": "wayside_shrine",
+        "name": "Virgen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0060445,
+          19.5760038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3978961465",
+      "properties": {
+        "@id": "node/3978961465",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0190003,
+          19.5734545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3978961466",
+      "properties": {
+        "@id": "node/3978961466",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0190193,
+          19.5733224
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3978961467",
+      "properties": {
+        "@id": "node/3978961467",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.0189948,
+          19.5733852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3988101591",
+      "properties": {
+        "@id": "node/3988101591",
+        "historic": "wayside_shrine",
+        "name": "Virgen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9427162,
+          19.5439205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4002571821",
+      "properties": {
+        "@id": "node/4002571821",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9209339,
+          19.5440595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4024199966",
+      "properties": {
+        "@id": "node/4024199966",
+        "historic": "wayside_shrine",
+        "name": "Virgen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9114849,
+          19.3997182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4024199967",
+      "properties": {
+        "@id": "node/4024199967",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9037503,
+          19.3772145
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4085754475",
+      "properties": {
+        "@id": "node/4085754475",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9417726,
+          19.3854847
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4085864621",
+      "properties": {
+        "@id": "node/4085864621",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9788632,
+          19.4025249
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4102535840",
+      "properties": {
+        "@id": "node/4102535840",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8269658,
+          19.4507118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4102581158",
+      "properties": {
+        "@id": "node/4102581158",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8291563,
+          19.4465305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4102581164",
+      "properties": {
+        "@id": "node/4102581164",
+        "historic": "wayside_shrine",
+        "name": "San Pascual Bailón"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8268906,
+          19.4478573
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4130648160",
+      "properties": {
+        "@id": "node/4130648160",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8678797,
+          19.4616047
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4130955187",
+      "properties": {
+        "@id": "node/4130955187",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8638269,
+          19.4760968
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4130956551",
+      "properties": {
+        "@id": "node/4130956551",
+        "historic": "wayside_shrine",
+        "name": "Virgen de Guadalupe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.8592055,
+          19.4629172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4141014629",
+      "properties": {
+        "@id": "node/4141014629",
+        "historic": "wayside_shrine"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.6318317,
+          19.5948112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4154170071",
+      "properties": {
+        "@id": "node/4154170071",
+        "historic": "wayside_cross"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.9915877,
+          19.3980456
+        ]
+      }
+    }
+  ]
+}
