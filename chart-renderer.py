@@ -104,8 +104,8 @@ class ChartRenderer:
 if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
-    chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (10), inch_to_mm (7.5))
+    chart_renderer.set_paper_size_mm (inch_to_mm (19), inch_to_mm (13))
+    chart_renderer.set_map_size_mm (inch_to_mm (18), inch_to_mm (12))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
 
     chart_renderer.render_to_svg ("foo.svg")

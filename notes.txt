@@ -417,6 +417,18 @@ bridge-street, plus a little more.
 Pedazo de carta INEGI Coatepec 19" x 13"
 python3 make-map.py --from-lat=19d30m --from-lon=-97d --to-lat=19d22m --to-lon=-96d47m  --output=output15.png
 
+For 18"x12" at 564 DPI, crop to 10152 x 6768 pixels
+
+* Tile storage
+
+https://github.com/mapbox/mbtiles-spec
+https://www.mapbox.com/help/an-open-platform/#mbtiles
+
+* Other projects
+
+https://wiki.openstreetmap.org/wiki/TopOSM
+
+
 * Story of script
 
 Initially, --lon --lat --width-tiles --height-tiles arguments.
