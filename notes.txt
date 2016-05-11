@@ -143,7 +143,7 @@ https://graphhopper.com/api/1/docs/routing/
     power=line
     power=sub_station
 
-*** Wayside shrines and crosses
+*** DONE - Wayside shrines and crosses
 
     historic=wayside_shrine
     historic=wayside_cross
