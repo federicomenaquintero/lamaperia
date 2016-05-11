@@ -168,8 +168,6 @@ https://graphhopper.com/api/1/docs/routing/
 
     landuse=residential
 
-    landuse=industrial
-
     place=farm
 
     barrier=gate  (for points - there is already a "gates" layer with line data)
@@ -335,6 +333,14 @@ outer casing?
 Can we make waterway labels appear more frequently?
 
 Make proper icons for the wayside-shrine and wayside-cross layers.
+
+** 2016/May/11
+
+Put power-substations under power-lines, so the power lines appear to
+be above the substation area.
+
+Exported layer from Overpass Turbo for landuse-industrial; added it
+to the style.
 
 ** 2016/May/09
 
