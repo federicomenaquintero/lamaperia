@@ -166,8 +166,6 @@ https://graphhopper.com/api/1/docs/routing/
 
 *** Miscellaneous
 
-    landuse=residential
-
     place=farm
 
     barrier=gate  (for points - there is already a "gates" layer with line data)
@@ -196,10 +194,6 @@ https://graphhopper.com/api/1/docs/routing/
 
 *** River flow?  Downstream = downhill!
 
-*** Wide rivers need casing
-
-    They are in the water layer - need a layer for casing.  How does
-    this affect lakes?
 
 *** Streets at low zoom levels
 
@@ -339,8 +333,7 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 Put power-substations under power-lines, so the power lines appear to
 be above the substation area.
 
-Exported layer from Overpass Turbo for landuse-industrial; added it
-to the style.
+Exported layers from Overpass Turbo: landuse-residential, landuse-industrial.
 
 ** 2016/May/09
 
