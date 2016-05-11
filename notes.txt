@@ -472,3 +472,7 @@ http://www.geography.wisc.edu/courses/geog370/
 https://en.wikipedia.org/wiki/Transverse_Mercator_projection
 
 https://en.wikipedia.org/wiki/Transverse_Mercator_projection#Normal_and_transverse_graticules
+
+Map Projections: a reference manual by L. Bugayevskiy and J. P. Snyder
+
+http://mapref.org/GeneralAspectsofMapProjections.html
