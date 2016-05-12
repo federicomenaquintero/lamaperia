@@ -328,12 +328,36 @@ Can we make waterway labels appear more frequently?
 
 Make proper icons for the wayside-shrine and wayside-cross layers.
 
+** 2016/May/12
+
+Lightened yellow landuse=residential to not look so much like egg yolk.
+
+Lightened wood, parks, and agriculture layers.
+
+Made poi-scalerank3/poi-scalerank2/poi-scalerank1 (labels) only appear
+from z=16 up; they don't work at z=15.
+
+Made hillshading gray, not greenish/brown; tweaked the opacity.
+
+Made contour lines and countour labels darker/grayer.
+
+Made aeroway* gray.
+
+Changed all place labels from {name_en} to {name}.
+
+Added ref= to Libramiento de Xalapa; it was missing in many segments.
+
+Made water-label as big as waterway-label.
+
 ** 2016/May/11
 
 Put power-substations under power-lines, so the power lines appear to
 be above the substation area.
 
-Exported layers from Overpass Turbo: landuse-residential, landuse-industrial.
+Exported layers from Overpass Turbo: landuse-residential,
+landuse-industrial.
+
+Made test print.
 
 ** 2016/May/09
 
