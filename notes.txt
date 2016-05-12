@@ -521,3 +521,5 @@ Map Projections: a reference manual by L. Bugayevskiy and J. P. Snyder
 http://mapref.org/GeneralAspectsofMapProjections.html
 
 https://www.mapbox.com/help/projection-support/
+
+Grep for "Changing Ellipsoid" in https://github.com/OSGeo/proj.4/wiki/FAQ
