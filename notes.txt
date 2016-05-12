@@ -135,6 +135,10 @@ https://graphhopper.com/api/1/docs/routing/
 
 * Map generation
 
+** Squid
+
+localhost:3128
+
 ** Data that is not in mapbox-streets-v7:
 
 *** DONE - High-voltage towers, power lines, substations - power=*
@@ -341,6 +345,10 @@ Made hillshading gray, not greenish/brown; tweaked the opacity.
 
 Made contour lines and countour labels darker/grayer.
 
+Made contour lines appear only every 20 meters, instead of every 10.
+Indexes every 100m instead of every 50m.  Tweaked spacing of contour
+index labels a bit.
+
 Made aeroway* gray.
 
 Changed all place labels from {name_en} to {name}.
@@ -511,3 +519,5 @@ https://en.wikipedia.org/wiki/Transverse_Mercator_projection#Normal_and_transver
 Map Projections: a reference manual by L. Bugayevskiy and J. P. Snyder
 
 http://mapref.org/GeneralAspectsofMapProjections.html
+
+https://www.mapbox.com/help/projection-support/
