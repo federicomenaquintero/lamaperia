@@ -522,8 +522,12 @@ http://mapref.org/GeneralAspectsofMapProjections.html
 
 https://www.mapbox.com/help/projection-support/
 
+https://gis.stackexchange.com/questions/45527/utm-grid-as-a-layer-with-leaflet
+
 Grep for "Changing Ellipsoid" in https://github.com/OSGeo/proj.4/wiki/FAQ
 
 https://gis.stackexchange.com/questions/99782/why-are-google-mercator-and-utm-rotated-towards-each-other
 
 https://wiki.openstreetmap.org/wiki/MapProxy
+
+Map with tile numbers: http://tools.geofabrik.de/map/#8/18.0092/-98.6391&type=Geofabrik_Standard&grid=1
