@@ -102,6 +102,7 @@ class ChartRenderer:
         self.paper_width_mm = 0.0
         self.paper_height_mm = 0.0
         self.map_scale_denom = 50000.0
+        self.map_center_coords = (19.4337, -96.8811) # lat, lon
         self.upper_left_coords = (0, 0) # lat, lon
         self.lower_right_coords = (0, 0) # computed from upper_left_coords, map_scale_denom, map_{width,height}_mm
         self.map_width_mm = 0.0
@@ -135,6 +136,10 @@ class ChartRenderer:
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
         self.zoom = zoom
+
+    def set_map_center_and_scale (self, lat, lon, scale_denom):
+        self.map_center_coords = (lat, lon)
+        self.map_scale_denom = scale_denom
 
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider
