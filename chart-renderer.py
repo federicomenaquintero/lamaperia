@@ -130,6 +130,12 @@ class ChartRenderer:
         self.map_to_left_margin_mm = x_mm
         self.map_to_top_margin_mm = y_mm
 
+    def set_zoom (self, zoom):
+        if not (type (zoom) == int and type >= 0 and type <= 19)
+            raise ValueError ("Zoom must be an integer in the range [0, 19]")
+
+        self.zoom = zoom
+
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider
 
