@@ -180,6 +180,7 @@ localhost:3128
 
 ** Data that is in mapbox-streets-v7 but is not rendered properly/nicely:
 
+*** Municipal lines   - not well visible.
 *** amenity=parking   - This is in the landuse layer, class=parking type=parking
 
 *** agriculture layer - landuse=farmland
