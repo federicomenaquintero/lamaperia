@@ -107,8 +107,10 @@ class ChartRenderer:
         self.lower_right_coords = (0, 0) # computed from upper_left_coords, map_scale_denom, map_{width,height}_mm
         self.map_width_mm = 0.0
         self.map_height_mm = 0.0
+        self.map_size_is_set = False
         self.map_to_left_margin_mm = 0.0
         self.map_to_top_margin_mm = 0.0
+        self.bounds_are_computed = False
 
         self.zoom = 15
 
@@ -126,6 +128,7 @@ class ChartRenderer:
     def set_map_size_mm (self, width_mm, height_mm):
         self.map_width_mm = width_mm
         self.map_height_mm = height_mm
+        self.map_size_is_set = True
 
     def set_map_to_top_left_margin_mm (self, x_mm, y_mm):
         self.map_to_left_margin_mm = x_mm
@@ -146,6 +149,32 @@ class ChartRenderer:
 
     def set_map_upper_left_coords (self, lat, lon):
         self.upper_left_coords = (lat, lon)
+
+    def compute_bounds (self):
+        if not self.map_size_is_set:
+            raise Exception ("ChartRenderer.set_map_size_mm() has not been called!")
+
+        half_width = self.map_width_mm / 2.0
+        half_height = self.map_height_mm / 2.0
+
+        # FIXME: the following assumes the earth is a sphere
+
+        lat_rad = math.radians (self.map_center_coords[0])
+
+        circumference_at_equator = 40075016686 # millimeters, check it yourself!
+        meridian_length = circumference_at_equator * math.cos (lat_rad)
+
+        half_scaled_width = half_width * self.map_scale_denom
+        
+
+    lat_rad = math.radians(lat)
+    n = 2.0 ** z
+    xtile = int ((lon + 180.0) / 360.0 * n)
+    ytile = int ((1.0 - math.log (math.tan (lat_rad) + (1 / math.cos (lat_rad))) / math.pi) / 2.0 * n)
+    return (xtile, ytile)
+        
+
+        self.bounds_are_computed = True
 
     def render_to_svg (self, filename):
         surf = cairo.SVGSurface (filename, mm_to_pt (self.paper_width_mm), mm_to_pt (self.paper_height_mm))

@@ -263,18 +263,12 @@ The default zoom value is 15.
     min_utm_e = int (min (utm1_e, utm2_e, utm3_e, utm4_e))
     max_utm_e = int (max (utm1_e, utm2_e, utm3_e, utm4_e)) + 1
 
-    min_utm_n = int (min (utm1_n, utm2_n utm3_n, utm4_n))
-    max_utm_n = int (max (utm1_n, utm2_n utm3_n, utm4_n)) + 1
+    min_utm_n = int (min (utm1_n, utm2_n, utm3_n, utm4_n))
+    max_utm_n = int (max (utm1_n, utm2_n, utm3_n, utm4_n)) + 1
 
     p = pyproj.Proj (proj="utm", zone=14, ellps='WGS84', inverse=True) # FIXME: hardcoded zone
 
     # make rectangular array of converted coordinates
-
-    for n in range (min_utm_n, max_utm_n):
-        for e in range (min_utm_e, max_utm_e):
-            # convert UTM coordinates to geographic
-            # convert geographic to pixels
-            #
 
     print ("Writing {0}".format (args.output))
     image_surf.write_to_png (args.output)
