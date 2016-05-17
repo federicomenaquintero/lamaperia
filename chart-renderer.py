@@ -1,3 +1,5 @@
+import math
+import sys
 import pyproj
 import cairo
 import io
@@ -79,6 +81,16 @@ def tile_number_to_coordinates (z, xtile, ytile):
     lat_deg = lat_rad * 180.0 / math.pi
     return (lat_deg, lon_deg)
 
+def compute_real_world_mm_per_tile (latitude, zoom):
+    lat_rad = math.radians (latitude)
+
+    circumference_at_equator = 40075016686 # millimeters
+    meridian_length = circumference_at_equator * math.cos (lat_rad)
+    tiles_around_the_earth = 2 ** zoom
+
+    mm_per_tile = meridian_length / tiles_around_the_earth
+    return mm_per_tile
+
 def rectangle_thickness_outside (cr, x, y, width, height, thickness):
     cr.set_line_join (cairo.LINE_JOIN_MITER)
     cr.set_line_width (thickness)
@@ -135,7 +147,7 @@ class ChartRenderer:
         self.map_to_top_margin_mm = y_mm
 
     def set_zoom (self, zoom):
-        if not (type (zoom) == int and type >= 0 and type <= 19)
+        if not (type (zoom) == int and type >= 0 and type <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
         self.zoom = zoom
@@ -150,31 +162,16 @@ class ChartRenderer:
     def set_map_upper_left_coords (self, lat, lon):
         self.upper_left_coords = (lat, lon)
 
-    def compute_bounds (self):
+    # We need to scale tiles by this much to get them to the final rendered size
+    def compute_tile_scale_factor (self, tile_size):
         if not self.map_size_is_set:
             raise Exception ("ChartRenderer.set_map_size_mm() has not been called!")
 
-        half_width = self.map_width_mm / 2.0
-        half_height = self.map_height_mm / 2.0
+        tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.zoom) / self.map_scale_denom
+        unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
-        # FIXME: the following assumes the earth is a sphere
-
-        lat_rad = math.radians (self.map_center_coords[0])
-
-        circumference_at_equator = 40075016686 # millimeters, check it yourself!
-        meridian_length = circumference_at_equator * math.cos (lat_rad)
-
-        half_scaled_width = half_width * self.map_scale_denom
-        
-
-    lat_rad = math.radians(lat)
-    n = 2.0 ** z
-    xtile = int ((lon + 180.0) / 360.0 * n)
-    ytile = int ((1.0 - math.log (math.tan (lat_rad) + (1 / math.cos (lat_rad))) / math.pi) / 2.0 * n)
-    return (xtile, ytile)
-        
-
-        self.bounds_are_computed = True
+        tile_scale_factor = tile_width_mm / unscaled_tile_mm
+        return tile_scale_factor
 
     def render_to_svg (self, filename):
         surf = cairo.SVGSurface (filename, mm_to_pt (self.paper_width_mm), mm_to_pt (self.paper_height_mm))
@@ -302,6 +299,9 @@ if __name__ == "__main__":
     chart_renderer.set_paper_size_mm (inch_to_mm (19), inch_to_mm (13))
     chart_renderer.set_map_size_mm (inch_to_mm (18), inch_to_mm (12))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
+
+    chart_renderer.compute_corner_coordinates (512)
+    sys.exit (0)
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
                                                                         'federicomenaquintero',
