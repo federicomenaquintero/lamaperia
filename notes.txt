@@ -200,6 +200,11 @@ localhost:3128
 *** River flow?  Downstream = downhill!
 
 
+*** natural=beach name labels; they are at poi-scalerank1, but you made those hidden until z=16
+
+*** natural=cape labels (Punta Zempoala)
+*** natural=strait labels (Boca La Antigua)
+
 *** Streets at low zoom levels
 
     Look at z=13; residential streets are white.  They should be black (or gray), no casing.
