@@ -215,6 +215,7 @@ class ChartRenderer:
     def render_map_frame (self, cr):
         cr.save ()
 
+        set_source_rgb (cr, self.frame_color_rgb)
         inner_thickness_mm = pt_to_mm (self.frame_inner_thickness_pt)
         outer_thickness_mm = pt_to_mm (self.frame_outer_thickness_pt)
 
