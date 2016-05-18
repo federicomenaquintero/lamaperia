@@ -247,8 +247,9 @@ class ChartRenderer:
     #
     def make_map_surface (self, leftmost_tile, topmost_tile, width_tiles, height_tiles):
         tile_size = self.tile_provider.get_tile_size ()
-        map_surf = None
-        cr = None
+        map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
+        cr = cairo.Context (map_surf)
+
         tiles_downloaded = 0
 
         print ("Downloading {0} tiles...".format (width_tiles * height_tiles))
@@ -263,10 +264,6 @@ class ChartRenderer:
 
                 png_data = self.tile_provider.get_tile_png (self.zoom, tile_x, tile_y)
                 tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
-
-                if map_surf == None:
-                    map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
-                    cr = cairo.Context (map_surf)
 
                 tile_xpos = x * tile_size
                 tile_ypos = y * tile_size
