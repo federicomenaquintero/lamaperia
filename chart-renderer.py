@@ -169,12 +169,7 @@ class ChartRenderer:
         tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.zoom) / self.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
-        print ("tile_width_mm = {0}".format (tile_width_mm))
-        print ("unscaled_tile_mm = {0}".format (unscaled_tile_mm))
-
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
-
-        print ("tile_scale_factor = {0}".format (tile_scale_factor))
         return tile_scale_factor
 
     def compute_tile_bounds (self, tile_size):
@@ -184,7 +179,6 @@ class ChartRenderer:
         half_height_mm = self.map_height_mm / 2.0
 
         (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
-        print ("center_tile_x, center_tile_y = {0}, {1}".format (center_tile_x, center_tile_y))
 
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
         scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
@@ -197,9 +191,6 @@ class ChartRenderer:
 
         self.west_tile_idx = center_tile_x - half_horizontal_tiles
         self.east_tile_idx = center_tile_x + half_horizontal_tiles
-
-        print ("west_tile_idx = {0}, east_tile_idx = {1}".format (self.west_tile_idx, self.east_tile_idx))
-        print ("north_tile_idx = {0}, south_tile_idx = {1}".format (self.north_tile_idx, self.south_tile_idx))
 
         self.tile_indexes_are_computed = True
 
@@ -218,8 +209,8 @@ class ChartRenderer:
 
     # Assumes that the current transformation matrix is set up for millimeters
     def render_to_cairo (self, cr):
-        self.render_map_frame (cr)
         self.render_map_data (cr)
+        self.render_map_frame (cr)
 
     def render_map_frame (self, cr):
         cr.save ()
@@ -288,13 +279,8 @@ class ChartRenderer:
         (center_tile_north, center_tile_west) = tile_number_to_coordinates (self.zoom, center_tile_x, center_tile_y)
         (center_tile_south, center_tile_east) = tile_number_to_coordinates (self.zoom, center_tile_x + 1, center_tile_y + 1)
 
-        print ("center_tile_north = {0}, center_tile_west = {1}".format (center_tile_north, center_tile_west))
-        print ("center_tile_south = {0}, center_tile_east = {1}".format (center_tile_south, center_tile_east))
-
         center_tile_xofs = (self.map_center_coords[1] - center_tile_west) / (center_tile_east - center_tile_west)
         center_tile_yofs = (self.map_center_coords[0] - center_tile_north) / (center_tile_south - center_tile_north)
-
-        print ("center_tile_xofs = {0}, center_tile_yofs = {1}".format (center_tile_xofs, center_tile_yofs))
 
         xofs = (center_tile_x - leftmost_tile + center_tile_xofs) * tile_size
         yofs = (center_tile_y - topmost_tile + center_tile_yofs) * tile_size
@@ -306,10 +292,7 @@ class ChartRenderer:
             print ("No tile provider; generating empty map")
             return
 
-        print ("map_center_coords[0] = {0}, map_center_coords[1] = {1}".format (self.map_center_coords[0], self.map_center_coords[1]))
         tile_size = self.tile_provider.get_tile_size ()
-
-        print ("zoom = {0}, tile_size = {1}".format (self.zoom, tile_size))
 
         self.compute_tile_bounds (tile_size)
 
@@ -320,24 +303,26 @@ class ChartRenderer:
             raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
 
         (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
-        map_surface.write_to_png ("map-surface.png")
-        print ("map_surface_xofs = {0}, map_surface_yofs = {1}".format (map_surface_xofs, map_surface_yofs))
+        # map_surface.write_to_png ("map-surface.png")
 
         cr.save ()
         self.clip_to_map (cr)
 
         # Center on the map
-        cr.move_to (self.map_to_left_margin_mm + self.map_width_mm / 2.0,
-                    self.map_to_top_margin_mm + self.map_height_mm / 2.0)
+        cr.translate (self.map_to_left_margin_mm + self.map_width_mm / 2.0,
+                      self.map_to_top_margin_mm + self.map_height_mm / 2.0)
 
         # Scale the map down to the final size
 
-        tile_scale_factor = self.compute_tile_scale_factor (tile_size)
-        cr.scale (tile_scale_factor, tile_scale_factor)
+        scale_factor = self.compute_tile_scale_factor (tile_size)
+        cr.scale (scale_factor, scale_factor)
+
+        points_to_mm = pt_to_mm (1.0)
+        cr.scale (points_to_mm, points_to_mm)
 
         # Offset the scaled map so that it is centered.
 
-        cr.move_to (-map_surface_xofs, -map_surface_yofs)
+        cr.translate (-map_surface_xofs, -map_surface_yofs)
         cr.set_source_surface (map_surface)
         cr.paint ()
 
@@ -347,13 +332,13 @@ if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
     chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (1), inch_to_mm (1))
+    chart_renderer.set_map_size_mm (inch_to_mm (10), inch_to_mm (7.5))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
                                                                         'federicomenaquintero',
                                                                         'cil44s8ep000c9jm18x074iwv'))
 
-    chart_renderer.set_map_center_and_scale (parse_degrees ("19d28m"), parse_degrees ("-96d51m"), 50000)
+    chart_renderer.set_map_center_and_scale (19.4621106, -96.9040473, 50000) # Cerro Malinche
 
     chart_renderer.render_to_svg ("foo.svg")
