@@ -1,6 +1,6 @@
+import re
 import math
 import sys
-import pyproj
 import cairo
 import io
 import tile_provider
@@ -115,8 +115,6 @@ class ChartRenderer:
         self.paper_height_mm = 0.0
         self.map_scale_denom = 50000.0
         self.map_center_coords = (19.4337, -96.8811) # lat, lon
-        self.upper_left_coords = (0, 0) # lat, lon
-        self.lower_right_coords = (0, 0) # computed from upper_left_coords, map_scale_denom, map_{width,height}_mm
         self.map_width_mm = 0.0
         self.map_height_mm = 0.0
         self.map_size_is_set = False
@@ -163,9 +161,6 @@ class ChartRenderer:
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider
 
-    def set_map_upper_left_coords (self, lat, lon):
-        self.upper_left_coords = (lat, lon)
-
     # We need to scale tiles by this much to get them to the final rendered size
     def compute_tile_scale_factor (self, tile_size):
         if not self.map_size_is_set:
@@ -178,7 +173,7 @@ class ChartRenderer:
         return tile_scale_factor
 
     def compute_tile_bounds (self, tile_size):
-        tile_scale_factor = compute_tile_scale_factor (self, tile_size)
+        tile_scale_factor = self.compute_tile_scale_factor (tile_size)
 
         half_width_mm = self.map_width_mm / 2.0
         half_height_mm = self.map_height_mm / 2.0
@@ -244,9 +239,13 @@ class ChartRenderer:
                       self.map_width_mm, self.map_height_mm)
         cr.clip ()
 
+    # Downloads tiles and builds a big image surface out of them
+    # Returns (map_surface, map_surface_xofs, map_surface_yofs), where the offsets are
+    # in the map_surface's coordinate space, and they refer to the point that corresponds
+    # to self.map_center_coords (i.e. the center point, but in pixel coordinates).
+    #
     def make_map_surface (self, leftmost_tile, topmost_tile, width_tiles, height_tiles):
-        have_tile_surf = False
-        tile_size = 0
+        tile_size = self.tile_provider.get_tile_size ()
         map_surf = None
         cr = None
         tiles_downloaded = 0
@@ -264,9 +263,7 @@ class ChartRenderer:
                 png_data = self.tile_provider.get_tile_png (self.zoom, tile_x, tile_y)
                 tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
 
-                if not have_tile_size:
-                    have_tile_size = True
-                    tile_size = tile_surf.get_width ()
+                if map_surf == None:
                     map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
                     cr = cairo.Context (map_surf)
 
@@ -278,42 +275,50 @@ class ChartRenderer:
 
         print ("")
 
-        return (map_surf, width_tiles * tile_size, height_tiles * tile_size)
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_north, center_tile_west) = tile_number_to_coordinates (self.zoom, center_tile_x, center_tile_y)
+        (center_tile_south, center_tile_east) = tile_number_to_coordinates (self.zoom, center_tile_x + 1, center_tile_y + 1)
+
+        center_tile_xofs = (center_tile_east - center_tile_west) / (self.map_center_coords[1] - center_tile_west)
+        center_tile_yofs = (center_tile_south - center_tile_north) / (self.map_center_coords[0] - center_tile_north)
+
+        xofs = (center_tile_x - leftmost_tile + center_tile_xofs) * tile_size
+        yofs = (center_tile_y - topmost_tile + center_tile_yofs) * tile_size
+        
+        return (map_surf, xofs, yofs)
 
     def render_map_data (self, cr):
-        (leftmost_tile, topmost_tile) = coordinates_to_tile_number (self.zoom, self.upper_left_coords[0], self.upper_left_coords[1])
-        (rightmost_tile, bottommost_tile) = coordinates_to_tile_number (self.zoom, self.lower_right_coords[0], self.lower_right_coords[1])
-
-        width_tiles = rightmost_tile - leftmost_tile + 1
-        height_tiles = bottommost_tile - topmost_tile + 1
-
-        if width_tiles < 1 or height_tiles < 1:
-            raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
-
         if self.tile_provider is None:
             print ("No tile provider; generating empty map")
             return
 
-        (map_surface, map_width, map_height) = self.make_map_surface (leftmost_tile, topmost_tile, width_tiles, height_tiles)
+        tile_size = self.tile_provider.get_tile_size ()
+
+        self.compute_tile_bounds (tile_size)
+
+        width_tiles = self.east_tile_idx - self.west_tile_idx + 1
+        height_tiles = self.south_tile_idx - self.north_tile_idx + 1
+
+        if width_tiles < 1 or height_tiles < 1:
+            raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
+
+        (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.east_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
 
         cr.save ()
         self.clip_to_map (cr)
 
-        cr.move_to (self.map_to_left_margin_mm, self.map_to_top_margin_mm)
+        # Center on the map
+        cr.move_to (self.map_to_left_margin_mm + self.map_width_mm / 2.0,
+                    self.map_to_top_margin_mm + self.map_height_mm / 2.0)
 
-        top_left_coords = tile_number_to_coordinates (self.zoom, leftmost_tile, topmost_tile)
-        bottom_right_coords = tile_number_to_coordinates (self.zoom, leftmost_tile + width_tiles, topmost_tile + height_tiles)
+        # Scale the map down to the final size
 
-        map_width_longitude = math.fabs (bottom_right_coords[1] - top_left_coords[1])
-        map_height_latitude = math.fabs (bottom_right_coords[0] - top_left_coords[0])
+        tile_scale_factor = self.compute_tile_scale_factor (tile_size)
+        cr.scale (tile_scale_factor, tile_scale_factor)
 
-        final_width_longitude = math.fabs (self.lower_right_coords[1] - self.upper_left_coords[1])
-        final_height_latitude = math.fabs (self.lower_right_coords[0] - self.upper_left_coords[0])
+        # Offset the scaled map so that it is centered.
 
-        cr.scale (self.map_width_mm * map_width_longitude / final_width_longitude,
-                  self.map_height_mm * map_height_latitude / final_height_latitude)
-        cr.moveto (top_left_coords[1] - self.upper_left_coords[1], top_left_coords[0] - self.upper_left_coords[0])
-
+        cr.move_to (-map_surface_xofs, -map_surface_yofs)
         cr.set_source_surface (map_surface)
         cr.paint ()
 
@@ -322,17 +327,14 @@ class ChartRenderer:
 if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
-    chart_renderer.set_paper_size_mm (inch_to_mm (19), inch_to_mm (13))
-    chart_renderer.set_map_size_mm (inch_to_mm (18), inch_to_mm (12))
+    chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
+    chart_renderer.set_map_size_mm (inch_to_mm (10), inch_to_mm (7.5))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
-
-    chart_renderer.compute_corner_coordinates (512)
-    sys.exit (0)
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
                                                                         'federicomenaquintero',
                                                                         'cil44s8ep000c9jm18x074iwv'))
 
-    chart_renderer.set_map_upper_left_coords (parse_degrees ("19d30m"), parse_degrees ("-97d"))
+    chart_renderer.set_map_center_and_scale (parse_degrees ("19d28m"), parse_degrees ("-96d51m"), 50000)
 
     chart_renderer.render_to_svg ("foo.svg")

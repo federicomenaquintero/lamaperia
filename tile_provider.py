@@ -30,7 +30,7 @@ class MapboxTileProvider (TileProvider):
         return r
 
     def get_tile_png (self, z, x, y):
-        r = make_request_for_tile (self, z, x, y)
+        r = self.make_request_for_tile (z, x, y)
         return r.content
 
     def get_tile_size (self):
