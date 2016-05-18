@@ -254,11 +254,7 @@ class ChartRenderer:
                       self.map_width_mm, self.map_height_mm)
         cr.clip ()
 
-    # Downloads tiles and builds a big image surface out of them
-    # Returns (map_surface, map_surface_xofs, map_surface_yofs), where the offsets are
-    # in the map_surface's coordinate space, and they refer to the point that corresponds
-    # to self.map_center_coords (i.e. the center point, but in pixel coordinates).
-    #
+    # Downloads tiles and composites them into a big image surface
     def make_map_surface (self, leftmost_tile, topmost_tile, width_tiles, height_tiles):
         tile_size = self.tile_provider.get_tile_size ()
         map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
@@ -287,13 +283,21 @@ class ChartRenderer:
 
         print ("")
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
-        (tile_xofs, tile_yofs) = offsets_within_tile (tile_size, self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        return map_surf
 
-        xofs = (center_tile_x - leftmost_tile) * tile_size + tile_xofs
-        yofs = (center_tile_y - topmost_tile) * tile_size + tile_yofs
-        
-        return (map_surf, xofs, yofs)
+    # Returns (xpixels, ypixels), both floats, that correspond to the map_center_coords
+    # with respect to the downloaded tiles.
+    #
+    def center_offsets_within_map (self):
+        tile_size = self.tile_provider.get_tile_size ()
+
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+
+        map_surface_xofs = (center_tile_x - self.west_tile_idx) * tile_size + center_tile_xofs
+        map_surface_yofs = (center_tile_y - self.north_tile_idx) * tile_size + center_tile_yofs
+
+        return (map_surface_xofs, map_surface_yofs)
 
     def render_map_data (self, cr):
         if self.tile_provider is None:
@@ -310,8 +314,14 @@ class ChartRenderer:
         if width_tiles < 1 or height_tiles < 1:
             raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
 
-        (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
+        # Download map image; figure out the offsets within the map for the center point
+
+        map_surface = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
         # map_surface.write_to_png ("map-surface.png")
+
+        (map_surface_xofs, map_surface_yofs) = self.center_offsets_within_map ()
+
+        # Clip to the frame
 
         cr.save ()
         self.clip_to_map (cr)
