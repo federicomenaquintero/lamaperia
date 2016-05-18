@@ -169,7 +169,12 @@ class ChartRenderer:
         tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.zoom) / self.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
+        print ("tile_width_mm = {0}".format (tile_width_mm))
+        print ("unscaled_tile_mm = {0}".format (unscaled_tile_mm))
+
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
+
+        print ("tile_scale_factor = {0}".format (tile_scale_factor))
         return tile_scale_factor
 
     def compute_tile_bounds (self, tile_size):
@@ -179,6 +184,7 @@ class ChartRenderer:
         half_height_mm = self.map_height_mm / 2.0
 
         (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        print ("center_tile_x, center_tile_y = {0}, {1}".format (center_tile_x, center_tile_y))
 
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
         scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
@@ -191,6 +197,9 @@ class ChartRenderer:
 
         self.west_tile_idx = center_tile_x - half_horizontal_tiles
         self.east_tile_idx = center_tile_x + half_horizontal_tiles
+
+        print ("west_tile_idx = {0}, east_tile_idx = {1}".format (self.west_tile_idx, self.east_tile_idx))
+        print ("north_tile_idx = {0}, south_tile_idx = {1}".format (self.north_tile_idx, self.south_tile_idx))
 
         self.tile_indexes_are_computed = True
 
@@ -292,7 +301,10 @@ class ChartRenderer:
             print ("No tile provider; generating empty map")
             return
 
+        print ("map_center_coords[0] = {0}, map_center_coords[1] = {1}".format (self.map_center_coords[0], self.map_center_coords[1]))
         tile_size = self.tile_provider.get_tile_size ()
+
+        print ("zoom = {0}, tile_size = {1}".format (self.zoom, tile_size))
 
         self.compute_tile_bounds (tile_size)
 
@@ -302,7 +314,8 @@ class ChartRenderer:
         if width_tiles < 1 or height_tiles < 1:
             raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
 
-        (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.east_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
+        (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
+        map_surface.write_to_png ("map-surface.png")
 
         cr.save ()
         self.clip_to_map (cr)
@@ -328,7 +341,7 @@ if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
     chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (10), inch_to_mm (7.5))
+    chart_renderer.set_map_size_mm (inch_to_mm (2), inch_to_mm (2))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
