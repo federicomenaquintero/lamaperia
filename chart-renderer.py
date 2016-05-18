@@ -81,6 +81,20 @@ def tile_number_to_coordinates (z, xtile, ytile):
     lat_deg = lat_rad * 180.0 / math.pi
     return (lat_deg, lon_deg)
 
+# Returns (xofs, yofs), two floats in [0, tile_size) that are the
+# offsets within the tile that contains the given (lat, lon) pair.
+# For example, coordinates that would fall exactly in the
+# middle of a 512-pixel tile would yield (256, 256).
+#
+def offsets_within_tile (tile_size, zoom, lat, lon):
+    (tile_x, tile_y) = coordinates_to_tile_number (zoom, lat, lon)
+    (tile_north, tile_west) = tile_number_to_coordinates (zoom, tile_x, tile_y)
+    (tile_south, tile_east) = tile_number_to_coordinates (zoom, tile_x + 1, tile_y + 1)
+
+    xofs = tile_size * (lon - tile_west) / (tile_east - tile_west)
+    yofs = tile_size * (lat - tile_north) / (tile_south - tile_north)
+    return (xofs, yofs)
+
 def compute_real_world_mm_per_tile (latitude, zoom):
     lat_rad = math.radians (latitude)
 
@@ -274,14 +288,10 @@ class ChartRenderer:
         print ("")
 
         (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
-        (center_tile_north, center_tile_west) = tile_number_to_coordinates (self.zoom, center_tile_x, center_tile_y)
-        (center_tile_south, center_tile_east) = tile_number_to_coordinates (self.zoom, center_tile_x + 1, center_tile_y + 1)
+        (tile_xofs, tile_yofs) = offsets_within_tile (tile_size, self.zoom, self.map_center_coords[0], self.map_center_coords[1])
 
-        center_tile_xofs = (self.map_center_coords[1] - center_tile_west) / (center_tile_east - center_tile_west)
-        center_tile_yofs = (self.map_center_coords[0] - center_tile_north) / (center_tile_south - center_tile_north)
-
-        xofs = (center_tile_x - leftmost_tile + center_tile_xofs) * tile_size
-        yofs = (center_tile_y - topmost_tile + center_tile_yofs) * tile_size
+        xofs = (center_tile_x - leftmost_tile) * tile_size + tile_xofs
+        yofs = (center_tile_y - topmost_tile) * tile_size + tile_yofs
         
         return (map_surf, xofs, yofs)
 
