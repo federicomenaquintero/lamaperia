@@ -350,8 +350,8 @@ if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
     chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (10), inch_to_mm (7.5))
-    chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
+    chart_renderer.set_map_size_mm (inch_to_mm (10.25), inch_to_mm (7.75))
+    chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.375), inch_to_mm (0.375))
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
                                                                         'federicomenaquintero',
