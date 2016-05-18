@@ -288,8 +288,13 @@ class ChartRenderer:
         (center_tile_north, center_tile_west) = tile_number_to_coordinates (self.zoom, center_tile_x, center_tile_y)
         (center_tile_south, center_tile_east) = tile_number_to_coordinates (self.zoom, center_tile_x + 1, center_tile_y + 1)
 
-        center_tile_xofs = (center_tile_east - center_tile_west) / (self.map_center_coords[1] - center_tile_west)
-        center_tile_yofs = (center_tile_south - center_tile_north) / (self.map_center_coords[0] - center_tile_north)
+        print ("center_tile_north = {0}, center_tile_west = {1}".format (center_tile_north, center_tile_west))
+        print ("center_tile_south = {0}, center_tile_east = {1}".format (center_tile_south, center_tile_east))
+
+        center_tile_xofs = (self.map_center_coords[1] - center_tile_west) / (center_tile_east - center_tile_west)
+        center_tile_yofs = (self.map_center_coords[0] - center_tile_north) / (center_tile_south - center_tile_north)
+
+        print ("center_tile_xofs = {0}, center_tile_yofs = {1}".format (center_tile_xofs, center_tile_yofs))
 
         xofs = (center_tile_x - leftmost_tile + center_tile_xofs) * tile_size
         yofs = (center_tile_y - topmost_tile + center_tile_yofs) * tile_size
@@ -316,6 +321,7 @@ class ChartRenderer:
 
         (map_surface, map_surface_xofs, map_surface_yofs) = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
         map_surface.write_to_png ("map-surface.png")
+        print ("map_surface_xofs = {0}, map_surface_yofs = {1}".format (map_surface_xofs, map_surface_yofs))
 
         cr.save ()
         self.clip_to_map (cr)
@@ -341,7 +347,7 @@ if __name__ == "__main__":
     chart_renderer = ChartRenderer ()
 
     chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (2), inch_to_mm (2))
+    chart_renderer.set_map_size_mm (inch_to_mm (1), inch_to_mm (1))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.5), inch_to_mm (0.5))
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
