@@ -122,7 +122,11 @@ class ChartRenderer:
         self.map_size_is_set = False
         self.map_to_left_margin_mm = 0.0
         self.map_to_top_margin_mm = 0.0
-        self.bounds_are_computed = False
+        self.north_tile_idx = 0
+        self.west_tile_idx = 0
+        self.south_tile_idx = 0
+        self.east_tile_idx = 0
+        self.tile_indexes_are_computed = False
 
         self.zoom = 15
 
@@ -172,6 +176,28 @@ class ChartRenderer:
 
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
         return tile_scale_factor
+
+    def compute_tile_bounds (self, tile_size):
+        tile_scale_factor = compute_tile_scale_factor (self, tile_size)
+
+        half_width_mm = self.map_width_mm / 2.0
+        half_height_mm = self.map_height_mm / 2.0
+
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+
+        unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
+        scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
+
+        half_horizontal_tiles = int (half_width_mm / scaled_tile_size_mm + 1)
+        half_vertical_tiles = int (half_height_mm / scaled_tile_size_mm + 1)
+
+        self.north_tile_idx = center_tile_y - half_vertical_tiles
+        self.south_tile_idx = center_tile_y + half_vertical_tiles
+
+        self.west_tile_idx = center_tile_x - half_horizontal_tiles
+        self.east_tile_idx = center_tile_x + half_horizontal_tiles
+
+        self.tile_indexes_are_computed = True
 
     def render_to_svg (self, filename):
         surf = cairo.SVGSurface (filename, mm_to_pt (self.paper_width_mm), mm_to_pt (self.paper_height_mm))
