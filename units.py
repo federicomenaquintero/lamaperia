@@ -65,34 +65,41 @@ class TestUnitConversions (testutils.TestCaseHelper):
         self.assertFloatEquals (inch_to_mm (mm_to_inch (x)), x)
         self.assertFloatEquals (mm_to_inch (inch_to_mm (x)), x)
 
-    def test_mm_inch_roundtrip (self):
+    def test_mm_to_inch_conversion_roundtrips (self):
         self.mm_inch_roundtrip (0)
         self.mm_inch_roundtrip (1)
         self.mm_inch_roundtrip (10)
+        self.mm_inch_roundtrip (-1)
+        self.mm_inch_roundtrip (-10)
 
     def mm_pt_roundtrip (self, x):
         self.assertFloatEquals (mm_to_pt (pt_to_mm (x)), x)
         self.assertFloatEquals (pt_to_mm (mm_to_pt (x)), x)
 
-    def test_mm_pt_roundtrip (self):
+    def test_mm_to_pt_conversion_roundtrips (self):
         self.mm_pt_roundtrip (0)
         self.mm_pt_roundtrip (1)
         self.mm_pt_roundtrip (10)
+        self.mm_pt_roundtrip (-1)
+        self.mm_pt_roundtrip (-10)
 
 class TestParseDegrees (testutils.TestCaseHelper):
-    def test_parse_degrees (self):
+    def test_parse_degrees_deals_with_invalid_values (self):
         self.assertIsNone (parse_degrees (""))
         self.assertIsNone (parse_degrees (" "))
         self.assertIsNone (parse_degrees ("19.5d"))
+        self.assertIsNone (parse_degrees ("19dms"))
 
+    def test_parse_degrees_deals_with_decimal_degrees (self):
         self.assertFloatEquals (parse_degrees ("19"), 19)
         self.assertFloatEquals (parse_degrees ("-19"), -19)
         self.assertFloatEquals (parse_degrees ("19.5"), 19.5)
         self.assertFloatEquals (parse_degrees ("-19.5"), -19.5)
 
-        self.assertFloatEquals (parse_degrees ("19d"), parse_degrees ("19.0"))
-        self.assertFloatEquals (parse_degrees ("-19d"), parse_degrees ("-19.0"))
-        self.assertFloatEquals (parse_degrees ("19d30m"), parse_degrees ("19.5"))
-        self.assertFloatEquals (parse_degrees ("-19d30m"), parse_degrees ("-19.5"))
+    def test_parse_degrees_deals_with_sexagesimal_degrees (self):
+        self.assertFloatEquals (parse_degrees ("19d"), 19.0)
+        self.assertFloatEquals (parse_degrees ("-19d"), -19.0)
+        self.assertFloatEquals (parse_degrees ("19d30m"), 19.5)
+        self.assertFloatEquals (parse_degrees ("-19d30m"), -19.5)
         self.assertFloatEquals (parse_degrees ("19d20m15s"), 19 + 20.0 / 60 + 15.0 / 3600)
         self.assertFloatEquals (parse_degrees ("-19d20m15s"), -(19 + 20.0 / 60 + 15.0 / 3600))
