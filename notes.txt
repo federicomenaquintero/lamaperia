@@ -64,6 +64,13 @@ http://www.transportparadise.co.uk/cyclemap/ - "quiet route",
 https://www.mapbox.com/blog/outdoors-design/
 
 http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
+** Lo que hacen los profesionales:
+
+https://www.adventurecycling.org/inquiry-forms/grab-a-free-map-catalog/
+https://www.adventurecycling.org/routes-and-maps/adventure-cycling-route-network/map-features/
+https://www.adventurecycling.org/routes-and-maps/adventure-cycling-route-network/
+
+Rutas ya hechas; mapas para cada ruta.
 
 
 ** TODO:
