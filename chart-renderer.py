@@ -5,6 +5,7 @@ import cairo
 import io
 import tile_provider
 from units import *
+from parsedegrees import *
 
 def set_source_rgb(cr, color):
     cr.set_source_rgb (color[0], color[1], color[2])
