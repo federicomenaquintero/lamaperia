@@ -82,3 +82,18 @@ def test_mm_to_pt ():
     mm_inch_roundtrip (0)
     mm_inch_roundtrip (1)
     mm_inch_roundtrip (10)
+
+def test_parse_degrees ():
+    assert parse_degrees ("") == None
+    assert parse_degrees (" ") == None
+    assert float_equals (parse_degrees ("19"), 19)
+    assert float_equals (parse_degrees ("-19"), -19)
+    assert parse_degrees ("19.5d") == None
+    assert float_equals (parse_degrees ("19.5"), 19.5)
+    assert float_equals (parse_degrees ("-19.5"), -19.5)
+    assert float_equals (parse_degrees ("19d"), parse_degrees ("19.0"))
+    assert float_equals (parse_degrees ("-19d"), parse_degrees ("-19.0"))
+    assert float_equals (parse_degrees ("19d30m"), parse_degrees ("19.5"))
+    assert float_equals (parse_degrees ("-19d30m"), parse_degrees ("-19.5"))
+    assert float_equals (parse_degrees ("19d20m15s"), 19 + 20.0 / 60 + 15.0 / 3600)
+    assert float_equals (parse_degrees ("-19d20m15s"), -(19 + 20.0 / 60 + 15.0 / 3600))
