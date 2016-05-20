@@ -1,6 +1,6 @@
 import re
 import math
-import pytest
+import testutils
 
 def inch_to_mm (inch):
     return inch * 25.4
@@ -60,40 +60,39 @@ def parse_degrees (value):
 
 ########## tests ##########
 
-EPSILON = 1e-6
+class TestUnitConversions (testutils.TestCaseHelper):
+    def mm_inch_roundtrip (self, x):
+        self.assertFloatEquals (inch_to_mm (mm_to_inch (x)), x)
+        self.assertFloatEquals (mm_to_inch (inch_to_mm (x)), x)
 
-def float_equals (a, b):
-    return math.fabs (a - b) < EPSILON
+    def test_mm_inch_roundtrip (self):
+        self.mm_inch_roundtrip (0)
+        self.mm_inch_roundtrip (1)
+        self.mm_inch_roundtrip (10)
 
-def mm_inch_roundtrip (x):
-    assert float_equals (inch_to_mm (mm_to_inch (x)), x)
-    assert float_equals (mm_to_inch (inch_to_mm (x)), x)
+    def mm_pt_roundtrip (self, x):
+        self.assertFloatEquals (mm_to_pt (pt_to_mm (x)), x)
+        self.assertFloatEquals (pt_to_mm (mm_to_pt (x)), x)
 
-def test_mm_inch_roundtrip ():
-    mm_inch_roundtrip (0)
-    mm_inch_roundtrip (1)
-    mm_inch_roundtrip (10)
+    def test_mm_pt_roundtrip (self):
+        self.mm_pt_roundtrip (0)
+        self.mm_pt_roundtrip (1)
+        self.mm_pt_roundtrip (10)
 
-def mm_pt_rountrip (x):
-    assert float_equals (mm_to_pt (pt_to_mm (x)), x)
-    assert float_equals (pt_to_mm (mm_to_pt (x)), x)
+class TestParseDegrees (testutils.TestCaseHelper):
+    def test_parse_degrees (self):
+        self.assertIsNone (parse_degrees (""))
+        self.assertIsNone (parse_degrees (" "))
+        self.assertIsNone (parse_degrees ("19.5d"))
 
-def test_mm_to_pt ():
-    mm_inch_roundtrip (0)
-    mm_inch_roundtrip (1)
-    mm_inch_roundtrip (10)
+        self.assertFloatEquals (parse_degrees ("19"), 19)
+        self.assertFloatEquals (parse_degrees ("-19"), -19)
+        self.assertFloatEquals (parse_degrees ("19.5"), 19.5)
+        self.assertFloatEquals (parse_degrees ("-19.5"), -19.5)
 
-def test_parse_degrees ():
-    assert parse_degrees ("") == None
-    assert parse_degrees (" ") == None
-    assert float_equals (parse_degrees ("19"), 19)
-    assert float_equals (parse_degrees ("-19"), -19)
-    assert parse_degrees ("19.5d") == None
-    assert float_equals (parse_degrees ("19.5"), 19.5)
-    assert float_equals (parse_degrees ("-19.5"), -19.5)
-    assert float_equals (parse_degrees ("19d"), parse_degrees ("19.0"))
-    assert float_equals (parse_degrees ("-19d"), parse_degrees ("-19.0"))
-    assert float_equals (parse_degrees ("19d30m"), parse_degrees ("19.5"))
-    assert float_equals (parse_degrees ("-19d30m"), parse_degrees ("-19.5"))
-    assert float_equals (parse_degrees ("19d20m15s"), 19 + 20.0 / 60 + 15.0 / 3600)
-    assert float_equals (parse_degrees ("-19d20m15s"), -(19 + 20.0 / 60 + 15.0 / 3600))
+        self.assertFloatEquals (parse_degrees ("19d"), parse_degrees ("19.0"))
+        self.assertFloatEquals (parse_degrees ("-19d"), parse_degrees ("-19.0"))
+        self.assertFloatEquals (parse_degrees ("19d30m"), parse_degrees ("19.5"))
+        self.assertFloatEquals (parse_degrees ("-19d30m"), parse_degrees ("-19.5"))
+        self.assertFloatEquals (parse_degrees ("19d20m15s"), 19 + 20.0 / 60 + 15.0 / 3600)
+        self.assertFloatEquals (parse_degrees ("-19d20m15s"), -(19 + 20.0 / 60 + 15.0 / 3600))
