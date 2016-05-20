@@ -1,4 +1,6 @@
 import re
+import math
+import pytest
 
 def inch_to_mm (inch):
     return inch * 25.4
@@ -56,3 +58,27 @@ def parse_degrees (value):
     else:
         return deg + decimals
 
+########## tests ##########
+
+EPSILON = 1e-6
+
+def float_equals (a, b):
+    return math.fabs (a - b) < EPSILON
+
+def mm_inch_roundtrip (x):
+    assert float_equals (inch_to_mm (mm_to_inch (x)), x)
+    assert float_equals (mm_to_inch (inch_to_mm (x)), x)
+
+def test_mm_inch_roundtrip ():
+    mm_inch_roundtrip (0)
+    mm_inch_roundtrip (1)
+    mm_inch_roundtrip (10)
+
+def mm_pt_rountrip (x):
+    assert float_equals (mm_to_pt (pt_to_mm (x)), x)
+    assert float_equals (pt_to_mm (mm_to_pt (x)), x)
+
+def test_mm_to_pt ():
+    mm_inch_roundtrip (0)
+    mm_inch_roundtrip (1)
+    mm_inch_roundtrip (10)
