@@ -75,7 +75,7 @@ class ScaleRenderer:
         self.render_alternate_divisions (cr,
                                          self.kilometers_with_small_scale * 1000 // self.small_scale_meters,
                                          leftmost_x, top_y,
-                                         mm_per_kilometer * self.small_scale_meters / (self.kilometers_with_small_scale * 1000), self.rule_width_mm)
+                                         mm_per_kilometer * self.small_scale_meters / 1000, self.rule_width_mm)
 
 if __name__ == "__main__":
     surface = cairo.PDFSurface ("scale.pdf", mm_to_pt (inch_to_mm (11.0)), mm_to_pt (inch_to_mm (8.5)))

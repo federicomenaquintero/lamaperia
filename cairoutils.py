@@ -1,7 +1,7 @@
 import cairo
-import units
 from gi.repository import Pango
 from gi.repository import PangoCairo
+from units import *
 
 def set_source_rgb(cr, color):
     cr.set_source_rgb (color[0], color[1], color[2])
@@ -84,6 +84,6 @@ def render_text (cr, x, y, anchor, font_description, str):
     ypos -= y_anchor * logical_rect.height
 
     cr.move_to (xpos, ypos)
-    PangoCairo.show_layout (cr.layout)
+    PangoCairo.show_layout (cr, layout)
 
     cr.restore ()
