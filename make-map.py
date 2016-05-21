@@ -11,6 +11,7 @@ import io
 import cairo
 import tempfile
 import re
+import pyproj
 
 mapbox_access_params = {
     'access_token' : 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
@@ -93,6 +94,13 @@ def coordinates_to_tile_number (z, lat, lon):
     xtile = int ((lon + 180.0) / 360.0 * n)
     ytile = int ((1.0 - math.log (math.tan (lat_rad) + (1 / math.cos (lat_rad))) / math.pi) / 2.0 * n)
     return (xtile, ytile)
+
+def tile_number_to_coordinates (z, xtile, ytile):
+    n = 2.0 ** z
+    lon_deg = xtile / n * 360.0 - 180.0
+    lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * ytile / n)))
+    lat_deg = lat_rad * 180.0 / math.pi
+    return (lat_deg, lon_deg)
 
 def find_tile_size_from_png_data (png_data):
     # total hack
@@ -205,6 +213,20 @@ The default zoom value is 15.
     image_surf = None
     cr = None
 
+    (lat1, lon1) = tile_number_to_coordinates (args.zoom, leftmost_tile, topmost_tile)
+    (lat2, lon2) = tile_number_to_coordinates (args.zoom, leftmost_tile + width_tiles, topmost_tile + height_tiles)
+
+    p = pyproj.Proj (proj="utm", zone=14, ellps='WGS84') # FIXME: hardcoded zone
+
+    (utm1_e, utm1_n) = p (lon1, lat1)
+    (utm2_e, utm2_n) = p (lon2, lat1)
+    (utm3_e, utm3_n) = p (lon1, lat2)
+    (utm4_e, utm4_n) = p (lon2, lat2)
+    
+    print ("Coordinates at corners: ({0}, {1}), ({2}, {3})".format (lat1, lon1, lat2, lon2))
+    print ("UTM at corners: ({0}, {1}), ({2}, {3})".format (utm1_e, utm1_n, utm2_e, utm2_n))
+    print ("                ({0}, {1}), ({2}, {3})".format (utm3_e, utm3_n, utm4_e, utm4_n))
+
     print ("Downloading {0} tiles ({1} * {2}) at zoom={3}...".format (width_tiles * height_tiles, width_tiles, height_tiles, args.zoom))
 
     tiles_downloaded = 0
@@ -237,6 +259,16 @@ The default zoom value is 15.
             cr.paint ()
 
     print ("")
+
+    min_utm_e = int (min (utm1_e, utm2_e, utm3_e, utm4_e))
+    max_utm_e = int (max (utm1_e, utm2_e, utm3_e, utm4_e)) + 1
+
+    min_utm_n = int (min (utm1_n, utm2_n, utm3_n, utm4_n))
+    max_utm_n = int (max (utm1_n, utm2_n, utm3_n, utm4_n)) + 1
+
+    p = pyproj.Proj (proj="utm", zone=14, ellps='WGS84', inverse=True) # FIXME: hardcoded zone
+
+    # make rectangular array of converted coordinates
 
     print ("Writing {0}".format (args.output))
     image_surf.write_to_png (args.output)

@@ -64,6 +64,13 @@ http://www.transportparadise.co.uk/cyclemap/ - "quiet route",
 https://www.mapbox.com/blog/outdoors-design/
 
 http://andyfiedler.com/blog/mapbox-studio-creation-osm-hiking-map-311/
+** Lo que hacen los profesionales:
+
+https://www.adventurecycling.org/inquiry-forms/grab-a-free-map-catalog/
+https://www.adventurecycling.org/routes-and-maps/adventure-cycling-route-network/map-features/
+https://www.adventurecycling.org/routes-and-maps/adventure-cycling-route-network/
+
+Rutas ya hechas; mapas para cada ruta.
 
 
 ** TODO:
@@ -135,15 +142,19 @@ https://graphhopper.com/api/1/docs/routing/
 
 * Map generation
 
+** Squid
+
+localhost:3128
+
 ** Data that is not in mapbox-streets-v7:
 
-*** High-voltage towers, power lines, substations - power=*
+*** DONE - High-voltage towers, power lines, substations - power=*
 
     power=tower
     power=line
     power=sub_station
 
-*** Wayside shrines and crosses
+*** DONE - Wayside shrines and crosses
 
     historic=wayside_shrine
     historic=wayside_cross
@@ -166,10 +177,6 @@ https://graphhopper.com/api/1/docs/routing/
 
 *** Miscellaneous
 
-    landuse=residential
-
-    landuse=industrial
-
     place=farm
 
     barrier=gate  (for points - there is already a "gates" layer with line data)
@@ -180,6 +187,7 @@ https://graphhopper.com/api/1/docs/routing/
 
 ** Data that is in mapbox-streets-v7 but is not rendered properly/nicely:
 
+*** Municipal lines   - not well visible.
 *** amenity=parking   - This is in the landuse layer, class=parking type=parking
 
 *** agriculture layer - landuse=farmland
@@ -198,10 +206,11 @@ https://graphhopper.com/api/1/docs/routing/
 
 *** River flow?  Downstream = downhill!
 
-*** Wide rivers need casing
 
-    They are in the water layer - need a layer for casing.  How does
-    this affect lakes?
+*** natural=beach name labels; they are at poi-scalerank1, but you made those hidden until z=16
+
+*** natural=cape labels (Punta Zempoala)
+*** natural=strait labels (Boca La Antigua)
 
 *** Streets at low zoom levels
 
@@ -323,6 +332,8 @@ La Trinitaria
 
 ** Pending
 
+Research http://www.gdal.org/ - geospatial data abstraction library 
+
 Copy the widths to tunnels, as you did for bridges.
 Should tunnels be gray?  Or dashed?
 
@@ -331,6 +342,50 @@ bridge-rail with otherwise normal bridge-rail-tracks; remove the
 outer casing?
 
 Can we make waterway labels appear more frequently?
+
+Make proper icons for the wayside-shrine and wayside-cross layers.
+
+** 2016/May/12
+
+Lightened yellow landuse=residential to not look so much like egg yolk.
+
+Lightened wood, parks, and agriculture layers.
+
+Made poi-scalerank3/poi-scalerank2/poi-scalerank1 (labels) only appear
+from z=16 up; they don't work at z=15.
+
+Made hillshading gray, not greenish/brown; tweaked the opacity.
+
+Made contour lines and countour labels darker/grayer.
+
+Made contour lines appear only every 20 meters, instead of every 10.
+Indexes every 100m instead of every 50m.  Tweaked spacing of contour
+index labels a bit.
+
+Made aeroway* gray.
+
+Changed all place labels from {name_en} to {name}.
+
+Added ref= to Libramiento de Xalapa; it was missing in many segments.
+
+Made water-label as big as waterway-label.
+
+** 2016/May/11
+
+Put power-substations under power-lines, so the power lines appear to
+be above the substation area.
+
+Exported layers from Overpass Turbo: landuse-residential,
+landuse-industrial.
+
+Made test print.
+
+** 2016/May/09
+
+Added layers power-substations, power-lines, power-towers, from a new
+"power" tileset created from an Overpass Turbo query.
+
+Added layers wayside-shrine, wayside-cross.  They need better icons.
 
 ** 2016/May/08
 
@@ -407,6 +462,18 @@ bridge-street, plus a little more.
 Pedazo de carta INEGI Coatepec 19" x 13"
 python3 make-map.py --from-lat=19d30m --from-lon=-97d --to-lat=19d22m --to-lon=-96d47m  --output=output15.png
 
+For 18"x12" at 564 DPI, crop to 10152 x 6768 pixels
+
+* Tile storage
+
+https://github.com/mapbox/mbtiles-spec
+https://www.mapbox.com/help/an-open-platform/#mbtiles
+
+* Other projects
+
+https://wiki.openstreetmap.org/wiki/TopOSM
+
+
 * Story of script
 
 Initially, --lon --lat --width-tiles --height-tiles arguments.
@@ -453,3 +520,27 @@ that it spits match my government's official maps.
 http://wiki.gis.com/wiki/index.php/Universal_Transverse_Mercator
 
 http://www.mappingsupport.com/p/recreation/utm_coordinates_topo_map.html
+
+* Learning Cartography
+
+http://www.geography.wisc.edu/courses/geog370/
+
+https://en.wikipedia.org/wiki/Transverse_Mercator_projection
+
+https://en.wikipedia.org/wiki/Transverse_Mercator_projection#Normal_and_transverse_graticules
+
+Map Projections: a reference manual by L. Bugayevskiy and J. P. Snyder
+
+http://mapref.org/GeneralAspectsofMapProjections.html
+
+https://www.mapbox.com/help/projection-support/
+
+https://gis.stackexchange.com/questions/45527/utm-grid-as-a-layer-with-leaflet
+
+Grep for "Changing Ellipsoid" in https://github.com/OSGeo/proj.4/wiki/FAQ
+
+https://gis.stackexchange.com/questions/99782/why-are-google-mercator-and-utm-rotated-towards-each-other
+
+https://wiki.openstreetmap.org/wiki/MapProxy
+
+Map with tile numbers: http://tools.geofabrik.de/map/#8/18.0092/-98.6391&type=Geofabrik_Standard&grid=1
