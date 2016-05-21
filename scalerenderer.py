@@ -24,6 +24,7 @@ class ScaleRenderer:
         self.kilometers_total = 5
         self.kilometers_with_small_scale = kilometers_with_small_scale
         self.small_scale_meters = small_scale_meters
+        self.font_description_str = "Luxi Serif 6"
 
     def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
         half_height = division_height / 2.0
@@ -86,16 +87,6 @@ if __name__ == "__main__":
     scale_renderer = ScaleRenderer (50000, 5, 1, 100)
     scale_renderer.render (cr, inch_to_mm (5.5), inch_to_mm (4))
 
-    layout = PangoCairo.create_layout (cr)
-    layout.set_font_description (Pango.font_description_from_string ("Luxi Serif 6"))
-    layout.set_text ("Hola mundo", -1)
+    font_desc = Pango.font_description_from_string ("Luxi Serif 6")
 
-    cr.move_to (inch_to_mm (5.5), inch_to_mm (4))
-    cr.scale (pt_to_mm (1), pt_to_mm (1))
-
-    (ink_rect, logical_rect) = layout.get_pixel_extents ()
-    (x, y) = cr.get_current_point ()
-    cr.move_to (x - logical_rect.width / 2, y - logical_rect.height)
-    PangoCairo.show_layout (cr, layout)
-
-    surface.show_page ()
+    render_text (cr, inch_to_mm (5.5), inch_to_mm (4), "s", font_desc, "Hola mundo")
