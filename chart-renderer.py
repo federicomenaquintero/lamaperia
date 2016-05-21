@@ -109,7 +109,7 @@ class ChartRenderer:
         self.map_to_top_margin_mm = y_mm
 
     def set_zoom (self, zoom):
-        if not (type (zoom) == int and type >= 0 and type <= 19):
+        if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
         self.zoom = zoom
