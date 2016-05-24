@@ -20,6 +20,9 @@ default_center_lat      = -96.9040473
 default_center_lon      = 19.4621106
 default_map_scale_denom = 50000
 
+default_map_width_mm    = inch_to_mm (10.25)
+default_map_height_mm   = inch_to_mm (7.75)
+
 class MapLayout:
     def __init__ (self):
         # Sane defaults for if a config file is not specified
@@ -31,6 +34,9 @@ class MapLayout:
         self.center_lat      = default_center_lat
         self.center_lon      = default_center_lon
         self.map_scale_denom = default_map_scale_denom
+
+        self.map_width_mm    = default_map_width_mm
+        self.map_height_mm   = default_map_height_mm
 
     def parse_json (self, str):
         parsed = json.loads (str)
@@ -52,6 +58,12 @@ class MapLayout:
 
         if "map-scale" in parsed:
             self.map_scale_denom = parsed["map-scale"]
+
+        if "map-width" in parsed:
+            self.map_width_mm = parse_units_value (parsed["map-width"])
+
+        if "map-height" in parsed:
+            self.map_height_mm = parse_units_value (parsed["map-height"])
 
 #################### tests ####################
 
@@ -126,3 +138,18 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertFloatEquals (layout.center_lat, default_center_lat)
         self.assertFloatEquals (layout.center_lon, default_center_lon)
         self.assertFloatEquals (layout.map_scale_denom, 50000)
+
+    def test_map_layout_has_default_map_size (self):
+        layout = MapLayout ()
+        self.assertFloatEquals (layout.map_width_mm, default_map_width_mm)
+        self.assertFloatEquals (layout.map_height_mm, default_map_height_mm)
+
+    def test_map_layout_parses_map_width_and_height (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "map-width" : "100 mm",
+            "map-height" : "200 mm" }
+        """)
+
+        self.assertFloatEquals (layout.map_width_mm, 100)
+        self.assertFloatEquals (layout.map_height_mm, 200)
