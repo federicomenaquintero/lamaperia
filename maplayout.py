@@ -5,9 +5,15 @@ import testutils
 
 class MapLayout:
     def __init__ (self):
+        # Sane defaults for if a config file is not specified
+
         self.paper_width_mm = inch_to_mm (11)
         self.paper_height_mm = inch_to_mm (8.5)
         self.zoom = 15
+
+        self.center_lat      = -96.9040473
+        self.center_lon      = 19.4621106
+        self.map_scale_denom = 50000
 
     def parse_json (self, str):
         parsed = json.loads (str)
@@ -78,12 +84,12 @@ class TestMapLayout (testutils.TestCaseHelper):
     def test_map_layout_parses_center_lon_and_lat (self):
         layout = MapLayout ()
         layout.parse_json ("""
-          { "center-lon" : -96.9040473,
-            "center-lat" : "19d27m43s" }
+          { "center-lat" : "19d27m43s",
+            "center-lon" : -96.9040473 }
         """)
 
-        self.assertFloatEquals (layout.center_lon, -96.9040473)
         self.assertFloatEquals (layout.center_lat, parse_degrees ("19d27m43s"))
+        self.assertFloatEquals (layout.center_lon, -96.9040473)
 
     def test_map_layout_parses_map_scale (self):
         layout = MapLayout ()
@@ -91,4 +97,10 @@ class TestMapLayout (testutils.TestCaseHelper):
           { "map-scale" : 50000 }
         """)
 
+        self.assertFloatEquals (layout.map_scale_denom, 50000)
+
+    def test_map_layout_has_default_center_and_scale (self):
+        layout = MapLayout ()
+        self.assertFloatEquals (layout.center_lat, -96.9040473)
+        self.assertFloatEquals (layout.center_lon, 19.4621106)
         self.assertFloatEquals (layout.map_scale_denom, 50000)
