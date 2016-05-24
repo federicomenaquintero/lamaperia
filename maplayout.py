@@ -23,6 +23,9 @@ default_map_scale_denom = 50000
 default_map_width_mm    = inch_to_mm (10.25)
 default_map_height_mm   = inch_to_mm (7.75)
 
+default_map_to_left_margin_mm = inch_to_mm (0.375)
+default_map_to_top_margin_mm  = inch_to_mm (0.375)
+
 class MapLayout:
     def __init__ (self):
         # Sane defaults for if a config file is not specified
@@ -37,6 +40,9 @@ class MapLayout:
 
         self.map_width_mm    = default_map_width_mm
         self.map_height_mm   = default_map_height_mm
+
+        self.map_to_left_margin_mm = default_map_to_left_margin_mm
+        self.map_to_top_margin_mm  = default_map_to_top_margin_mm
 
     def parse_json (self, str):
         parsed = json.loads (str)
@@ -64,6 +70,12 @@ class MapLayout:
 
         if "map-height" in parsed:
             self.map_height_mm = parse_units_value (parsed["map-height"])
+
+        if "map-to-left-margin" in parsed:
+            self.map_to_left_margin_mm = parse_units_value (parsed["map-to-left-margin"])
+
+        if "map-to-top-margin" in parsed:
+            self.map_to_top_margin_mm = parse_units_value (parsed["map-to-top-margin"])
 
 #################### tests ####################
 
@@ -153,3 +165,18 @@ class TestMapLayout (testutils.TestCaseHelper):
 
         self.assertFloatEquals (layout.map_width_mm, 100)
         self.assertFloatEquals (layout.map_height_mm, 200)
+
+    def test_map_layout_has_default_map_to_top_left_margin (self):
+        layout = MapLayout ()
+        self.assertFloatEquals (layout.map_to_left_margin_mm, default_map_to_left_margin_mm)
+        self.assertFloatEquals (layout.map_to_top_margin_mm, default_map_to_top_margin_mm)
+
+    def test_map_layout_parses_map_to_top_left_margin (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "map-to-left-margin" : "100 mm",
+            "map-to-top-margin" : "200 mm" }
+        """)
+
+        self.assertFloatEquals (layout.map_to_left_margin_mm, 100)
+        self.assertFloatEquals (layout.map_to_top_margin_mm, 200)
