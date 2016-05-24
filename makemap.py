@@ -12,6 +12,7 @@ import math
 import cairo
 from units import *
 from parsedegrees import *
+import maplayout
 
 mapbox_access_params = {
     'access_token' : 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
@@ -44,8 +45,7 @@ Degrees can be negative as in "-19d30m".
 The default zoom value is 15.
 """)
 
-    parser.add_argument ("--paper-width",  type = float, default = inch_to_mm (11.0), metavar="FLOAT")
-    parser.add_argument ("--paper-height", type = float, default = inch_to_mm (8.5), metavar="FLOAT")
+    parser.add_argument ("--config",       type = str, required = True, metavar = "JSON-FILENAME")
     parser.add_argument ("--center-lat",   type = str, required = True, metavar = "DEGREES")
     parser.add_argument ("--center-lon",   type = str, required = True, metavar = "DEGREES")
     parser.add_argument ("--map-scale",    type = float, default = 50000.0, metavar = "FLOAT")
@@ -57,11 +57,15 @@ The default zoom value is 15.
 
     validate_args (args)
 
+    json_config = open (args.config).read ()
+    map_layout = maplayout.MapLayout ()
+    map_layout.parse_json (json_config)
+
     center_lat = parse_degrees (args.center_lat)
     center_lon = parse_degrees (args.center_lon)
 
     paper_renderer = paperrenderer.PaperRenderer ()
-    paper_renderer.set_paper_size_mm (args.paper_width, args.paper_height)
+    paper_renderer.set_paper_size_mm (map_layout.paper_width_mm, map_layout.paper_height_mm)
 
     chart_renderer = chartrenderer.ChartRenderer ()
     chart_renderer.set_map_size_mm (inch_to_mm (10.25), inch_to_mm (7.75))
