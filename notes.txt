@@ -547,3 +547,7 @@ https://gis.stackexchange.com/questions/99782/why-are-google-mercator-and-utm-ro
 https://wiki.openstreetmap.org/wiki/MapProxy
 
 Map with tile numbers: http://tools.geofabrik.de/map/#8/18.0092/-98.6391&type=Geofabrik_Standard&grid=1
+
+* Testing
+
+python3 -m unittest -v module-to-test.py
