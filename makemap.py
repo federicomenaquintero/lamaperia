@@ -20,19 +20,6 @@ mapbox_access_params = {
     'style_id'     : 'cil44s8ep000c9jm18x074iwv'
 }
 
-def validate_args (args):
-    valid = True
-
-    if args.zoom == None:
-        print ("Missing --zoom=N argument")
-        valid = False
-    elif args.zoom < 0 or args.zoom > 20:
-        print ("--zoom-tiles expects an integer in the [0, 20] range")
-        valid = False
-
-    if not valid:
-        sys.exit (1)
-
 ####################################################################
 
 def main ():
@@ -54,8 +41,6 @@ The default zoom value is 15.
 
     args = parser.parse_args ()
 
-    validate_args (args)
-
     json_config = open (args.config).read ()
     map_layout = maplayout.MapLayout ()
     map_layout.parse_json (json_config)
@@ -63,8 +48,7 @@ The default zoom value is 15.
     center_lat = parse_degrees (args.center_lat)
     center_lon = parse_degrees (args.center_lon)
 
-    paper_renderer = paperrenderer.PaperRenderer ()
-    paper_renderer.set_paper_size_mm (map_layout.paper_width_mm, map_layout.paper_height_mm)
+    paper_renderer = paperrenderer.PaperRenderer (map_layout)
 
     chart_renderer = chartrenderer.ChartRenderer ()
     chart_renderer.set_map_size_mm (inch_to_mm (10.25), inch_to_mm (7.75))
