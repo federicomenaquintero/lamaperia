@@ -13,15 +13,29 @@ def mm_to_pt (mm):
 def pt_to_mm (pt):
     return pt / 72.0 * 25.4
 
-mm_re = re.compile ("^([-+]?\d*\.?\d+)\s*mm$")
+def unity (value):
+    return value
+
+units_re = re.compile ("^([-+]?\d*\.?\d+)\s*(\w+)?$")
 
 def parse_units_str (str):
-    m = mm_re.match (str)
+    m = units_re.match (str)
     if m == None:
         return None
 
-    mm = m.group (1)
-    return float (mm)
+    value = m.group (1)
+    unit = m.group (2)
+
+    v = float (value)
+
+    if unit == "mm":
+        convert = unity
+    elif unit == "in":
+        convert = inch_to_mm
+    elif unit == None:
+        convert = unity
+
+    return convert (v)
 
 ########## tests ##########
 
@@ -50,6 +64,12 @@ class TestUnitConversions (testutils.TestCaseHelper):
 
     def test_can_parse_mm (self):
         self.assertFloatEquals (11.0, parse_units_str ("11mm"))
+        self.assertFloatEquals (-11.0, parse_units_str ("-11 mm"))
 
-    def test_can_parse_mm_with_space (self):
-        self.assertFloatEquals (11.0, parse_units_str ("11 mm"))
+    def test_can_parse_inches (self):
+        self.assertFloatEquals (inch_to_mm (11.0), parse_units_str ("11in"))
+        self.assertFloatEquals (inch_to_mm (-11.0), parse_units_str ("-11 in"))
+
+    def test_can_parse_units_without_specifier (self):
+        self.assertFloatEquals (11.0, parse_units_str ("11"))
+        self.assertFloatEquals (-11.0, parse_units_str ("-11"))
