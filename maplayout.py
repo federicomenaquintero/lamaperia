@@ -7,6 +7,7 @@ class MapLayout:
     def __init__ (self):
         self.paper_width_mm = inch_to_mm (11)
         self.paper_height_mm = inch_to_mm (8.5)
+        self.zoom = 15
 
     def parse_json (self, str):
         parsed = json.loads (str)
