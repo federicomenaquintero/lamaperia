@@ -43,9 +43,7 @@ The default zoom value is 15.
     map_layout.parse_json (json_config)
 
     paper_renderer = paperrenderer.PaperRenderer (map_layout)
-
     chart_renderer = chartrenderer.ChartRenderer (map_layout)
-    chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.375), inch_to_mm (0.375))
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
                                                                         mapbox_access_params["username"],

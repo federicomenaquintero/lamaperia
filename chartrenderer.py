@@ -51,8 +51,6 @@ def compute_real_world_mm_per_tile (latitude, zoom):
 
 class ChartRenderer:
     def __init__ (self, layout):
-        self.map_to_left_margin_mm = 0.0
-        self.map_to_top_margin_mm = 0.0
         self.north_tile_idx = 0
         self.west_tile_idx = 0
         self.south_tile_idx = 0
@@ -74,10 +72,6 @@ class ChartRenderer:
 
         if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
-
-    def set_map_to_top_left_margin_mm (self, x_mm, y_mm):
-        self.map_to_left_margin_mm = x_mm
-        self.map_to_top_margin_mm = y_mm
 
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider
@@ -125,15 +119,15 @@ class ChartRenderer:
         outer_thickness_mm = pt_to_mm (self.frame_outer_thickness_pt)
 
         rectangle_thickness_outside (cr,
-                                     self.map_to_left_margin_mm,
-                                     self.map_to_top_margin_mm,
+                                     self.layout.map_to_left_margin_mm,
+                                     self.layout.map_to_top_margin_mm,
                                      self.layout.map_width_mm,
                                      self.layout.map_height_mm,
                                      inner_thickness_mm)
 
         rectangle_thickness_inside (cr,
-                                    self.map_to_left_margin_mm - self.frame_width_mm,
-                                    self.map_to_top_margin_mm - self.frame_width_mm,
+                                    self.layout.map_to_left_margin_mm - self.frame_width_mm,
+                                    self.layout.map_to_top_margin_mm - self.frame_width_mm,
                                     self.layout.map_width_mm + 2 * self.frame_width_mm,
                                     self.layout.map_height_mm + 2 * self.frame_width_mm,
                                     outer_thickness_mm)
@@ -141,7 +135,7 @@ class ChartRenderer:
         cr.restore ()
 
     def clip_to_map (self, cr):
-        cr.rectangle (self.map_to_left_margin_mm, self.map_to_top_margin_mm,
+        cr.rectangle (self.layout.map_to_left_margin_mm, self.layout.map_to_top_margin_mm,
                       self.layout.map_width_mm, self.layout.map_height_mm)
         cr.clip ()
 
@@ -218,8 +212,8 @@ class ChartRenderer:
         self.clip_to_map (cr)
 
         # Center on the map
-        cr.translate (self.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
-                      self.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
+        cr.translate (self.layout.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
+                      self.layout.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
 
         # Scale the map down to the final size
 
@@ -236,16 +230,3 @@ class ChartRenderer:
         cr.paint ()
 
         cr.restore ()
-
-if __name__ == "__main__":
-    chart_renderer = ChartRenderer ()
-
-    chart_renderer.set_paper_size_mm (inch_to_mm (11), inch_to_mm (8.5))
-    chart_renderer.set_map_size_mm (inch_to_mm (10.25), inch_to_mm (7.75))
-    chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.375), inch_to_mm (0.375))
-
-    chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
-                                                                        'federicomenaquintero',
-                                                                        'cil44s8ep000c9jm18x074iwv'))
-
-    chart_renderer.render_to_svg ("foo.svg")
