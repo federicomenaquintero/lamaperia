@@ -27,6 +27,9 @@ class MapLayout:
         if "center-lat" in parsed:
             self.center_lat = parse_degrees_value (parsed["center-lat"])
 
+        if "map-scale" in parsed:
+            self.map_scale_denom = parsed["map-scale"]
+
 #################### tests ####################
 
 class TestMapLayout (testutils.TestCaseHelper):
@@ -81,3 +84,11 @@ class TestMapLayout (testutils.TestCaseHelper):
 
         self.assertFloatEquals (layout.center_lon, -96.9040473)
         self.assertFloatEquals (layout.center_lat, parse_degrees ("19d27m43s"))
+
+    def test_map_layout_parses_map_scale (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "map-scale" : 50000 }
+        """)
+
+        self.assertFloatEquals (layout.map_scale_denom, 50000)
