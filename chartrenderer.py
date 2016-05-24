@@ -50,7 +50,7 @@ def compute_real_world_mm_per_tile (latitude, zoom):
     return mm_per_tile
 
 class ChartRenderer:
-    def __init__ (self):
+    def __init__ (self, layout):
         self.map_scale_denom = 50000.0
         self.map_center_coords = (19.4337, -96.8811) # lat, lon
         self.map_width_mm = 0.0
@@ -64,7 +64,8 @@ class ChartRenderer:
         self.east_tile_idx = 0
         self.tile_indexes_are_computed = False
 
-        self.zoom = 15
+        self.validate_layout (layout)
+        self.layout = layout
 
         self.tile_provider = None
 
@@ -72,6 +73,12 @@ class ChartRenderer:
         self.frame_inner_thickness_pt = 0.5
         self.frame_outer_thickness_pt = 1.0
         self.frame_color_rgb = (0, 0, 0)
+
+    def validate_layout (self, layout):
+        zoom = layout.zoom
+
+        if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
+            raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
     def set_map_size_mm (self, width_mm, height_mm):
         self.map_width_mm = width_mm
@@ -81,12 +88,6 @@ class ChartRenderer:
     def set_map_to_top_left_margin_mm (self, x_mm, y_mm):
         self.map_to_left_margin_mm = x_mm
         self.map_to_top_margin_mm = y_mm
-
-    def set_zoom (self, zoom):
-        if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
-            raise ValueError ("Zoom must be an integer in the range [0, 19]")
-
-        self.zoom = zoom
 
     def set_map_center_and_scale (self, lat, lon, scale_denom):
         self.map_center_coords = (lat, lon)
@@ -100,7 +101,7 @@ class ChartRenderer:
         if not self.map_size_is_set:
             raise Exception ("ChartRenderer.set_map_size_mm() has not been called!")
 
-        tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.zoom) / self.map_scale_denom
+        tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.layout.zoom) / self.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
@@ -112,7 +113,7 @@ class ChartRenderer:
         half_width_mm = self.map_width_mm / 2.0
         half_height_mm = self.map_height_mm / 2.0
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
 
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
         scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
@@ -179,7 +180,7 @@ class ChartRenderer:
                 tiles_downloaded += 1
                 print ("Downloading tile {0}".format(tiles_downloaded), end='\r', flush=True)
 
-                png_data = self.tile_provider.get_tile_png (self.zoom, tile_x, tile_y)
+                png_data = self.tile_provider.get_tile_png (self.layout.zoom, tile_x, tile_y)
                 tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
 
                 tile_xpos = x * tile_size
@@ -198,8 +199,8 @@ class ChartRenderer:
     def center_offsets_within_map (self):
         tile_size = self.tile_provider.get_tile_size ()
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.zoom, self.map_center_coords[0], self.map_center_coords[1])
-        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
 
         map_surface_xofs = (center_tile_x - self.west_tile_idx) * tile_size + center_tile_xofs
         map_surface_yofs = (center_tile_y - self.north_tile_idx) * tile_size + center_tile_yofs
