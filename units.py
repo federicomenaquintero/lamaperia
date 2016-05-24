@@ -37,7 +37,7 @@ def parse_units_str (str):
 
     return convert (v)
 
-def parse_units (value):
+def parse_units_value (value):
     if type (value) == str:
         return parse_units_str (value)
     elif type (value) == float:
@@ -83,9 +83,9 @@ class TestUnitConversions (testutils.TestCaseHelper):
         self.assertFloatEquals (-11.0, parse_units_str ("-11.0"))
 
     def test_can_parse_float_value (self):
-        self.assertFloatEquals (11.0, parse_units (11.0))
+        self.assertFloatEquals (11.0, parse_units_value (11.0))
 
     def test_can_parse_string_value (self):
-        self.assertFloatEquals (11.0, parse_units ("11.0"))
-        self.assertFloatEquals (11.0, parse_units ("11.0 mm"))
-        self.assertFloatEquals (inch_to_mm (-11.0), parse_units ("-11 in"))
+        self.assertFloatEquals (11.0, parse_units_value ("11.0"))
+        self.assertFloatEquals (11.0, parse_units_value ("11.0 mm"))
+        self.assertFloatEquals (inch_to_mm (-11.0), parse_units_value ("-11 in"))

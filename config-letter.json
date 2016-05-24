@@ -1,4 +1,6 @@
 {
     "paper-width"  : "11 in",
-    "paper-heigth" : "8.5 in"
+    "paper-heigth" : "8.5 in",
+
+    "zoom" : 15
 }

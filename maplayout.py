@@ -13,10 +13,10 @@ class MapLayout:
         parsed = json.loads (str)
 
         if "paper-width" in parsed:
-            self.paper_width_mm = parse_units (parsed["paper-width"])
+            self.paper_width_mm = parse_units_value (parsed["paper-width"])
 
         if "paper-height" in parsed:
-            self.paper_height_mm = parse_units (parsed["paper-height"])
+            self.paper_height_mm = parse_units_value (parsed["paper-height"])
 
         if "zoom" in parsed:
             self.zoom = parsed["zoom"]
