@@ -17,6 +17,9 @@ class MapLayout:
         if "paper-height" in parsed:
             self.paper_height_mm = parse_units (parsed["paper-height"])
 
+        if "zoom" in parsed:
+            self.zoom = parsed["zoom"]
+
 #################### tests ####################
 
 class TestMapLayout (testutils.TestCaseHelper):
@@ -53,3 +56,11 @@ class TestMapLayout (testutils.TestCaseHelper):
 
         self.assertFloatEquals (layout.paper_width_mm, inch_to_mm (11))
         self.assertFloatEquals (layout.paper_height_mm, inch_to_mm (8.5))
+
+    def test_map_layout_parses_zoom (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "zoom" : 15 }
+        """)
+
+        self.assertEqual (layout.zoom, 15)
