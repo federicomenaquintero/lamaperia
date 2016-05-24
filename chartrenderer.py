@@ -51,8 +51,6 @@ def compute_real_world_mm_per_tile (latitude, zoom):
 
 class ChartRenderer:
     def __init__ (self, layout):
-        self.map_scale_denom = 50000.0
-        self.map_center_coords = (19.4337, -96.8811) # lat, lon
         self.map_width_mm = 0.0
         self.map_height_mm = 0.0
         self.map_size_is_set = False
@@ -89,10 +87,6 @@ class ChartRenderer:
         self.map_to_left_margin_mm = x_mm
         self.map_to_top_margin_mm = y_mm
 
-    def set_map_center_and_scale (self, lat, lon, scale_denom):
-        self.map_center_coords = (lat, lon)
-        self.map_scale_denom = scale_denom
-
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider
 
@@ -101,7 +95,7 @@ class ChartRenderer:
         if not self.map_size_is_set:
             raise Exception ("ChartRenderer.set_map_size_mm() has not been called!")
 
-        tile_width_mm = compute_real_world_mm_per_tile (self.map_center_coords[0], self.layout.zoom) / self.map_scale_denom
+        tile_width_mm = compute_real_world_mm_per_tile (self.layout.center_lat, self.layout.zoom) / self.layout.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
@@ -113,7 +107,7 @@ class ChartRenderer:
         half_width_mm = self.map_width_mm / 2.0
         half_height_mm = self.map_height_mm / 2.0
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
 
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
         scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
@@ -199,8 +193,8 @@ class ChartRenderer:
     def center_offsets_within_map (self):
         tile_size = self.tile_provider.get_tile_size ()
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
-        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.layout.zoom, self.map_center_coords[0], self.map_center_coords[1])
+        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
+        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
 
         map_surface_xofs = (center_tile_x - self.west_tile_idx) * tile_size + center_tile_xofs
         map_surface_yofs = (center_tile_y - self.north_tile_idx) * tile_size + center_tile_yofs
@@ -264,7 +258,5 @@ if __name__ == "__main__":
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider ('pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
                                                                         'federicomenaquintero',
                                                                         'cil44s8ep000c9jm18x074iwv'))
-
-    chart_renderer.set_map_center_and_scale (19.4621106, -96.9040473, 50000) # Cerro Malinche
 
     chart_renderer.render_to_svg ("foo.svg")

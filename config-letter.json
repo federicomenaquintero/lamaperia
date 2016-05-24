@@ -2,5 +2,9 @@
     "paper-width"  : "11 in",
     "paper-heigth" : "8.5 in",
 
-    "zoom" : 15
+    "zoom" : 15,
+
+    "center-lat" : 19.4621106,
+    "center-lon" : -96.9040473,
+    "map-scale"  : 50000
 }

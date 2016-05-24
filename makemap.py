@@ -33,9 +33,6 @@ The default zoom value is 15.
 """)
 
     parser.add_argument ("--config",       type = str, required = True, metavar = "JSON-FILENAME")
-    parser.add_argument ("--center-lat",   type = str, required = True, metavar = "DEGREES")
-    parser.add_argument ("--center-lon",   type = str, required = True, metavar = "DEGREES")
-    parser.add_argument ("--map-scale",    type = float, default = 50000.0, metavar = "FLOAT")
     parser.add_argument ("--format",       type = str, required = True, metavar = "STRING")
     parser.add_argument ("--output",       type = str, required = True, metavar = "FILENAME")
 
@@ -45,15 +42,11 @@ The default zoom value is 15.
     map_layout = maplayout.MapLayout ()
     map_layout.parse_json (json_config)
 
-    center_lat = parse_degrees (args.center_lat)
-    center_lon = parse_degrees (args.center_lon)
-
     paper_renderer = paperrenderer.PaperRenderer (map_layout)
 
     chart_renderer = chartrenderer.ChartRenderer (map_layout)
     chart_renderer.set_map_size_mm (inch_to_mm (10.25), inch_to_mm (7.75))
     chart_renderer.set_map_to_top_left_margin_mm (inch_to_mm (0.375), inch_to_mm (0.375))
-    chart_renderer.set_map_center_and_scale (center_lat, center_lon, args.map_scale)
 
     chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
                                                                         mapbox_access_params["username"],
