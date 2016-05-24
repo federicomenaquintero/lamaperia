@@ -51,8 +51,6 @@ def compute_real_world_mm_per_tile (latitude, zoom):
 
 class ChartRenderer:
     def __init__ (self):
-        self.paper_width_mm = 0.0
-        self.paper_height_mm = 0.0
         self.map_scale_denom = 50000.0
         self.map_center_coords = (19.4337, -96.8811) # lat, lon
         self.map_width_mm = 0.0
@@ -74,10 +72,6 @@ class ChartRenderer:
         self.frame_inner_thickness_pt = 0.5
         self.frame_outer_thickness_pt = 1.0
         self.frame_color_rgb = (0, 0, 0)
-
-    def set_paper_size_mm (self, width_mm, height_mm):
-        self.paper_width_mm = width_mm
-        self.paper_height_mm = height_mm
 
     def set_map_size_mm (self, width_mm, height_mm):
         self.map_width_mm = width_mm
@@ -133,19 +127,6 @@ class ChartRenderer:
         self.east_tile_idx = center_tile_x + half_horizontal_tiles
 
         self.tile_indexes_are_computed = True
-
-    def render_to_svg (self, filename):
-        surf = cairo.SVGSurface (filename, mm_to_pt (self.paper_width_mm), mm_to_pt (self.paper_height_mm))
-
-        # The SVG surface is created in points, but we want to render everything in millimeters.
-        # Set up a scaling transformation and render everything based on that.
-
-        cr = cairo.Context (surf)
-        factor = mm_to_pt (1.0)
-        cr.scale (factor, factor)
-
-        self.render_to_cairo (cr)
-        surf.show_page ()
 
     # Assumes that the current transformation matrix is set up for millimeters
     def render_to_cairo (self, cr):

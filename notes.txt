@@ -464,6 +464,9 @@ python3 make-map.py --from-lat=19d30m --from-lon=-97d --to-lat=19d22m --to-lon=-
 
 For 18"x12" at 564 DPI, crop to 10152 x 6768 pixels
 
+# Cerro Malinche
+python3 makemap.py --format=svg --output=foo.svg --center-lat=19.4621106 --center-lon=-96.9040473 --map-scale=50000
+
 * Tile storage
 
 https://github.com/mapbox/mbtiles-spec
