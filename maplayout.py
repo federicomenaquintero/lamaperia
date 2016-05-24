@@ -26,6 +26,9 @@ default_map_height_mm   = inch_to_mm (7.75)
 default_map_to_left_margin_mm = inch_to_mm (0.375)
 default_map_to_top_margin_mm  = inch_to_mm (0.375)
 
+default_scale_xpos_mm = inch_to_mm (5.5)
+default_scale_ypos_mm = inch_to_mm (8.125)
+
 class MapLayout:
     def __init__ (self):
         # Sane defaults for if a config file is not specified
@@ -43,6 +46,9 @@ class MapLayout:
 
         self.map_to_left_margin_mm = default_map_to_left_margin_mm
         self.map_to_top_margin_mm  = default_map_to_top_margin_mm
+
+        self.scale_xpos_mm = default_scale_xpos_mm
+        self.scale_ypos_mm = default_scale_ypos_mm
 
     def parse_json (self, str):
         parsed = json.loads (str)
@@ -76,6 +82,12 @@ class MapLayout:
 
         if "map-to-top-margin" in parsed:
             self.map_to_top_margin_mm = parse_units_value (parsed["map-to-top-margin"])
+
+        if "scale-xpos" in parsed:
+            self.scale_xpos_mm = parse_units_value (parsed["scale-xpos"])
+
+        if "scale-ypos" in parsed:
+            self.scale_ypos_mm = parse_units_value (parsed["scale-ypos"])
 
 #################### tests ####################
 
@@ -180,3 +192,20 @@ class TestMapLayout (testutils.TestCaseHelper):
 
         self.assertFloatEquals (layout.map_to_left_margin_mm, 100)
         self.assertFloatEquals (layout.map_to_top_margin_mm, 200)
+
+    def test_map_layout_has_default_scale_position (self):
+        layout = MapLayout ()
+        self.assertFloatEquals (layout.scale_xpos_mm, default_scale_xpos_mm)
+        self.assertFloatEquals (layout.scale_ypos_mm, default_scale_ypos_mm)
+
+    def test_map_layout_parses_scale_position (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "scale-xpos" : "100 mm",
+            "scale-ypos" : "200 mm" }
+        """)
+
+        self.assertFloatEquals (layout.scale_xpos_mm, 100)
+        self.assertFloatEquals (layout.scale_ypos_mm, 200)
+
+        
