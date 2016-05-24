@@ -46,6 +46,14 @@ def parse_degrees (value):
     else:
         return deg + decimals
 
+def parse_degrees_value (value):
+    if type (value) == str:
+        return parse_degrees (value)
+    elif type (value) == float:
+        return value
+    else:
+        raise ValueError ("value must be a float or a string")
+
 ########## tests ##########
 
 
@@ -69,3 +77,9 @@ class TestParseDegrees (testutils.TestCaseHelper):
         self.assertFloatEquals (parse_degrees ("-19d30m"), -19.5)
         self.assertFloatEquals (parse_degrees ("19d20m15s"), 19 + 20.0 / 60 + 15.0 / 3600)
         self.assertFloatEquals (parse_degrees ("-19d20m15s"), -(19 + 20.0 / 60 + 15.0 / 3600))
+
+    def test_parse_degrees_can_parse_float_value (self):
+        self.assertFloatEquals (parse_degrees_value (19.5), 19.5)
+
+    def test_parse_degrees_can_parse_string_value (self):
+        self.assertFloatEquals (parse_degrees_value ("-19d30m"), -19.5)
