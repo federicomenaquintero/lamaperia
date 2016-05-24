@@ -37,6 +37,14 @@ def parse_units_str (str):
 
     return convert (v)
 
+def parse_units (value):
+    if type (value) == str:
+        return parse_units_str (value)
+    elif type (value) == float:
+        return value
+    else:
+        raise ValueError ("value must be a float or a string")
+
 ########## tests ##########
 
 class TestUnitConversions (testutils.TestCaseHelper):
@@ -63,13 +71,21 @@ class TestUnitConversions (testutils.TestCaseHelper):
         self.mm_pt_roundtrip (-10)
 
     def test_can_parse_mm (self):
-        self.assertFloatEquals (11.0, parse_units_str ("11mm"))
+        self.assertFloatEquals (11.0, parse_units_str ("11.0mm"))
         self.assertFloatEquals (-11.0, parse_units_str ("-11 mm"))
 
     def test_can_parse_inches (self):
         self.assertFloatEquals (inch_to_mm (11.0), parse_units_str ("11in"))
-        self.assertFloatEquals (inch_to_mm (-11.0), parse_units_str ("-11 in"))
+        self.assertFloatEquals (inch_to_mm (-11.0), parse_units_str ("-11.0 in"))
 
     def test_can_parse_units_without_specifier (self):
         self.assertFloatEquals (11.0, parse_units_str ("11"))
-        self.assertFloatEquals (-11.0, parse_units_str ("-11"))
+        self.assertFloatEquals (-11.0, parse_units_str ("-11.0"))
+
+    def test_can_parse_float_value (self):
+        self.assertFloatEquals (11.0, parse_units (11.0))
+
+    def test_can_parse_string_value (self):
+        self.assertFloatEquals (11.0, parse_units ("11.0"))
+        self.assertFloatEquals (11.0, parse_units ("11.0 mm"))
+        self.assertFloatEquals (inch_to_mm (-11.0), parse_units ("-11 in"))
