@@ -4,6 +4,7 @@ import sys
 import cairo
 import io
 import tile_provider
+import scalerenderer
 from units import *
 from parsedegrees import *
 from cairoutils import *
@@ -110,6 +111,7 @@ class ChartRenderer:
     def render_to_cairo (self, cr):
         self.render_map_data (cr)
         self.render_map_frame (cr)
+        self.render_scale (cr)
 
     def render_map_frame (self, cr):
         cr.save ()
@@ -230,3 +232,7 @@ class ChartRenderer:
         cr.paint ()
 
         cr.restore ()
+
+    def render_scale (self, cr):
+        scale_renderer = scalerenderer.ScaleRenderer (self.layout.map_scale_denom, 5, 1, 100)
+        scale_renderer.render (cr, self.layout.scale_xpos_mm, self.layout.scale_ypos_mm)
