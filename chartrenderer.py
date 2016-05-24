@@ -51,9 +51,6 @@ def compute_real_world_mm_per_tile (latitude, zoom):
 
 class ChartRenderer:
     def __init__ (self, layout):
-        self.map_width_mm = 0.0
-        self.map_height_mm = 0.0
-        self.map_size_is_set = False
         self.map_to_left_margin_mm = 0.0
         self.map_to_top_margin_mm = 0.0
         self.north_tile_idx = 0
@@ -78,11 +75,6 @@ class ChartRenderer:
         if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
-    def set_map_size_mm (self, width_mm, height_mm):
-        self.map_width_mm = width_mm
-        self.map_height_mm = height_mm
-        self.map_size_is_set = True
-
     def set_map_to_top_left_margin_mm (self, x_mm, y_mm):
         self.map_to_left_margin_mm = x_mm
         self.map_to_top_margin_mm = y_mm
@@ -92,9 +84,6 @@ class ChartRenderer:
 
     # We need to scale tiles by this much to get them to the final rendered size
     def compute_tile_scale_factor (self, tile_size):
-        if not self.map_size_is_set:
-            raise Exception ("ChartRenderer.set_map_size_mm() has not been called!")
-
         tile_width_mm = compute_real_world_mm_per_tile (self.layout.center_lat, self.layout.zoom) / self.layout.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
@@ -104,8 +93,8 @@ class ChartRenderer:
     def compute_tile_bounds (self, tile_size):
         tile_scale_factor = self.compute_tile_scale_factor (tile_size)
 
-        half_width_mm = self.map_width_mm / 2.0
-        half_height_mm = self.map_height_mm / 2.0
+        half_width_mm = self.layout.map_width_mm / 2.0
+        half_height_mm = self.layout.map_height_mm / 2.0
 
         (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
 
@@ -138,22 +127,22 @@ class ChartRenderer:
         rectangle_thickness_outside (cr,
                                      self.map_to_left_margin_mm,
                                      self.map_to_top_margin_mm,
-                                     self.map_width_mm,
-                                     self.map_height_mm,
+                                     self.layout.map_width_mm,
+                                     self.layout.map_height_mm,
                                      inner_thickness_mm)
 
         rectangle_thickness_inside (cr,
                                     self.map_to_left_margin_mm - self.frame_width_mm,
                                     self.map_to_top_margin_mm - self.frame_width_mm,
-                                    self.map_width_mm + 2 * self.frame_width_mm,
-                                    self.map_height_mm + 2 * self.frame_width_mm,
+                                    self.layout.map_width_mm + 2 * self.frame_width_mm,
+                                    self.layout.map_height_mm + 2 * self.frame_width_mm,
                                     outer_thickness_mm)
 
         cr.restore ()
 
     def clip_to_map (self, cr):
         cr.rectangle (self.map_to_left_margin_mm, self.map_to_top_margin_mm,
-                      self.map_width_mm, self.map_height_mm)
+                      self.layout.map_width_mm, self.layout.map_height_mm)
         cr.clip ()
 
     # Downloads tiles and composites them into a big image surface
@@ -229,8 +218,8 @@ class ChartRenderer:
         self.clip_to_map (cr)
 
         # Center on the map
-        cr.translate (self.map_to_left_margin_mm + self.map_width_mm / 2.0,
-                      self.map_to_top_margin_mm + self.map_height_mm / 2.0)
+        cr.translate (self.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
+                      self.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
 
         # Scale the map down to the final size
 
