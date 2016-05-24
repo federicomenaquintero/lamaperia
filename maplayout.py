@@ -3,17 +3,34 @@ from parsedegrees import *
 from units import *
 import testutils
 
+# The following values are declared here instead of
+# MapLayout.__init__() so that we can use the same values in the unit
+# tests.
+#
+# You can also change these values if you want different defaults
+# when not using a configuration file.  May I suggest that you
+# make a known-good configuration file instead and base the
+# rest of your work on that.
+#
+default_paper_width_mm  = inch_to_mm (11)
+default_paper_height_mm = inch_to_mm (8.5)
+default_zoom            = 15
+
+default_center_lat      = -96.9040473
+default_center_lon      = 19.4621106
+default_map_scale_denom = 50000
+
 class MapLayout:
     def __init__ (self):
         # Sane defaults for if a config file is not specified
 
-        self.paper_width_mm = inch_to_mm (11)
-        self.paper_height_mm = inch_to_mm (8.5)
-        self.zoom = 15
+        self.paper_width_mm  = default_paper_width_mm
+        self.paper_height_mm = default_paper_height_mm
+        self.zoom            = default_zoom
 
-        self.center_lat      = -96.9040473
-        self.center_lon      = 19.4621106
-        self.map_scale_denom = 50000
+        self.center_lat      = default_center_lat
+        self.center_lon      = default_center_lon
+        self.map_scale_denom = default_map_scale_denom
 
     def parse_json (self, str):
         parsed = json.loads (str)
@@ -73,6 +90,11 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertFloatEquals (layout.paper_width_mm, inch_to_mm (11))
         self.assertFloatEquals (layout.paper_height_mm, inch_to_mm (8.5))
 
+    def test_map_layout_has_default_paper_size (self):
+        layout = MapLayout ()
+        self.assertFloatEquals (layout.paper_width_mm, default_paper_width_mm)
+        self.assertFloatEquals (layout.paper_height_mm, default_paper_height_mm)
+
     def test_map_layout_parses_zoom (self):
         layout = MapLayout ()
         layout.parse_json ("""
@@ -101,6 +123,6 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_has_default_center_and_scale (self):
         layout = MapLayout ()
-        self.assertFloatEquals (layout.center_lat, -96.9040473)
-        self.assertFloatEquals (layout.center_lon, 19.4621106)
+        self.assertFloatEquals (layout.center_lat, default_center_lat)
+        self.assertFloatEquals (layout.center_lon, default_center_lon)
         self.assertFloatEquals (layout.map_scale_denom, 50000)
