@@ -78,7 +78,7 @@ class ScaleRenderer:
                                          mm_per_kilometer * self.small_scale_meters / 1000, self.rule_width_mm)
 
 if __name__ == "__main__":
-    surface = cairo.PDFSurface ("scale.pdf", mm_to_pt (inch_to_mm (11.0)), mm_to_pt (inch_to_mm (8.5)))
+    surface = cairo.SVGSurface ("scale.svg", mm_to_pt (inch_to_mm (11.0)), mm_to_pt (inch_to_mm (8.5)))
     cr = cairo.Context (surface)
 
     factor = mm_to_pt (1.0)
