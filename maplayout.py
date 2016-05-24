@@ -21,6 +21,12 @@ class MapLayout:
         if "zoom" in parsed:
             self.zoom = parsed["zoom"]
 
+        if "center-lon" in parsed:
+            self.center_lon = parse_degrees_value (parsed["center-lon"])
+
+        if "center-lat" in parsed:
+            self.center_lat = parse_degrees_value (parsed["center-lat"])
+
 #################### tests ####################
 
 class TestMapLayout (testutils.TestCaseHelper):
@@ -65,3 +71,13 @@ class TestMapLayout (testutils.TestCaseHelper):
         """)
 
         self.assertEqual (layout.zoom, 15)
+
+    def test_map_layout_parses_center_lon_and_lat (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "center-lon" : -96.9040473,
+            "center-lat" : "19d27m43s" }
+        """)
+
+        self.assertFloatEquals (layout.center_lon, -96.9040473)
+        self.assertFloatEquals (layout.center_lat, parse_degrees ("19d27m43s"))
