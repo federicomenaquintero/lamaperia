@@ -21,12 +21,15 @@ class MapboxTileProvider (TileProvider):
             x = x,
             y = y)
 
+        uri = "http://127.0.0.1:8080/fmq-mapbox/{z}/{x}/{y}.png".format (z = z, x = x, y = y)
+
         return uri
 
     def make_request_for_tile (self, z, x, y):
         url = self.get_uri_for_tile (z, x, y)
-        r = requests.get (url,
-                          params = { 'access_token' : self.access_token })
+#        r = requests.get (url,
+#                          params = { 'access_token' : self.access_token })
+        r = requests.get (url)
         return r
 
     def get_tile_png (self, z, x, y):

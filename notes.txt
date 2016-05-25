@@ -551,3 +551,8 @@ Map with tile numbers: http://tools.geofabrik.de/map/#8/18.0092/-98.6391&type=Ge
 * Testing
 
 python3 -m unittest -v module-to-test.py
+
+* TileStache
+
+cd ~/src/fieldpapers/TileStache/scripts
+python tilestache-server.py --config=/home/federico/Documents/Mapas/tilestache/tilestache-mapbox.cfg
