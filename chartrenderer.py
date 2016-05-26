@@ -109,9 +109,14 @@ class ChartRenderer:
 
     # Assumes that the current transformation matrix is set up for millimeters
     def render_to_cairo (self, cr):
-        self.render_map_data (cr)
-        self.render_map_frame (cr)
-        self.render_scale (cr)
+        if self.layout.draw_map:
+            self.render_map_data (cr)
+
+        if self.layout.draw_map_frame:
+            self.render_map_frame (cr)
+
+        if self.layout.draw_scale:
+            self.render_scale (cr)
 
     def render_map_frame (self, cr):
         cr.save ()
@@ -234,5 +239,9 @@ class ChartRenderer:
         cr.restore ()
 
     def render_scale (self, cr):
+        cr.save ()
+
         scale_renderer = scalerenderer.ScaleRenderer (self.layout.map_scale_denom, 5, 1, 100)
         scale_renderer.render (cr, self.layout.scale_xpos_mm, self.layout.scale_ypos_mm)
+
+        cr.restore ()
