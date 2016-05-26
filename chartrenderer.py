@@ -96,7 +96,13 @@ class ChartRenderer:
         cr.clip ()
 
     # Downloads tiles and composites them into a big image surface
-    def make_map_surface (self, leftmost_tile, topmost_tile, width_tiles, height_tiles):
+    def make_map_surface (self):
+        width_tiles = self.east_tile_idx - self.west_tile_idx + 1
+        height_tiles = self.south_tile_idx - self.north_tile_idx + 1
+
+        assert width_tiles >= 1
+        assert height_tiles >= 1
+
         tile_size = self.tile_provider.get_tile_size ()
         map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
         cr = cairo.Context (map_surf)
@@ -107,8 +113,8 @@ class ChartRenderer:
 
         for y in range (0, height_tiles):
             for x in range (0, width_tiles):
-                tile_x = x + leftmost_tile
-                tile_y = y + topmost_tile
+                tile_x = x + self.west_tile_idx
+                tile_y = y + self.north_tile_idx
 
                 tiles_downloaded += 1
                 print ("Downloading tile {0}".format(tiles_downloaded), end='\r', flush=True)
@@ -146,15 +152,12 @@ class ChartRenderer:
 
         self.compute_extents_of_downloaded_tiles ()
 
-        width_tiles = self.east_tile_idx - self.west_tile_idx + 1
-        height_tiles = self.south_tile_idx - self.north_tile_idx + 1
-
-        if width_tiles < 1 or height_tiles < 1:
+        if self.west_tile_idx > self.east_tile_idx or self.north_tile_idx > self.south_tile_idx:
             raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
 
         # Download map image; figure out the offsets within the map for the center point
 
-        map_surface = self.make_map_surface (self.west_tile_idx, self.north_tile_idx, width_tiles, height_tiles)
+        map_surface = self.make_map_surface ()
         # Uncomment this if you want to examine the downloaded map image
         # map_surface.write_to_png ("map-surface.png")
 
@@ -241,3 +244,20 @@ class TestChartRenderer (testutils.TestCaseHelper):
         self.assertEqual (chart_renderer.north_tile_idx, 14573)
         self.assertEqual (chart_renderer.east_tile_idx, 7569)
         self.assertEqual (chart_renderer.south_tile_idx, 14581)
+
+    def test_downloaded_image_has_correct_size (self):
+        layout = self.make_test_layout ()
+        chart_renderer = ChartRenderer (layout)
+        provider = tile_provider.NullTileProvider ()
+        chart_renderer.set_tile_provider (provider)
+
+        chart_renderer.compute_extents_of_downloaded_tiles ()
+
+        map_surface = chart_renderer.make_map_surface ()
+
+        # The tile indices are in test_computes_minimal_extents_of_downloaded_tiles()
+
+        self.assertEqual (map_surface.get_width (),
+                          provider.get_tile_size () * (7569 - 7558 + 1))
+        self.assertEqual (map_surface.get_height (),
+                          provider.get_tile_size () * (14581 - 14573 + 1))
