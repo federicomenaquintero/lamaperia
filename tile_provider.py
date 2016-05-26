@@ -43,10 +43,40 @@ class MapboxTileProvider (TileProvider):
         return 512
 
 class NullTileProvider (TileProvider):
+    def __init__ (self):
+        self.north_tile_requested_limit = -1
+        self.south_tile_requested_limit = -1
+        self.east_tile_requested_limit = -1
+        self.west_tile_requested_limit = -1
+
     def get_tile_png (self, z, x, y):
+        assert z >= 0
+        assert x >= 0
+        assert y >= 0
+
         f = open ("null-tile-512.png", "rb")
         data = f.read ()
         f.close ()
+
+        if self.west_tile_requested_limit < 0:
+            self.west_tile_requested_limit = x
+        elif x < self.west_tile_requested_limit:
+            self.west_tile_requested_limit = x
+
+        if self.east_tile_requested_limit < 0:
+            self.east_tile_requested_limit = x
+        elif x > self.east_tile_requested_limit:
+            self.east_tile_requested_limit = x
+
+        if self.north_tile_requested_limit < 0:
+            self.north_tile_requested_limit = y
+        elif y < self.north_tile_requested_limit:
+            self.north_tile_requested_limit = y
+
+        if self.south_tile_requested_limit < 0:
+            self.south_tile_requested_limit = y
+        elif y > self.south_tile_requested_limit:
+            self.south_tile_requested_limit = y
 
         return data
 
@@ -56,6 +86,13 @@ class NullTileProvider (TileProvider):
 #################### tests ####################
 
 class TestNullTileProvider (unittest.TestCase):
+    def test_null_tile_provider_has_initialized_request_limits (self):
+        tile_provider = NullTileProvider ()
+        self.assertEqual (tile_provider.north_tile_requested_limit, -1)
+        self.assertEqual (tile_provider.south_tile_requested_limit, -1)
+        self.assertEqual (tile_provider.east_tile_requested_limit, -1)
+        self.assertEqual (tile_provider.west_tile_requested_limit, -1)
+
     def test_null_tile_provider_makes_sense (self):
         tile_provider = NullTileProvider ()
 
@@ -69,3 +106,14 @@ class TestNullTileProvider (unittest.TestCase):
 
         self.assertEqual (tile_surf.get_width (), tile_size)
         self.assertEqual (tile_surf.get_height (), tile_size)
+
+    def test_null_tile_provider_maintains_requested_limits (self):
+        tile_provider = NullTileProvider ()
+
+        tile_provider.get_tile_png (15, 20, 30)
+        tile_provider.get_tile_png (15, 40, 50)
+
+        self.assertEqual (tile_provider.north_tile_requested_limit, 30)
+        self.assertEqual (tile_provider.south_tile_requested_limit, 50)
+        self.assertEqual (tile_provider.west_tile_requested_limit, 20)
+        self.assertEqual (tile_provider.east_tile_requested_limit, 40)
