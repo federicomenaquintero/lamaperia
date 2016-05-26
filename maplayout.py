@@ -12,6 +12,11 @@ import testutils
 # make a known-good configuration file instead and base the
 # rest of your work on that.
 #
+
+default_draw_map_frame = True
+default_draw_map       = True
+default_draw_scale     = True
+
 default_paper_width_mm  = inch_to_mm (11)
 default_paper_height_mm = inch_to_mm (8.5)
 default_zoom            = 15
@@ -33,6 +38,10 @@ class MapLayout:
     def __init__ (self):
         # Sane defaults for if a config file is not specified
 
+        self.draw_map_frame = default_draw_map_frame
+        self.draw_map       = default_draw_map
+        self.draw_scale     = default_draw_scale
+
         self.paper_width_mm  = default_paper_width_mm
         self.paper_height_mm = default_paper_height_mm
         self.zoom            = default_zoom
@@ -52,6 +61,15 @@ class MapLayout:
 
     def parse_json (self, str):
         parsed = json.loads (str)
+
+        if "draw-map-frame" in parsed:
+            self.draw_map_frame = parsed["draw-map-frame"]
+
+        if "draw-map" in parsed:
+            self.draw_map = parsed["draw-map"]
+
+        if "draw-scale" in parsed:
+            self.draw_scale = parsed["draw-scale"]
 
         if "paper-width" in parsed:
             self.paper_width_mm = parse_units_value (parsed["paper-width"])
@@ -92,6 +110,25 @@ class MapLayout:
 #################### tests ####################
 
 class TestMapLayout (testutils.TestCaseHelper):
+    def test_map_layout_has_defaults_for_what_to_render (self):
+        layout = MapLayout ()
+
+        self.assertEqual (layout.draw_map_frame, default_draw_map_frame)
+        self.assertEqual (layout.draw_map, default_draw_map)
+        self.assertEqual (layout.draw_scale, default_draw_scale)
+
+    def test_map_layout_parses_what_to_render (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "draw-map-frame" : false,
+            "draw-map"       : false,
+            "draw-scale"     : false }
+        """)
+
+        self.assertEqual (layout.draw_map_frame, False)
+        self.assertEqual (layout.draw_map, False)
+        self.assertEqual (layout.draw_scale, False)
+
     def test_map_layout_has_us_letter_default_paper_size (self):
         layout = MapLayout ()
 
