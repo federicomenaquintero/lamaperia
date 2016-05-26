@@ -8,8 +8,6 @@ import tile_provider
 import framerenderer
 import scalerenderer
 from units import *
-from parsedegrees import *
-from cairoutils import *
 import testutils
 import maplayout
 import tile_provider
@@ -150,41 +148,27 @@ class ChartRenderer:
             print ("No tile provider; generating empty map")
             return
 
+        cr.save ()
+
         self.compute_extents_of_downloaded_tiles ()
 
         if self.west_tile_idx > self.east_tile_idx or self.north_tile_idx > self.south_tile_idx:
             raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
 
-        # Download map image; figure out the offsets within the map for the center point
+        # Download map image
 
         map_surface = self.make_map_surface ()
-        # Uncomment this if you want to examine the downloaded map image
-        # map_surface.write_to_png ("map-surface.png")
-
-        (map_surface_xofs, map_surface_yofs) = self.center_offsets_within_map ()
+        # map_surface.write_to_png ("map-surface.png") # Uncomment this if you want to examine the downloaded map image
 
         # Clip to the frame
 
-        cr.save ()
         self.clip_to_map (cr)
 
-        # Center on the map
-        cr.translate (self.layout.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
-                      self.layout.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
+        # Transform and paint
 
-        # Scale the map down to the final size
-
-        tile_size = self.tile_provider.get_tile_size ()
-
-        scale_factor = self.compute_tile_scale_factor (tile_size)
-        cr.scale (scale_factor, scale_factor)
-
-        points_to_mm = pt_to_mm (1.0)
-        cr.scale (points_to_mm, points_to_mm)
-
-        # Offset the scaled map so that it is centered.
-
-        cr.translate (-map_surface_xofs, -map_surface_yofs)
+        matrix = self.compute_matrix_from_page_mm_to_map_surface_coordinates ()
+        matrix.invert ()
+        cr.transform (matrix)
         cr.set_source_surface (map_surface)
         cr.paint ()
 
