@@ -152,3 +152,18 @@ class TestChartRenderer (testutils.TestCaseHelper):
                           provider.get_tile_size () * (7569 - 7558 + 1))
         self.assertEqual (map_surface.get_height (),
                           provider.get_tile_size () * (14581 - 14573 + 1))
+
+    def test_downloads_the_correct_range_of_tiles (self):
+        map_layout = self.make_test_map_layout ()
+        provider = tile_provider.NullTileProvider ()
+        geometry = chartgeometry.ChartGeometry (map_layout, provider)
+
+        chart_renderer = ChartRenderer (geometry)
+
+        geometry.compute_extents_of_downloaded_tiles ()
+        chart_renderer.make_map_surface ()
+
+        self.assertEqual (provider.west_tile_requested_limit, 7558)
+        self.assertEqual (provider.north_tile_requested_limit, 14573)
+        self.assertEqual (provider.east_tile_requested_limit, 7569)
+        self.assertEqual (provider.south_tile_requested_limit, 14581)
