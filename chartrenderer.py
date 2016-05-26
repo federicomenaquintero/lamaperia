@@ -13,19 +13,19 @@ import maplayout
 import tile_provider
 
 class ChartRenderer:
-    def __init__ (self, layout):
+    def __init__ (self, map_layout):
         self.north_tile_idx = 0
         self.west_tile_idx = 0
         self.south_tile_idx = 0
         self.east_tile_idx = 0
         self.tile_indexes_are_computed = False
 
-        self.validate_layout (layout)
-        self.layout = layout
+        self.validate_map_layout (map_layout)
+        self.map_layout = map_layout
 
         self.tile_provider = None
 
-    def validate_layout (self, layout):
+    def validate_map_layout (self, layout):
         zoom = layout.zoom
 
         if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
@@ -36,7 +36,7 @@ class ChartRenderer:
 
     # We need to scale tiles by this much to get them to the final rendered size
     def compute_tile_scale_factor (self, tile_size):
-        tile_width_mm = compute_real_world_mm_per_tile (self.layout.center_lat, self.layout.zoom) / self.layout.map_scale_denom
+        tile_width_mm = compute_real_world_mm_per_tile (self.map_layout.center_lat, self.map_layout.zoom) / self.map_layout.map_scale_denom
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
 
         tile_scale_factor = tile_width_mm / unscaled_tile_mm
@@ -50,10 +50,10 @@ class ChartRenderer:
 
         tile_scale_factor = self.compute_tile_scale_factor (tile_size)
 
-        half_width_mm = self.layout.map_width_mm / 2.0
-        half_height_mm = self.layout.map_height_mm / 2.0
+        half_width_mm = self.map_layout.map_width_mm / 2.0
+        half_height_mm = self.map_layout.map_height_mm / 2.0
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
+        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.map_layout.zoom, self.map_layout.center_lat, self.map_layout.center_lon)
 
         unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
         scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
@@ -71,26 +71,26 @@ class ChartRenderer:
 
     # Assumes that the current transformation matrix is set up for millimeters
     def render_to_cairo (self, cr):
-        if self.layout.draw_map:
+        if self.map_layout.draw_map:
             self.render_map_data (cr)
 
-        if self.layout.draw_map_frame:
+        if self.map_layout.draw_map_frame:
             self.render_map_frame (cr)
 
-        if self.layout.draw_scale:
+        if self.map_layout.draw_scale:
             self.render_scale (cr)
 
     def render_map_frame (self, cr):
         cr.save ()
 
-        frame_renderer = framerenderer.FrameRenderer (self.layout)
+        frame_renderer = framerenderer.FrameRenderer (self.map_layout)
         frame_renderer.render (cr)
 
         cr.restore ()
 
     def clip_to_map (self, cr):
-        cr.rectangle (self.layout.map_to_left_margin_mm, self.layout.map_to_top_margin_mm,
-                      self.layout.map_width_mm, self.layout.map_height_mm)
+        cr.rectangle (self.map_layout.map_to_left_margin_mm, self.map_layout.map_to_top_margin_mm,
+                      self.map_layout.map_width_mm, self.map_layout.map_height_mm)
         cr.clip ()
 
     # Downloads tiles and composites them into a big image surface
@@ -117,7 +117,7 @@ class ChartRenderer:
                 tiles_downloaded += 1
                 print ("Downloading tile {0}".format(tiles_downloaded), end='\r', flush=True)
 
-                png_data = self.tile_provider.get_tile_png (self.layout.zoom, tile_x, tile_y)
+                png_data = self.tile_provider.get_tile_png (self.map_layout.zoom, tile_x, tile_y)
                 tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
 
                 tile_xpos = x * tile_size
@@ -134,7 +134,7 @@ class ChartRenderer:
     # with respect to the downloaded tiles.
     #
     def center_offsets_within_map (self):
-        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
+        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.map_layout.zoom, self.map_layout.center_lat, self.map_layout.center_lon)
 
         center_tile_x -= self.west_tile_idx
         center_tile_y -= self.north_tile_idx
@@ -177,8 +177,8 @@ class ChartRenderer:
     def render_scale (self, cr):
         cr.save ()
 
-        scale_renderer = scalerenderer.ScaleRenderer (self.layout.map_scale_denom, 5, 1, 100)
-        scale_renderer.render (cr, self.layout.scale_xpos_mm, self.layout.scale_ypos_mm)
+        scale_renderer = scalerenderer.ScaleRenderer (self.map_layout.map_scale_denom, 5, 1, 100)
+        scale_renderer.render (cr, self.map_layout.scale_xpos_mm, self.map_layout.scale_ypos_mm)
 
         cr.restore ()
 
@@ -191,8 +191,8 @@ class ChartRenderer:
         m = cairo.Matrix () # starts with a unit matrix
 
         # Center on the map
-        m.translate (self.layout.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
-                     self.layout.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
+        m.translate (self.map_layout.map_to_left_margin_mm + self.map_layout.map_width_mm / 2.0,
+                     self.map_layout.map_to_top_margin_mm + self.map_layout.map_height_mm / 2.0)
 
         # Scale the map down to the final size
 
@@ -215,7 +215,7 @@ class ChartRenderer:
 #################### tests ####################
 
 class TestChartRenderer (testutils.TestCaseHelper):
-    def make_test_layout (self):
+    def make_test_map_layout (self):
         layout = maplayout.MapLayout ()
         layout.parse_json ("""
             {
@@ -238,8 +238,8 @@ class TestChartRenderer (testutils.TestCaseHelper):
         return layout
 
     def test_computes_minimal_extents_of_downloaded_tiles (self):
-        layout = self.make_test_layout ()
-        chart_renderer = ChartRenderer (layout)
+        map_layout = self.make_test_map_layout ()
+        chart_renderer = ChartRenderer (map_layout)
         chart_renderer.set_tile_provider (tile_provider.NullTileProvider ())
 
         chart_renderer.compute_extents_of_downloaded_tiles ()
@@ -251,8 +251,8 @@ class TestChartRenderer (testutils.TestCaseHelper):
         self.assertEqual (chart_renderer.south_tile_idx, 14581)
 
     def test_downloaded_image_has_correct_size (self):
-        layout = self.make_test_layout ()
-        chart_renderer = ChartRenderer (layout)
+        map_layout = self.make_test_map_layout ()
+        chart_renderer = ChartRenderer (map_layout)
         provider = tile_provider.NullTileProvider ()
         chart_renderer.set_tile_provider (provider)
 
@@ -270,8 +270,8 @@ class TestChartRenderer (testutils.TestCaseHelper):
     def test_configuration_has_map_center_in_the_correct_transformed_coordinates (self):
         # Figure out the transformation matrix
 
-        layout = self.make_test_layout ()
-        chart_renderer = ChartRenderer (layout)
+        map_layout = self.make_test_map_layout ()
+        chart_renderer = ChartRenderer (map_layout)
         provider = tile_provider.NullTileProvider ()
         chart_renderer.set_tile_provider (provider)
 
@@ -281,8 +281,8 @@ class TestChartRenderer (testutils.TestCaseHelper):
 
         # This is the center of the map in the page
 
-        map_area_center_x = layout.map_to_left_margin_mm + layout.map_width_mm / 2.0
-        map_area_center_y = layout.map_to_top_margin_mm + layout.map_height_mm / 2.0
+        map_area_center_x = map_layout.map_to_left_margin_mm + map_layout.map_width_mm / 2.0
+        map_area_center_y = map_layout.map_to_top_margin_mm + map_layout.map_height_mm / 2.0
 
         (pixel_x, pixel_y) = matrix.transform_point (map_area_center_x, map_area_center_y)
         tile_size = provider.get_tile_size ()
@@ -290,7 +290,7 @@ class TestChartRenderer (testutils.TestCaseHelper):
         global_pixel_x = chart_renderer.west_tile_idx + pixel_x / tile_size
         global_pixel_y = chart_renderer.north_tile_idx + pixel_y / tile_size
 
-        (lat, lon) = tile_number_to_coordinates (layout.zoom, global_pixel_x, global_pixel_y)
+        (lat, lon) = tile_number_to_coordinates (map_layout.zoom, global_pixel_x, global_pixel_y)
 
-        self.assertFloatEquals (lat, layout.center_lat)
-        self.assertFloatEquals (lon, layout.center_lon)
+        self.assertFloatEquals (lat, map_layout.center_lat)
+        self.assertFloatEquals (lon, map_layout.center_lon)
