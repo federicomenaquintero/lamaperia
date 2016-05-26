@@ -122,15 +122,14 @@ class ChartRenderer:
     # with respect to the downloaded tiles.
     #
     def center_offsets_within_map (self):
+        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
+
+        center_tile_x -= self.west_tile_idx
+        center_tile_y -= self.north_tile_idx
+
         tile_size = self.tile_provider.get_tile_size ()
 
-        (center_tile_x, center_tile_y) = coordinates_to_tile_number (self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
-        (center_tile_xofs, center_tile_yofs) = offsets_within_tile (tile_size, self.layout.zoom, self.layout.center_lat, self.layout.center_lon)
-
-        map_surface_xofs = (center_tile_x - self.west_tile_idx) * tile_size + center_tile_xofs
-        map_surface_yofs = (center_tile_y - self.north_tile_idx) * tile_size + center_tile_yofs
-
-        return (map_surface_xofs, map_surface_yofs)
+        return (center_tile_x * tile_size, center_tile_y * tile_size)
 
     def render_map_data (self, cr):
         if self.tile_provider is None:

@@ -22,20 +22,6 @@ def tile_number_to_coordinates (z, xtile, ytile):
     lat_deg = lat_rad * 180.0 / math.pi
     return (lat_deg, lon_deg)
 
-# Returns (xofs, yofs), two floats in [0, tile_size) that are the
-# offsets within the tile that contains the given (lat, lon) pair.
-# For example, coordinates that would fall exactly in the
-# middle of a 512-pixel tile would yield (256, 256).
-#
-def offsets_within_tile (tile_size, zoom, lat, lon):
-    (tile_x, tile_y) = coordinates_to_tile_number (zoom, lat, lon)
-    (tile_north, tile_west) = tile_number_to_coordinates (zoom, tile_x, tile_y)
-    (tile_south, tile_east) = tile_number_to_coordinates (zoom, tile_x + 1, tile_y + 1)
-
-    xofs = tile_size * (lon - tile_west) / (tile_east - tile_west)
-    yofs = tile_size * (lat - tile_north) / (tile_south - tile_north)
-    return (xofs, yofs)
-
 def compute_real_world_mm_per_tile (latitude, zoom):
     lat_rad = math.radians (latitude)
 
