@@ -3,12 +3,17 @@ import math
 # stolen from https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 #
 # returns (x, y) pair
-def coordinates_to_tile_number (z, lat, lon):
+
+def coordinates_to_tile_and_fraction (z, lat, lon):
     lat_rad = math.radians(lat)
     n = 2.0 ** z
-    xtile = int ((lon + 180.0) / 360.0 * n)
-    ytile = int ((1.0 - math.log (math.tan (lat_rad) + (1 / math.cos (lat_rad))) / math.pi) / 2.0 * n)
+    xtile = (lon + 180.0) / 360.0 * n
+    ytile = (1.0 - math.log (math.tan (lat_rad) + (1 / math.cos (lat_rad))) / math.pi) / 2.0 * n
     return (xtile, ytile)
+
+def coordinates_to_tile_number (z, lat, lon):
+    (xtile, ytile) = coordinates_to_tile_and_fraction (z, lat, lon)
+    return (int (xtile), int (ytile))
 
 def tile_number_to_coordinates (z, xtile, ytile):
     n = 2.0 ** z
