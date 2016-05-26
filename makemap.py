@@ -13,6 +13,7 @@ import cairo
 from units import *
 from parsedegrees import *
 import maplayout
+import chartgeometry
 
 mapbox_access_params = {
     'access_token' : 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
@@ -42,12 +43,14 @@ The default zoom value is 15.
     map_layout = maplayout.MapLayout ()
     map_layout.parse_json (json_config)
 
-    paper_renderer = paperrenderer.PaperRenderer (map_layout)
-    chart_renderer = chartrenderer.ChartRenderer (map_layout)
+    provider = tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
+                                                 mapbox_access_params["username"],
+                                                 mapbox_access_params["style_id"])
 
-    chart_renderer.set_tile_provider (tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
-                                                                        mapbox_access_params["username"],
-                                                                        mapbox_access_params["style_id"]))
+    geometry = chartgeometry.ChartGeometry (map_layout, provider)
+
+    paper_renderer = paperrenderer.PaperRenderer (map_layout)
+    chart_renderer = chartrenderer.ChartRenderer (geometry)
 
     paper_renderer.render (args.format, args.output, chart_renderer)
 

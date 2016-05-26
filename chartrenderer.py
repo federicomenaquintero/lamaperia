@@ -11,59 +11,19 @@ from units import *
 import testutils
 import maplayout
 import tile_provider
+import chartgeometry
 
 class ChartRenderer:
-    def __init__ (self, map_layout):
-        self.north_tile_idx = 0
-        self.west_tile_idx = 0
-        self.south_tile_idx = 0
-        self.east_tile_idx = 0
-        self.tile_indexes_are_computed = False
+    def __init__ (self, chart_geometry):
+        assert chart_geometry is not None
+        self.geometry = chart_geometry
 
-        self.map_layout = map_layout
-
-        self.tile_provider = None
-
-    def set_tile_provider (self, tile_provider):
-        self.tile_provider = tile_provider
-
-    # We need to scale tiles by this much to get them to the final rendered size
-    def compute_tile_scale_factor (self, tile_size):
-        tile_width_mm = compute_real_world_mm_per_tile (self.map_layout.center_lat, self.map_layout.zoom) / self.map_layout.map_scale_denom
-        unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
-
-        tile_scale_factor = tile_width_mm / unscaled_tile_mm
-        return tile_scale_factor
-
-    def compute_extents_of_downloaded_tiles (self):
-        if self.tile_provider is None:
-            raise Exception ("Cannot compute_extents_of_downloaded_tiles() without a tile_provider!  Call set_tile_provider() first!")
-
-        tile_size = self.tile_provider.get_tile_size ()
-
-        tile_scale_factor = self.compute_tile_scale_factor (tile_size)
-
-        half_width_mm = self.map_layout.map_width_mm / 2.0
-        half_height_mm = self.map_layout.map_height_mm / 2.0
-
-        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.map_layout.zoom, self.map_layout.center_lat, self.map_layout.center_lon)
-
-        unscaled_tile_mm = pt_to_mm (tile_size) # image surfaces get loaded at 1 px -> 1 pt
-        scaled_tile_size_mm = unscaled_tile_mm * tile_scale_factor
-
-        half_horizontal_tiles = half_width_mm / scaled_tile_size_mm
-        half_vertical_tiles   = half_height_mm / scaled_tile_size_mm
-
-        self.north_tile_idx = int (center_tile_y - half_vertical_tiles)
-        self.south_tile_idx = int (center_tile_y + half_vertical_tiles)
-
-        self.west_tile_idx = int (center_tile_x - half_horizontal_tiles)
-        self.east_tile_idx = int (center_tile_x + half_horizontal_tiles)
-
-        self.tile_indexes_are_computed = True
+        self.map_layout = chart_geometry.map_layout
 
     # Assumes that the current transformation matrix is set up for millimeters
     def render_to_cairo (self, cr):
+        self.geometry.compute_extents_of_downloaded_tiles ()
+
         if self.map_layout.draw_map:
             self.render_map_data (cr)
 
@@ -88,13 +48,16 @@ class ChartRenderer:
 
     # Downloads tiles and composites them into a big image surface
     def make_map_surface (self):
-        width_tiles = self.east_tile_idx - self.west_tile_idx + 1
-        height_tiles = self.south_tile_idx - self.north_tile_idx + 1
+        geometry = self.geometry
+        provider = geometry.tile_provider
+
+        width_tiles = geometry.east_tile_idx - geometry.west_tile_idx + 1
+        height_tiles = geometry.south_tile_idx - geometry.north_tile_idx + 1
 
         assert width_tiles >= 1
         assert height_tiles >= 1
 
-        tile_size = self.tile_provider.get_tile_size ()
+        tile_size = provider.get_tile_size ()
         map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
         cr = cairo.Context (map_surf)
 
@@ -104,13 +67,13 @@ class ChartRenderer:
 
         for y in range (0, height_tiles):
             for x in range (0, width_tiles):
-                tile_x = x + self.west_tile_idx
-                tile_y = y + self.north_tile_idx
+                tile_x = x + geometry.west_tile_idx
+                tile_y = y + geometry.north_tile_idx
 
                 tiles_downloaded += 1
                 print ("Downloading tile {0}".format(tiles_downloaded), end='\r', flush=True)
 
-                png_data = self.tile_provider.get_tile_png (self.map_layout.zoom, tile_x, tile_y)
+                png_data = provider.get_tile_png (self.map_layout.zoom, tile_x, tile_y)
                 tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
 
                 tile_xpos = x * tile_size
@@ -123,43 +86,15 @@ class ChartRenderer:
 
         return map_surf
 
-    # Returns (xpixels, ypixels), both floats, that correspond to the map_center_coords
-    # with respect to the downloaded tiles.
-    #
-    def center_offsets_within_map (self):
-        (center_tile_x, center_tile_y) = coordinates_to_tile_and_fraction (self.map_layout.zoom, self.map_layout.center_lat, self.map_layout.center_lon)
-
-        center_tile_x -= self.west_tile_idx
-        center_tile_y -= self.north_tile_idx
-
-        tile_size = self.tile_provider.get_tile_size ()
-
-        return (center_tile_x * tile_size, center_tile_y * tile_size)
-
     def render_map_data (self, cr):
-        if self.tile_provider is None:
-            print ("No tile provider; generating empty map")
-            return
-
         cr.save ()
-
-        self.compute_extents_of_downloaded_tiles ()
-
-        if self.west_tile_idx > self.east_tile_idx or self.north_tile_idx > self.south_tile_idx:
-            raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
-
-        # Download map image
 
         map_surface = self.make_map_surface ()
         # map_surface.write_to_png ("map-surface.png") # Uncomment this if you want to examine the downloaded map image
 
-        # Clip to the frame
-
         self.clip_to_map (cr)
 
-        # Transform and paint
-
-        matrix = self.compute_matrix_from_page_mm_to_map_surface_coordinates ()
+        matrix = self.geometry.compute_matrix_from_page_mm_to_map_surface_coordinates ()
         matrix.invert ()
         cr.transform (matrix)
         cr.set_source_surface (map_surface)
@@ -174,36 +109,6 @@ class ChartRenderer:
         scale_renderer.render (cr, self.map_layout.scale_xpos_mm, self.map_layout.scale_ypos_mm)
 
         cr.restore ()
-
-    # If we start with a CTM so that (0, 0) is at the page's top-left corner,
-    # and 1 unit is 1 mm, this computes a transformation matrix to get
-    # from there to map coordinates:  (0, 0) will be at the north-west
-    # corner of the downloaded tiles, and 1 unit will be 1 pixel in the tiles.
-    #
-    def compute_matrix_from_page_mm_to_map_surface_coordinates (self):
-        m = cairo.Matrix () # starts with a unit matrix
-
-        # Center on the map
-        m.translate (self.map_layout.map_to_left_margin_mm + self.map_layout.map_width_mm / 2.0,
-                     self.map_layout.map_to_top_margin_mm + self.map_layout.map_height_mm / 2.0)
-
-        # Scale the map down to the final size
-
-        tile_size = self.tile_provider.get_tile_size ()
-
-        scale_factor = self.compute_tile_scale_factor (tile_size)
-        m.scale (scale_factor, scale_factor)
-
-        points_to_mm = pt_to_mm (1.0)
-        m.scale (points_to_mm, points_to_mm)
-
-        # Offset the scaled map so that it is centered.
-
-        (map_surface_xofs, map_surface_yofs) = self.center_offsets_within_map ()
-        m.translate (-map_surface_xofs, -map_surface_yofs)
-
-        m.invert ()
-        return m
 
 #################### tests ####################
 
@@ -230,60 +135,20 @@ class TestChartRenderer (testutils.TestCaseHelper):
 
         return layout
 
-    def test_computes_minimal_extents_of_downloaded_tiles (self):
-        map_layout = self.make_test_map_layout ()
-        chart_renderer = ChartRenderer (map_layout)
-        chart_renderer.set_tile_provider (tile_provider.NullTileProvider ())
-
-        chart_renderer.compute_extents_of_downloaded_tiles ()
-
-        # We know these to be correct; these is the minimal rectangle of tiles that spans the test area
-        self.assertEqual (chart_renderer.west_tile_idx, 7558)
-        self.assertEqual (chart_renderer.north_tile_idx, 14573)
-        self.assertEqual (chart_renderer.east_tile_idx, 7569)
-        self.assertEqual (chart_renderer.south_tile_idx, 14581)
-
     def test_downloaded_image_has_correct_size (self):
         map_layout = self.make_test_map_layout ()
-        chart_renderer = ChartRenderer (map_layout)
         provider = tile_provider.NullTileProvider ()
-        chart_renderer.set_tile_provider (provider)
+        geometry = chartgeometry.ChartGeometry (map_layout, provider)
 
-        chart_renderer.compute_extents_of_downloaded_tiles ()
+        chart_renderer = ChartRenderer (geometry)
+
+        geometry.compute_extents_of_downloaded_tiles ()
 
         map_surface = chart_renderer.make_map_surface ()
 
-        # The tile indices are in test_computes_minimal_extents_of_downloaded_tiles()
+        # The following tile indices are in TestChartGeometry.test_computes_minimal_extents_of_downloaded_tiles()
 
         self.assertEqual (map_surface.get_width (),
                           provider.get_tile_size () * (7569 - 7558 + 1))
         self.assertEqual (map_surface.get_height (),
                           provider.get_tile_size () * (14581 - 14573 + 1))
-
-    def test_configuration_has_map_center_in_the_correct_transformed_coordinates (self):
-        # Figure out the transformation matrix
-
-        map_layout = self.make_test_map_layout ()
-        chart_renderer = ChartRenderer (map_layout)
-        provider = tile_provider.NullTileProvider ()
-        chart_renderer.set_tile_provider (provider)
-
-        chart_renderer.compute_extents_of_downloaded_tiles ()
-
-        matrix = chart_renderer.compute_matrix_from_page_mm_to_map_surface_coordinates ()
-
-        # This is the center of the map in the page
-
-        map_area_center_x = map_layout.map_to_left_margin_mm + map_layout.map_width_mm / 2.0
-        map_area_center_y = map_layout.map_to_top_margin_mm + map_layout.map_height_mm / 2.0
-
-        (pixel_x, pixel_y) = matrix.transform_point (map_area_center_x, map_area_center_y)
-        tile_size = provider.get_tile_size ()
-
-        global_pixel_x = chart_renderer.west_tile_idx + pixel_x / tile_size
-        global_pixel_y = chart_renderer.north_tile_idx + pixel_y / tile_size
-
-        (lat, lon) = tile_number_to_coordinates (map_layout.zoom, global_pixel_x, global_pixel_y)
-
-        self.assertFloatEquals (lat, map_layout.center_lat)
-        self.assertFloatEquals (lon, map_layout.center_lon)
