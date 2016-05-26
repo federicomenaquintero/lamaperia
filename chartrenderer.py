@@ -20,16 +20,9 @@ class ChartRenderer:
         self.east_tile_idx = 0
         self.tile_indexes_are_computed = False
 
-        self.validate_map_layout (map_layout)
         self.map_layout = map_layout
 
         self.tile_provider = None
-
-    def validate_map_layout (self, layout):
-        zoom = layout.zoom
-
-        if not (type (zoom) == int and zoom >= 0 and zoom <= 19):
-            raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
     def set_tile_provider (self, tile_provider):
         self.tile_provider = tile_provider

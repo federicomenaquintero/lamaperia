@@ -59,6 +59,10 @@ class MapLayout:
         self.scale_xpos_mm = default_scale_xpos_mm
         self.scale_ypos_mm = default_scale_ypos_mm
 
+    def validate (self):
+        if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
+            raise ValueError ("Zoom must be an integer in the range [0, 19]")
+
     def parse_json (self, str):
         parsed = json.loads (str)
 
