@@ -1,4 +1,7 @@
 import requests
+import unittest
+import cairo
+import io
 
 class TileProvider:
     def get_tile_png (self, z, x, y):
@@ -38,3 +41,31 @@ class MapboxTileProvider (TileProvider):
 
     def get_tile_size (self):
         return 512
+
+class NullTileProvider (TileProvider):
+    def get_tile_png (self, z, x, y):
+        f = open ("null-tile-512.png", "rb")
+        data = f.read ()
+        f.close ()
+
+        return data
+
+    def get_tile_size (self):
+        return 512
+
+#################### tests ####################
+
+class TestNullTileProvider (unittest.TestCase):
+    def test_null_tile_provider_makes_sense (self):
+        tile_provider = NullTileProvider ()
+
+        tile_size = tile_provider.get_tile_size ()
+
+        png_data = tile_provider.get_tile_png (0, 0, 0)
+        self.assertIsNotNone (png_data)
+
+        tile_surf = cairo.ImageSurface.create_from_png (io.BytesIO (png_data))
+        self.assertIsNotNone (tile_surf)
+
+        self.assertEqual (tile_surf.get_width (), tile_size)
+        self.assertEqual (tile_surf.get_height (), tile_size)
