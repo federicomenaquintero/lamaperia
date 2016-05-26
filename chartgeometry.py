@@ -57,6 +57,9 @@ class ChartGeometry:
         self.west_tile_idx = int (center_tile_x - half_horizontal_tiles)
         self.east_tile_idx = int (center_tile_x + half_horizontal_tiles)
 
+        if self.west_tile_idx > self.east_tile_idx or self.north_tile_idx > self.south_tile_idx:
+            raise Exception ("Invalid coordinates; must produce at least 1x1 tiles")
+
         self.tile_indexes_are_computed = True
 
     # Returns (xpixels, ypixels), both floats, that correspond to the map_center_coords
