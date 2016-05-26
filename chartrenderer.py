@@ -203,9 +203,30 @@ class ChartRenderer:
     # from there to map coordinates:  (0, 0) will be at the north-west
     # corner of the downloaded tiles, and 1 unit will be 1 pixel in the tiles.
     #
-    def compute_matrix_from_page_to_map_coordinates (self):
+    def compute_matrix_from_page_mm_to_map_surface_coordinates (self):
         m = cairo.Matrix () # starts with a unit matrix
 
+        # Center on the map
+        m.translate (self.layout.map_to_left_margin_mm + self.layout.map_width_mm / 2.0,
+                     self.layout.map_to_top_margin_mm + self.layout.map_height_mm / 2.0)
+
+        # Scale the map down to the final size
+
+        tile_size = self.tile_provider.get_tile_size ()
+
+        scale_factor = self.compute_tile_scale_factor (tile_size)
+        m.scale (scale_factor, scale_factor)
+
+        points_to_mm = pt_to_mm (1.0)
+        m.scale (points_to_mm, points_to_mm)
+
+        # Offset the scaled map so that it is centered.
+
+        (map_surface_xofs, map_surface_yofs) = self.center_offsets_within_map ()
+        m.translate (-map_surface_xofs, -map_surface_yofs)
+
+        m.invert ()
+        return m
 
 #################### tests ####################
 
@@ -261,3 +282,31 @@ class TestChartRenderer (testutils.TestCaseHelper):
                           provider.get_tile_size () * (7569 - 7558 + 1))
         self.assertEqual (map_surface.get_height (),
                           provider.get_tile_size () * (14581 - 14573 + 1))
+
+    def test_configuration_has_map_center_in_the_correct_transformed_coordinates (self):
+        # Figure out the transformation matrix
+
+        layout = self.make_test_layout ()
+        chart_renderer = ChartRenderer (layout)
+        provider = tile_provider.NullTileProvider ()
+        chart_renderer.set_tile_provider (provider)
+
+        chart_renderer.compute_extents_of_downloaded_tiles ()
+
+        matrix = chart_renderer.compute_matrix_from_page_mm_to_map_surface_coordinates ()
+
+        # This is the center of the map in the page
+
+        map_area_center_x = layout.map_to_left_margin_mm + layout.map_width_mm / 2.0
+        map_area_center_y = layout.map_to_top_margin_mm + layout.map_height_mm / 2.0
+
+        (pixel_x, pixel_y) = matrix.transform_point (map_area_center_x, map_area_center_y)
+        tile_size = provider.get_tile_size ()
+
+        global_pixel_x = chart_renderer.west_tile_idx + pixel_x / tile_size
+        global_pixel_y = chart_renderer.north_tile_idx + pixel_y / tile_size
+
+        (lat, lon) = tile_number_to_coordinates (layout.zoom, global_pixel_x, global_pixel_y)
+
+        self.assertFloatEquals (lat, layout.center_lat)
+        self.assertFloatEquals (lon, layout.center_lon)
