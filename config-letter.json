@@ -1,4 +1,9 @@
 {
+    "draw-ticks"     : true,
+    "draw-map"       : true,
+    "draw-map-frame" : true,
+    "draw-scale"     : true,
+
     "paper-width"  : "11 in",
     "paper-height" : "8.5 in",
 
