@@ -27,8 +27,7 @@ class ChartRenderer:
         if self.map_layout.draw_map:
             self.render_map_data (cr)
 
-        if self.map_layout.draw_map_frame:
-            self.render_map_frame (cr)
+        self.render_map_frame (cr)
 
         if self.map_layout.draw_scale:
             self.render_scale (cr)
@@ -37,7 +36,10 @@ class ChartRenderer:
         cr.save ()
 
         frame_renderer = framerenderer.FrameRenderer (self.geometry)
-        frame_renderer.render (cr)
+
+        if self.map_layout.draw_map_frame:
+            frame_renderer.render_frame (cr)
+            frame_renderer.render_ticks (cr)
 
         cr.restore ()
 
