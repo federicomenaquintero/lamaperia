@@ -1,0 +1,18 @@
+{
+    "paper-width"  : "19 in",
+    "paper-height" : "13 in",
+
+    "zoom" : 15,
+
+    "center-lat" : "19d35m15s",
+    "center-lon" : "-96d54m",
+    "map-scale"  : 50000,
+
+    "map-width"  : "18 in",
+    "map-height" : "11.5 in",
+    "map-to-left-margin" : "0.5 in",
+    "map-to-top-margin" : "0.5 in",
+
+    "scale-xpos" : "9.5 in",
+    "scale-ypos" : "12.5 in"
+}
