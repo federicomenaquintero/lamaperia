@@ -14,6 +14,7 @@ import testutils
 #
 
 default_draw_map_frame = True
+default_draw_ticks     = True
 default_draw_map       = True
 default_draw_scale     = True
 
@@ -39,6 +40,7 @@ class MapLayout:
         # Sane defaults for if a config file is not specified
 
         self.draw_map_frame = default_draw_map_frame
+        self.draw_ticks     = default_draw_ticks
         self.draw_map       = default_draw_map
         self.draw_scale     = default_draw_scale
 
@@ -68,6 +70,9 @@ class MapLayout:
 
         if "draw-map-frame" in parsed:
             self.draw_map_frame = parsed["draw-map-frame"]
+
+        if "draw-ticks" in parsed:
+            self.draw_ticks = parsed["draw-ticks"]
 
         if "draw-map" in parsed:
             self.draw_map = parsed["draw-map"]
@@ -118,6 +123,7 @@ class TestMapLayout (testutils.TestCaseHelper):
         layout = MapLayout ()
 
         self.assertEqual (layout.draw_map_frame, default_draw_map_frame)
+        self.assertEqual (layout.draw_ticks, default_draw_ticks)
         self.assertEqual (layout.draw_map, default_draw_map)
         self.assertEqual (layout.draw_scale, default_draw_scale)
 
@@ -125,11 +131,13 @@ class TestMapLayout (testutils.TestCaseHelper):
         layout = MapLayout ()
         layout.parse_json ("""
           { "draw-map-frame" : false,
+            "draw-ticks"     : false,
             "draw-map"       : false,
             "draw-scale"     : false }
         """)
 
         self.assertEqual (layout.draw_map_frame, False)
+        self.assertEqual (layout.draw_ticks, False)
         self.assertEqual (layout.draw_map, False)
         self.assertEqual (layout.draw_scale, False)
 
