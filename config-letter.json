@@ -8,9 +8,9 @@
     "center-lon" : -96.9040473,
     "map-scale"  : 50000,
 
-    "map-width"  : "10.25 in",
+    "map-width"  : "10 in",
     "map-height" : "7.375 in",
-    "map-to-left-margin" : "0.375 in",
+    "map-to-left-margin" : "0.5 in",
     "map-to-top-margin" : "0.375 in",
 
     "scale-xpos" : "5.5 in",
