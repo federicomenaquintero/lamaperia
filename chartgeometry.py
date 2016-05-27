@@ -119,6 +119,18 @@ class ChartGeometry:
 
         return tile_number_to_coordinates (self.map_layout.zoom, global_pixel_x, global_pixel_y)
 
+    def transform_lat_lon_to_page_mm (self, lat, lon):
+        matrix = self.compute_matrix_from_page_mm_to_map_surface_coordinates ()
+        matrix.invert ()
+
+        tile_size = self.tile_provider.get_tile_size ()
+
+        (tile_x, tile_y) = coordinates_to_tile_and_fraction (self.map_layout.zoom, lat, lon)
+        pixel_x = (tile_x - self.west_tile_idx) * tile_size
+        pixel_y = (tile_y - self.north_tile_idx) * tile_size
+
+        return matrix.transform_point (pixel_x, pixel_y)
+
 #################### tests ####################
 
 class TestChartGeometry (testutils.TestCaseHelper):
@@ -184,7 +196,7 @@ class TestChartGeometry (testutils.TestCaseHelper):
         self.assertFloatEquals (lat, map_layout.center_lat)
         self.assertFloatEquals (lon, map_layout.center_lon)
 
-    def test_page_mm_to_lat_lon (self):
+    def test_page_mm_to_lat_lon_roundtrips (self):
         map_layout = self.make_test_map_layout ()
         provider = tile_provider.NullTileProvider ()
         chart_geometry = ChartGeometry (map_layout, provider)
@@ -195,6 +207,7 @@ class TestChartGeometry (testutils.TestCaseHelper):
         map_area_center_y = map_layout.map_to_top_margin_mm + map_layout.map_height_mm / 2.0
 
         (lat, lon) = chart_geometry.transform_page_mm_to_lat_lon (map_area_center_x, map_area_center_y)
+        (x, y) = chart_geometry.transform_lat_lon_to_page_mm (lat, lon)
 
-        self.assertFloatEquals (lat, map_layout.center_lat)
-        self.assertFloatEquals (lon, map_layout.center_lon)
+        self.assertFloatEquals (x, map_area_center_x)
+        self.assertFloatEquals (y, map_area_center_y)
