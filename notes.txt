@@ -556,5 +556,10 @@ python3 -m unittest -v module-to-test.py
 
 * TileStache
 
-cd ~/src/fieldpapers/TileStache/scripts
-python tilestache-server.py --config=/home/federico/Documents/Mapas/tilestache/tilestache-mapbox.cfg
+** Run server:
+   cd ~/src/fieldpapers/TileStache/scripts
+   python tilestache-server.py --config=/home/federico/Documents/Mapas/tilestache/tilestache-mapbox.cfg
+
+** Clean cache:
+   cd ~/src/fieldpapers/TileStache/scripts
+   python tilestache-clean.py --layer=fmq-mapbox --bbox=19.5526 -96.917263 19.621099 -96.860778 --config=/home/federico/Documents/Mapas/tilestache/tilestache-mapbox.cfg 14 15 16
