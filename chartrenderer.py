@@ -36,7 +36,7 @@ class ChartRenderer:
     def render_map_frame (self, cr):
         cr.save ()
 
-        frame_renderer = framerenderer.FrameRenderer (self.map_layout)
+        frame_renderer = framerenderer.FrameRenderer (self.geometry)
         frame_renderer.render (cr)
 
         cr.restore ()
