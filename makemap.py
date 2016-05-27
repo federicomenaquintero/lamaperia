@@ -52,6 +52,13 @@ The default zoom value is 15.
     paper_renderer = paperrenderer.PaperRenderer (map_layout)
     chart_renderer = chartrenderer.ChartRenderer (geometry)
 
+    geometry.compute_extents_of_downloaded_tiles ()
+
+    (lat1, lon1) = geometry.transform_page_mm_to_lat_lon (map_layout.map_to_left_margin_mm, map_layout.map_to_top_margin_mm + map_layout.map_height_mm)
+    (lat2, lon2) = geometry.transform_page_mm_to_lat_lon (map_layout.map_to_left_margin_mm + map_layout.map_width_mm, map_layout.map_to_top_margin_mm)
+
+    print ("Map bounds: {0} {1} {2} {3}".format (lat1, lon1, lat2, lon2))
+
     paper_renderer.render (args.format, args.output, chart_renderer)
 
 if __name__ == "__main__":
