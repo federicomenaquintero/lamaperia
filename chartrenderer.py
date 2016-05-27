@@ -39,6 +39,8 @@ class ChartRenderer:
 
         if self.map_layout.draw_map_frame:
             frame_renderer.render_frame (cr)
+
+        if self.map_layout.draw_ticks:
             frame_renderer.render_ticks (cr)
 
         cr.restore ()
