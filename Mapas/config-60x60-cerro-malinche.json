@@ -4,8 +4,8 @@
 
     "zoom" : 15,
 
-    "center-lat" : 19.4621106,
-    "center-lon" : -96.9040473,
+    "center-lat" : "19d28m43s",
+    "center-lon" : "-96d53m29s",
     "map-scale"  : 50000,
 
     "map-width"  : "560 mm",
