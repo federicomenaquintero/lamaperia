@@ -130,7 +130,7 @@ class FrameRenderer:
                 (minutes, degrees) = math.modf (lon)
                 minutes = int (math.fabs (minutes) * 60 + 0.5)
                 degrees = int (degrees)
-                render_text (cr, x, y, anchor, fd, "{0}°{1}'".format (degrees, minutes))
+                render_text (cr, x, y, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
 
     def paint_vertical_arc_minutes (self, cr, left_mm, right_mm, lon, top_lat, bottom_lat, every_arc_minutes, labels_left):
         ticks = self.generate_ticks (bottom_lat, top_lat, every_arc_minutes)
@@ -166,4 +166,4 @@ class FrameRenderer:
                 (minutes, degrees) = math.modf (lat)
                 minutes = int (math.fabs (minutes) * 60 + 0.5)
                 degrees = int (degrees)
-                render_text (cr, x, y, anchor, fd, "{0}°{1}'".format (degrees, minutes))
+                render_text (cr, x, y, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
