@@ -107,12 +107,8 @@ class ChartRenderer:
         cr.restore ()
 
     def render_scale (self, cr):
-        cr.save ()
-
         scale_renderer = scalerenderer.ScaleRenderer (self.map_layout)
         scale_renderer.render (cr, self.map_layout.scale_xpos_mm, self.map_layout.scale_ypos_mm)
-
-        cr.restore ()
 
 #################### tests ####################
 

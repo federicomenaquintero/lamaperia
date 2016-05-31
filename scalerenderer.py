@@ -50,10 +50,32 @@ class ScaleRenderer:
             cr.rectangle (x, y, division_length, half_height)
             cr.fill ()
 
+    def render_ticks (self, cr,
+                      xpos, ypos,
+                      sign,
+                      ticks_pairs):
+        i = 0
+
+        y1 = ypos
+        y2 = ypos + self.tick_length_mm
+
+        while i < len (ticks_pairs):
+            (meters, label) = (ticks_pairs[i], ticks_pairs[i + 1])
+
+            x = xpos + sign * meters * 1000 / self.map_layout.map_scale_denom
+
+            cr.move_to (x, y1)
+            cr.line_to (x, y2)
+            cr.stroke ()
+
+            i += 2
+
     # The anchor point is the horizontal center of the scale rule,
     # and the vertical top of the scale rule.
     #
     def render (self, cr, center_x, top_y):
+        cr.save ()
+
         layout = self.map_layout
 
         millimeters_total = (layout.scale_large_divisions_interval_m * layout.scale_num_large_divisions
@@ -78,8 +100,6 @@ class ScaleRenderer:
         cr.set_line_join (cairo.LINE_JOIN_MITER)
         cr.stroke ()
 
-#    def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
-
         # Paint the large-scale divisions on the right
         self.render_alternate_divisions (cr,
                                          layout.scale_num_large_divisions,
@@ -87,12 +107,24 @@ class ScaleRenderer:
                                          layout.scale_large_divisions_interval_m * 1000 / layout.map_scale_denom,
                                          self.rule_width_mm)
 
+        self.render_ticks (cr,
+                           large_scale_x, top_y + self.rule_width_mm,
+                           1,
+                           layout.scale_large_ticks_m)
+
         # Paint the small-scale divisions on the left
         self.render_alternate_divisions (cr,
                                          layout.scale_num_small_divisions,
                                          leftmost_x, top_y,
                                          layout.scale_small_divisions_interval_m * 1000 / layout.map_scale_denom,
                                          self.rule_width_mm)
+
+        self.render_ticks (cr,
+                           large_scale_x, top_y - self.tick_length_mm,
+                           -1,
+                           layout.scale_small_ticks_m)
+
+        cr.restore ()
 
 if __name__ == "__main__":
     surface = cairo.SVGSurface ("scale.svg", mm_to_pt (inch_to_mm (11.0)), mm_to_pt (inch_to_mm (8.5)))
