@@ -14,5 +14,20 @@
     "map-to-top-margin" : "0.5 in",
 
     "scale-xpos" : "9.5 in",
-    "scale-ypos" : "12.5 in"
+    "scale-ypos" : "12.5 in",
+
+    "scale-large-divisions-interval-m" : 1000,
+    "scale-num-large-divisions" : 4,
+
+    "scale-small-divisions-interval-m" : 100,
+    "scale-num-small-divisions" : 10,
+
+    "scale-large-ticks-m" : [ 0, 0,
+                              1000, 1,
+                              2000, 2,
+                              3000, 3,
+                              4000, 4 ],
+    "scale-small-ticks-m" : [ 0, 0,
+                              500, 500,
+                              1000, 1000 ]
 }
