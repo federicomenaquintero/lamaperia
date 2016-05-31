@@ -116,6 +116,24 @@ class MapLayout:
         if "scale-ypos" in parsed:
             self.scale_ypos_mm = parse_units_value (parsed["scale-ypos"])
 
+        if "scale-large-divisions-interval-m" in parsed:
+            self.scale_large_divisions_interval_m = parsed["scale-large-divisions-interval-m"]
+
+        if "scale-num-large-divisions" in parsed:
+            self.scale_num_large_divisions = parsed["scale-num-large-divisions"]
+
+        if "scale-small-divisions-interval-m" in parsed:
+            self.scale_small_divisions_interval_m = parsed["scale-small-divisions-interval-m"]
+
+        if "scale-num-small-divisions" in parsed:
+            self.scale_num_small_divisions = parsed["scale-num-small-divisions"]
+
+        if "scale-large-ticks-m" in parsed:
+            self.scale_large_ticks_m = parsed["scale-large-ticks-m"]
+
+        if "scale-small-ticks-m" in parsed:
+            self.scale_small_ticks_m = parsed["scale-small-ticks-m"]
+
 #################### tests ####################
 
 class TestMapLayout (testutils.TestCaseHelper):
@@ -257,4 +275,37 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertFloatEquals (layout.scale_xpos_mm, 100)
         self.assertFloatEquals (layout.scale_ypos_mm, 200)
 
-        
+    def test_map_layout_parses_scale_parameters (self):
+        layout = MapLayout ()
+        layout.parse_json ("""
+          { "scale-large-divisions-interval-m" : 1000,
+            "scale-num-large-divisions" : 4,
+
+            "scale-small-divisions-interval-m" : 100,
+            "scale-num-small-divisions" : 10,
+
+            "scale-large-ticks-m" : [ 0, 0,
+                                      1000, 1,
+                                      2000, 2,
+                                      3000, 3,
+                                      4000, 4 ],
+            "scale-small-ticks-m" : [ 0, 0,
+                                      500, 500,
+                                      1000, 1000 ]
+          }
+        """)
+
+        self.assertEqual (layout.scale_large_divisions_interval_m, 1000)
+        self.assertEqual (layout.scale_num_large_divisions, 4)
+
+        self.assertEqual (layout.scale_small_divisions_interval_m, 100)
+        self.assertEqual (layout.scale_num_small_divisions, 10)
+
+        self.assertEqual (layout.scale_large_ticks_m, [ 0, 0,
+                                                        1000, 1,
+                                                        2000, 2,
+                                                        3000, 3,
+                                                        4000, 4 ])
+        self.assertEqual (layout.scale_small_ticks_m, [ 0, 0,
+                                                        500, 500,
+                                                        1000, 1000 ])
