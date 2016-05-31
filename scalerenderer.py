@@ -1,19 +1,8 @@
 import cairo
+from units import *
 from cairoutils import *
 from gi.repository import Pango
 from gi.repository import PangoCairo
-
-def inch_to_mm (inch):
-    return inch * 25.4
-
-def mm_to_inch (mm):
-    return mm / 25.4
-
-def mm_to_pt (mm):
-    return mm / 25.4 * 72.0
-
-def pt_to_mm (pt):
-    return pt / 72.0 * 25.4
 
 class ScaleRenderer:
     def __init__ (self, map_scale_denom, kilometers_total, kilometers_with_small_scale, small_scale_meters):
