@@ -9,7 +9,7 @@ large_ticks_for_50000 = [ (0, 0),
                           (2, 2000),
                           (3, 3000),
                           (4, 4000) ]
-small_ticks_for_50000 = [ (0, 0)
+small_ticks_for_50000 = [ (0, 0),
                           (500, 500),
                           (1000, 1000) ]
 
@@ -25,8 +25,9 @@ small_ticks_for_20000 = [ (0, 0),
                           (500, 500) ]
 
 class ScaleRenderer:
-    def __init__ (self, map_scale_denom, kilometers_total, kilometers_with_small_scale, small_scale_meters):
-        self.map_scale_denom = map_scale_denom
+    def __init__ (self, map_layout, kilometers_total, kilometers_with_small_scale, small_scale_meters):
+        self.map_layout = map_layout
+
         self.outline_thickness_pt = 0.5
         self.color_rgb = (0, 0, 0)
         self.rule_width_mm = 2.0
@@ -56,7 +57,7 @@ class ScaleRenderer:
     #
     def render (self, cr, center_x, top_y):
         millimeters_total = self.kilometers_total * 1000000
-        rule_length_mm = millimeters_total / self.map_scale_denom
+        rule_length_mm = millimeters_total / self.map_layout.map_scale_denom
         mm_per_kilometer = rule_length_mm / self.kilometers_total
 
         # upper-left coords will be (leftmost_x, top_y)
