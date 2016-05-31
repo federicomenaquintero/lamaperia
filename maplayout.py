@@ -61,6 +61,22 @@ class MapLayout:
         self.scale_xpos_mm = default_scale_xpos_mm
         self.scale_ypos_mm = default_scale_ypos_mm
 
+        self.scale_large_divisions_interval_m = 1000
+        self.scale_num_large_divisions = 4
+
+        self.scale_small_divisions_interval_m = 100
+        self.scale_num_small_divisions = 10
+
+        self.scale_large_ticks_m = [ 0, 0,
+                                     1000, 1,
+                                     2000, 2,
+                                     3000, 3,
+                                     4000, 4 ]
+
+        self.scale_small_ticks_m = [ 0, 0,
+                                     500, 500,
+                                     1000, 1000 ]
+
     def validate (self):
         if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
@@ -274,6 +290,25 @@ class TestMapLayout (testutils.TestCaseHelper):
 
         self.assertFloatEquals (layout.scale_xpos_mm, 100)
         self.assertFloatEquals (layout.scale_ypos_mm, 200)
+
+    def test_map_layout_has_defaults_for_scale_parameters (self):
+        layout = MapLayout ()
+
+        self.assertEqual (layout.scale_large_divisions_interval_m, 1000)
+        self.assertEqual (layout.scale_num_large_divisions, 4)
+
+        self.assertEqual (layout.scale_small_divisions_interval_m, 100)
+        self.assertEqual (layout.scale_num_small_divisions, 10)
+
+        self.assertEqual (layout.scale_large_ticks_m, [ 0, 0,
+                                                        1000, 1,
+                                                        2000, 2,
+                                                        3000, 3,
+                                                        4000, 4 ])
+        self.assertEqual (layout.scale_small_ticks_m, [ 0, 0,
+                                                        500, 500,
+                                                        1000, 1000 ])
+        
 
     def test_map_layout_parses_scale_parameters (self):
         layout = MapLayout ()
