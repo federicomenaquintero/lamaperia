@@ -142,9 +142,19 @@ https://graphhopper.com/api/1/docs/routing/
 
 * Map generation
 
-** Squid
+** make-map.py:
 
-localhost:3128
+*** Make ScaleRenderer print kilometer numbers
+
+*** Automatically determine ScaleRenderer parameters:
+
+    1:50,000 - 5 Km in scale, 1 Km intervals, 100 m intervals for small section
+
+    1:20,000 - How big?  INEGI uses 1800 meters. (that's 9 cm at 1:20,000)
+    Big section: 1200 m divided/labeled at 400 m intervals.  
+    Small section: 600 m, divided at 100 m intervals, labeled at 200 m intervals.
+
+    1500 meters at 500 m intervals for big section; 500m at 100m intervals for small section
 
 ** Data that is not in mapbox-streets-v7:
 
@@ -233,6 +243,10 @@ localhost:3128
     blue, respectively.
 
     Added waterway-stream layer.
+
+** Squid
+
+localhost:3128
 
 * Math
 
@@ -334,8 +348,6 @@ La Trinitaria
 
 ** Pending
 
-Research http://www.gdal.org/ - geospatial data abstraction library 
-
 Copy the widths to tunnels, as you did for bridges.
 Should tunnels be gray?  Or dashed?
 
@@ -346,6 +358,8 @@ outer casing?
 Can we make waterway labels appear more frequently?
 
 Make proper icons for the wayside-shrine and wayside-cross layers.
+
+Research http://www.gdal.org/ - geospatial data abstraction library 
 
 ** 2016/May/12
 
@@ -469,11 +483,6 @@ For 18"x12" at 564 DPI, crop to 10152 x 6768 pixels
 # Cerro Malinche
 python3 makemap.py --format=svg --output=foo.svg --center-lat=19.4621106 --center-lon=-96.9040473 --map-scale=50000
 
-* Tile storage
-
-https://github.com/mapbox/mbtiles-spec
-https://www.mapbox.com/help/an-open-platform/#mbtiles
-
 * Other projects
 
 https://wiki.openstreetmap.org/wiki/TopOSM
@@ -563,3 +572,8 @@ python3 -m unittest -v module-to-test.py
 ** Clean cache:
    cd ~/src/fieldpapers/TileStache/scripts
    python tilestache-clean.py --layer=fmq-mapbox --bbox=19.5526 -96.917263 19.621099 -96.860778 --config=/home/federico/Documents/Mapas/tilestache/tilestache-mapbox.cfg 14 15 16
+** Tile storage
+
+https://github.com/mapbox/mbtiles-spec
+https://www.mapbox.com/help/an-open-platform/#mbtiles
+
