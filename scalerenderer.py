@@ -4,12 +4,34 @@ from cairoutils import *
 from gi.repository import Pango
 from gi.repository import PangoCairo
 
+large_ticks_for_50000 = [ (0, 0),
+                          (1, 1000),
+                          (2, 2000),
+                          (3, 3000),
+                          (4, 4000) ]
+small_ticks_for_50000 = [ (0, 0)
+                          (500, 500),
+                          (1000, 1000) ]
+
+large_ticks_for_20000 = [ (0, 0),
+                          (500, 500),
+                          (1000, 1000),
+                          (1500, 1500) ]
+small_ticks_for_20000 = [ (0, 0),
+                          (100, 100),
+                          (200, 200),
+                          (300, 300),
+                          (400, 400),
+                          (500, 500) ]
+
 class ScaleRenderer:
     def __init__ (self, map_scale_denom, kilometers_total, kilometers_with_small_scale, small_scale_meters):
         self.map_scale_denom = map_scale_denom
         self.outline_thickness_pt = 0.5
         self.color_rgb = (0, 0, 0)
-        self.rule_width_mm = 2.5
+        self.rule_width_mm = 2.0
+        self.tick_length_mm = 0.5
+
         self.kilometers_total = 5
         self.kilometers_with_small_scale = kilometers_with_small_scale
         self.small_scale_meters = small_scale_meters
