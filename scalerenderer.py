@@ -1,4 +1,5 @@
 import cairo
+import maplayout
 from units import *
 from cairoutils import *
 from gi.repository import Pango
@@ -25,7 +26,7 @@ small_ticks_for_20000 = [ (0, 0),
                           (500, 500) ]
 
 class ScaleRenderer:
-    def __init__ (self, map_layout, kilometers_total, kilometers_with_small_scale, small_scale_meters):
+    def __init__ (self, map_layout):
         self.map_layout = map_layout
 
         self.outline_thickness_pt = 0.5
@@ -33,9 +34,6 @@ class ScaleRenderer:
         self.rule_width_mm = 2.0
         self.tick_length_mm = 0.5
 
-        self.kilometers_total = 5
-        self.kilometers_with_small_scale = kilometers_with_small_scale
-        self.small_scale_meters = small_scale_meters
         self.font_description_str = "Luxi Serif 6"
 
     def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
@@ -56,13 +54,16 @@ class ScaleRenderer:
     # and the vertical top of the scale rule.
     #
     def render (self, cr, center_x, top_y):
-        millimeters_total = self.kilometers_total * 1000000
-        rule_length_mm = millimeters_total / self.map_layout.map_scale_denom
-        mm_per_kilometer = rule_length_mm / self.kilometers_total
+        layout = self.map_layout
+
+        millimeters_total = (layout.scale_large_divisions_interval_m * layout.scale_num_large_divisions
+                             + layout.scale_small_divisions_interval_m * layout.scale_num_small_divisions) * 1000
+        rule_length_mm = millimeters_total / layout.map_scale_denom
 
         # upper-left coords will be (leftmost_x, top_y)
         # size of rule will be (rule_length_mm, self.rule_width_mm)
         leftmost_x = center_x - rule_length_mm / 2.0
+        large_scale_x = leftmost_x + layout.scale_num_small_divisions * layout.scale_small_divisions_interval_m * 1000 / layout.map_scale_denom
 
         # Paint the main outline
 
@@ -77,17 +78,21 @@ class ScaleRenderer:
         cr.set_line_join (cairo.LINE_JOIN_MITER)
         cr.stroke ()
 
-        # Paint the main divisions on the right
+#    def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
+
+        # Paint the large-scale divisions on the right
         self.render_alternate_divisions (cr,
-                                         self.kilometers_total - self.kilometers_with_small_scale,
-                                         leftmost_x + mm_per_kilometer * self.kilometers_with_small_scale, top_y,
-                                         mm_per_kilometer, self.rule_width_mm)
+                                         layout.scale_num_large_divisions,
+                                         large_scale_x, top_y,
+                                         layout.scale_large_divisions_interval_m * 1000 / layout.map_scale_denom,
+                                         self.rule_width_mm)
 
         # Paint the small-scale divisions on the left
         self.render_alternate_divisions (cr,
-                                         self.kilometers_with_small_scale * 1000 // self.small_scale_meters,
+                                         layout.scale_num_small_divisions,
                                          leftmost_x, top_y,
-                                         mm_per_kilometer * self.small_scale_meters / 1000, self.rule_width_mm)
+                                         layout.scale_small_divisions_interval_m * 1000 / layout.map_scale_denom,
+                                         self.rule_width_mm)
 
 if __name__ == "__main__":
     surface = cairo.SVGSurface ("scale.svg", mm_to_pt (inch_to_mm (11.0)), mm_to_pt (inch_to_mm (8.5)))
@@ -96,7 +101,26 @@ if __name__ == "__main__":
     factor = mm_to_pt (1.0)
     cr.scale (factor, factor)
 
-    scale_renderer = ScaleRenderer (50000, 5, 1, 100)
+    layout = maplayout.MapLayout ()
+    layout.parse_json ("""
+      { "scale-large-divisions-interval-m" : 1000,
+        "scale-num-large-divisions" : 4,
+
+        "scale-small-divisions-interval-m" : 100,
+        "scale-num-small-divisions" : 10,
+
+        "scale-large-ticks-m" : [ 0, 0,
+                                  1000, 1,
+                                  2000, 2,
+                                  3000, 3,
+                                  4000, 4 ],
+        "scale-small-ticks-m" : [ 0, 0,
+                                  500, 500,
+                                  1000, 1000 ]
+      }
+    """)
+
+    scale_renderer = ScaleRenderer (layout)
     scale_renderer.render (cr, inch_to_mm (5.5), inch_to_mm (4))
 
     font_desc = Pango.font_description_from_string ("Luxi Serif 6")
