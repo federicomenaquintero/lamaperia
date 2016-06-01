@@ -50,8 +50,8 @@ class ChartRenderer:
                       self.map_layout.map_width_mm, self.map_layout.map_height_mm)
         cr.clip ()
 
-    # Downloads tiles and composites them into a big image surface
-    def make_map_surface (self):
+    # Downloads tiles and paints them on the master surface
+    def make_map_surface (self, cr):
         geometry = self.geometry
         provider = geometry.tile_provider
 
@@ -62,8 +62,6 @@ class ChartRenderer:
         assert height_tiles >= 1
 
         tile_size = provider.get_tile_size ()
-        map_surf = cairo.ImageSurface (cairo.FORMAT_RGB24, tile_size * width_tiles, tile_size * height_tiles)
-        cr = cairo.Context (map_surf)
 
         tiles_downloaded = 0
 
@@ -90,21 +88,15 @@ class ChartRenderer:
 
         print ("")
 
-        return map_surf
-
     def render_map_data (self, cr):
         cr.save ()
-
-        map_surface = self.make_map_surface ()
-        # map_surface.write_to_png ("map-surface.png") # Uncomment this if you want to examine the downloaded map image
 
         self.clip_to_map (cr)
 
         matrix = self.geometry.compute_matrix_from_page_mm_to_map_surface_coordinates ()
         matrix.invert ()
         cr.transform (matrix)
-        cr.set_source_surface (map_surface)
-        cr.paint ()
+        self.make_map_surface (cr)
 
         cr.restore ()
 
