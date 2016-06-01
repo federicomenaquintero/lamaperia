@@ -86,6 +86,8 @@ class ChartRenderer:
                 cr.set_source_surface (tile_surf, tile_xpos, tile_ypos)
                 cr.paint ()
 
+                del tile_surf
+
         print ("")
 
         return map_surf
