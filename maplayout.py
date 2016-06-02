@@ -67,15 +67,15 @@ class MapLayout:
         self.scale_small_divisions_interval_m = 100
         self.scale_num_small_divisions = 10
 
-        self.scale_large_ticks_m = [ 0, 0,
-                                     1000, 1,
-                                     2000, 2,
-                                     3000, 3,
-                                     4000, 4 ]
+        self.scale_large_ticks_m = [ 0, "0",
+                                     1000, "1",
+                                     2000, "2",
+                                     3000, "3",
+                                     4000, "4 Km" ]
 
-        self.scale_small_ticks_m = [ 0, 0,
-                                     500, 500,
-                                     1000, 1000 ]
+        self.scale_small_ticks_m = [ 0, "0 m",
+                                     500, "500",
+                                     1000, "1000" ]
 
     def validate (self):
         if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
@@ -300,14 +300,14 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertEqual (layout.scale_small_divisions_interval_m, 100)
         self.assertEqual (layout.scale_num_small_divisions, 10)
 
-        self.assertEqual (layout.scale_large_ticks_m, [ 0, 0,
-                                                        1000, 1,
-                                                        2000, 2,
-                                                        3000, 3,
-                                                        4000, 4 ])
-        self.assertEqual (layout.scale_small_ticks_m, [ 0, 0,
-                                                        500, 500,
-                                                        1000, 1000 ])
+        self.assertEqual (layout.scale_large_ticks_m, [ 0, "0",
+                                                        1000, "1",
+                                                        2000, "2",
+                                                        3000, "3",
+                                                        4000, "4 Km" ])
+        self.assertEqual (layout.scale_small_ticks_m, [ 0, "0 m",
+                                                        500, "500",
+                                                        1000, "1000" ])
         
 
     def test_map_layout_parses_scale_parameters (self):
@@ -319,14 +319,14 @@ class TestMapLayout (testutils.TestCaseHelper):
             "scale-small-divisions-interval-m" : 100,
             "scale-num-small-divisions" : 10,
 
-            "scale-large-ticks-m" : [ 0, "0",
-                                      1000, "1",
-                                      2000, "2",
-                                      3000, "3",
-                                      4000, "4 Km" ],
-            "scale-small-ticks-m" : [ 0, "0 m",
-                                      500, "500",
-                                      1000, "1000" ]
+            "scale-large-ticks-m" : [ 0, 0,
+                                      1000, 1,
+                                      2000, 2,
+                                      3000, 3,
+                                      4000, 4 ],
+            "scale-small-ticks-m" : [ 0, 0,
+                                      500, 500,
+                                      1000, 1000 ]
           }
         """)
 
@@ -336,11 +336,11 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertEqual (layout.scale_small_divisions_interval_m, 100)
         self.assertEqual (layout.scale_num_small_divisions, 10)
 
-        self.assertEqual (layout.scale_large_ticks_m, [ 0, "0",
-                                                        1000, "1",
-                                                        2000, "2",
-                                                        3000, "3",
-                                                        4000, "4 Km" ])
-        self.assertEqual (layout.scale_small_ticks_m, [ 0, "0 m",
-                                                        500, "500",
-                                                        1000, "1000" ])
+        self.assertEqual (layout.scale_large_ticks_m, [ 0, 0,
+                                                        1000, 1,
+                                                        2000, 2,
+                                                        3000, 3,
+                                                        4000, 4 ])
+        self.assertEqual (layout.scale_small_ticks_m, [ 0, 0,
+                                                        500, 500,
+                                                        1000, 1000 ])
