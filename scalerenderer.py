@@ -51,13 +51,13 @@ class ScaleRenderer:
             cr.fill ()
 
     def render_ticks (self, cr,
-                      xpos, ypos,
+                      xpos, ypos, height,
                       sign,
                       ticks_pairs):
         i = 0
 
         y1 = ypos
-        y2 = ypos + self.tick_length_mm
+        y2 = ypos + height
 
         while i < len (ticks_pairs):
             (meters, label) = (ticks_pairs[i], ticks_pairs[i + 1])
@@ -108,7 +108,7 @@ class ScaleRenderer:
                                          self.rule_width_mm)
 
         self.render_ticks (cr,
-                           large_scale_x, top_y + self.rule_width_mm,
+                           large_scale_x, top_y + self.rule_width_mm, self.tick_length_mm,
                            1,
                            layout.scale_large_ticks_m)
 
@@ -120,7 +120,7 @@ class ScaleRenderer:
                                          self.rule_width_mm)
 
         self.render_ticks (cr,
-                           large_scale_x, top_y - self.tick_length_mm,
+                           large_scale_x, top_y, -self.tick_length_mm,
                            -1,
                            layout.scale_small_ticks_m)
 
