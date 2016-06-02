@@ -35,6 +35,7 @@ class ScaleRenderer:
         self.tick_length_mm = 0.5
 
         self.font_description_str = "Luxi Serif 6"
+        self.font_description = Pango.font_description_from_string (self.font_description_str)
 
     def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
         half_height = division_height / 2.0
@@ -52,6 +53,7 @@ class ScaleRenderer:
 
     def render_ticks (self, cr,
                       xpos, ypos, height,
+                      text_anchor,
                       sign,
                       ticks_pairs):
         i = 0
@@ -67,6 +69,8 @@ class ScaleRenderer:
             cr.move_to (x, y1)
             cr.line_to (x, y2)
             cr.stroke ()
+
+            render_text (cr, x, y2, text_anchor, self.font_description, "{0}".format (label))
 
             i += 2
 
@@ -109,6 +113,7 @@ class ScaleRenderer:
 
         self.render_ticks (cr,
                            large_scale_x, top_y + self.rule_width_mm, self.tick_length_mm,
+                           "n",
                            1,
                            layout.scale_large_ticks_m)
 
@@ -121,6 +126,7 @@ class ScaleRenderer:
 
         self.render_ticks (cr,
                            large_scale_x, top_y, -self.tick_length_mm,
+                           "s",
                            -1,
                            layout.scale_small_ticks_m)
 
