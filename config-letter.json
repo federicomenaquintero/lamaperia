@@ -19,5 +19,15 @@
     "map-to-top-margin" : "0.375 in",
 
     "scale-xpos" : "5.5 in",
-    "scale-ypos" : "8.125 in"
+    "scale-ypos" : "8.125 in",
+
+    "scale-large-ticks-m" : [ 0, 0,
+                              1000, 1,
+                              2000, 2,
+                              3000, 3,
+                              4000, "4 Km" ],
+    "scale-small-ticks-m" : [ 0, "0 m",
+                              500, 500,
+                              1000, 1000 ]
+
 }
