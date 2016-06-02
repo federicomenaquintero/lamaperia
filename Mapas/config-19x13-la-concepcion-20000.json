@@ -22,11 +22,11 @@
     "scale-small-divisions-interval-m" : 100,
     "scale-num-small-divisions" : 4,
 
-    "scale-large-ticks-m" : [ 0, 0,
-			      500, 500,
-                              1000, 1000,
-			      1500, 1500 ],
-    "scale-small-ticks-m" : [ 0, 0,
-                              200, 200,
-                              400, 400 ]
+    "scale-large-ticks-m" : [ 0, "0",
+			      500, "500",
+                              1000, "1000",
+			      1500, "1500 m" ],
+    "scale-small-ticks-m" : [ 0, "0 m",
+                              200, "200",
+                              400, "400" ]
 }
