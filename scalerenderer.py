@@ -113,7 +113,7 @@ class ScaleRenderer:
 
         self.render_ticks (cr,
                            large_scale_x, top_y + self.rule_width_mm, self.tick_length_mm,
-                           "n",
+                           "nw",
                            1,
                            layout.scale_large_ticks_m)
 
@@ -126,7 +126,7 @@ class ScaleRenderer:
 
         self.render_ticks (cr,
                            large_scale_x, top_y, -self.tick_length_mm,
-                           "s",
+                           "sw",
                            -1,
                            layout.scale_small_ticks_m)
 
