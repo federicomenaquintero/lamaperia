@@ -140,6 +140,11 @@ for x in `seq 7565 7568`; do for y in `seq 14576 14579`; do curl "https://api.ma
 
 https://graphhopper.com/api/1/docs/routing/
 
+Use that one a one-time basis; it is limited access.
+
+First ensure that the ways are well-mapped; then get the elevation
+profiles for each route segment.
+
 * Map generation
 
 ** make-map.py:
