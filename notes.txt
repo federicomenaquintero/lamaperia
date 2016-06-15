@@ -190,6 +190,10 @@ profiles for each route segment.
 
     waterway=waterfall (points) - put a little waterfall icon?
 
+    natural=plateau
+
+    natural=valley
+
 *** Miscellaneous
 
     place=farm
@@ -492,6 +496,7 @@ python3 makemap.py --format=svg --output=foo.svg --center-lat=19.4621106 --cente
 
 https://wiki.openstreetmap.org/wiki/TopOSM
 
+https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
 
 * Story of script
 
