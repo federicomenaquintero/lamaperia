@@ -40,6 +40,8 @@ class MapboxTileProvider (TileProvider):
                 print ("request for {0} returned {1}, retrying...".format (url, r.status_code))
                 retries -= 1
                 continue
+            else:
+                break
 
         if retries == 0:
             r.raise_for_status ()
