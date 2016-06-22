@@ -29,10 +29,21 @@ class MapboxTileProvider (TileProvider):
         return uri
 
     def make_request_for_tile (self, z, x, y):
-        url = self.get_uri_for_tile (z, x, y)
-#        r = requests.get (url,
-#                          params = { 'access_token' : self.access_token })
-        r = requests.get (url)
+        retries = 5
+
+        while retries > 0:
+            url = self.get_uri_for_tile (z, x, y)
+            #        r = requests.get (url,
+            #                          params = { 'access_token' : self.access_token })
+            r = requests.get (url)
+            if r.status_code != 200:
+                print ("request for {0} returned {1}, retrying...".format (url, r.status_code))
+                retries -= 1
+                continue
+
+        if retries == 0:
+            r.raise_for_status ()
+
         return r
 
     def get_tile_png (self, z, x, y):
