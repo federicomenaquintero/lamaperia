@@ -149,8 +149,6 @@ profiles for each route segment.
 
 ** make-map.py:
 
-*** Make ScaleRenderer print kilometer numbers
-
 *** Automatically determine ScaleRenderer parameters:
 
     1:50,000 - 5 Km in scale, 1 Km intervals, 100 m intervals for small section
@@ -253,9 +251,6 @@ profiles for each route segment.
 
     Added waterway-stream layer.
 
-** Squid
-
-localhost:3128
 
 * Math
 
@@ -370,6 +365,10 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
+** 2016/Jun/23
+
+Added new layer valleys, from Overpass Turbo "natural=*"
+
 ** 2016/May/12
 
 Lightened yellow landuse=residential to not look so much like egg yolk.
@@ -482,15 +481,6 @@ casing-with-gap.
 Made the gap in bridge-street-case equal to the line width in
 bridge-street, plus a little more.
 
-* Locations
-
-Pedazo de carta INEGI Coatepec 19" x 13"
-python3 make-map.py --from-lat=19d30m --from-lon=-97d --to-lat=19d22m --to-lon=-96d47m  --output=output15.png
-
-For 18"x12" at 564 DPI, crop to 10152 x 6768 pixels
-
-# Cerro Malinche
-python3 makemap.py --format=svg --output=foo.svg --center-lat=19.4621106 --center-lon=-96.9040473 --map-scale=50000
 
 * Other projects
 
@@ -586,4 +576,3 @@ python3 -m unittest -v module-to-test.py
 
 https://github.com/mapbox/mbtiles-spec
 https://www.mapbox.com/help/an-open-platform/#mbtiles
-
