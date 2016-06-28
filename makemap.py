@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-#
-# python3 make-map.py --lat=yyy --lon=xxx --width-tiles=5 --height-tiles=5 --output=foo.png
 
 import os
 import sys
