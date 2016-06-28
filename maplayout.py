@@ -26,10 +26,10 @@ default_center_lat      = -96.9040473
 default_center_lon      = 19.4621106
 default_map_scale_denom = 50000
 
-default_map_width_mm    = inch_to_mm (10.25)
-default_map_height_mm   = inch_to_mm (7.75)
+default_map_width_mm    = inch_to_mm (10)
+default_map_height_mm   = inch_to_mm (7.375)
 
-default_map_to_left_margin_mm = inch_to_mm (0.375)
+default_map_to_left_margin_mm = inch_to_mm (0.5)
 default_map_to_top_margin_mm  = inch_to_mm (0.375)
 
 default_scale_xpos_mm = inch_to_mm (5.5)
