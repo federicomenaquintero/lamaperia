@@ -576,3 +576,22 @@ python3 -m unittest -v module-to-test.py
 
 https://github.com/mapbox/mbtiles-spec
 https://www.mapbox.com/help/an-open-platform/#mbtiles
+
+
+* Hackweek
+
+** Documentation for script
+
+** Make fonts configurable
+
+** Large scales (1:20,000, 1:10,000) need every arc-minute labeled on the map's frame.
+
+** Finish UTM grid
+
+** Extend mapbox style to support large scales.
+
+** Extend mapbox style to make hypsometric / color-coded contours.
+
+** Primary/secondary/tertiary roads for Xalapa (road hierarchy).
+
+** Flatpak
