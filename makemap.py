@@ -22,14 +22,7 @@ mapbox_access_params = {
 ####################################################################
 
 def main ():
-    parser = argparse.ArgumentParser (description = "Makes a PDF or SVG map from Mapbox tiles.",
-                                      epilog =
-"""DEGREES can be given as decimal degrees (e.g. "19.5" or "-19.5")
-or as degrees/minutes as "19d30m"
-or as degrees/minutes/seconds as "19d30m5s".
-Degrees can be negative as in "-19d30m".
-The default zoom value is 15.
-""")
+    parser = argparse.ArgumentParser (description = "Makes a PDF or SVG map from Mapbox tiles.")
 
     parser.add_argument ("--config",       type = str, required = True, metavar = "JSON-FILENAME")
     parser.add_argument ("--format",       type = str, required = True, metavar = "STRING")
