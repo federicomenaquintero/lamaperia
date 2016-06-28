@@ -33,7 +33,7 @@ configuration files are in JSON format.
 Here is a minimal configuration that will give you a map at 1:50,000
 scale for printing in US-letter paper.  That's the default paper size;
 later we will see how to change it.  Put the following in a file
-called mymap.json:
+called `mymap.json`:
 
 ```json
 {
@@ -83,12 +83,12 @@ Sexagesimal degrees must always be specified as strings.
 ### Choosing a Paper Size
 
 La Mapería lets you specify units in millimeters or in inches.  A
-value in mm is specified as a string, for example `"25 mm"` or `"10
-in"`.
+value in mm is specified as a string like `"25 mm"`; a value in inches
+as `"10 in"`.
 
 You can specify the paper size with two parameters in the
 configuration file, `paper-width` and `paper-height`.  For example,
-this describes an A4 sheet of paper:
+this describes an A4 sheet of paper in landscape format:
 
 ```json
     "paper-width"  : "297 mm",
@@ -159,3 +159,90 @@ this only works if `draw-map-frame` is true.
 output is not your final map, and you intend to show the scale in
 another way.
 
+### Map scale and Zoom
+
+By default La Mapería creates maps at 1:50,000 scale.  For this kind
+of scale, OpenStreetMap has a comfortable level of detail at zoom=15.
+
+```json
+    "map-scale" : 50000,
+
+    "zoom" : 15,
+```
+
+The `map-scale` parameter is the denominator of the scale you want.
+To have a scale of 1:25,000, use `"map-scale" : 25000`.
+
+You may want to experiment with the `zoom` level depending on the map
+scale you want, the amount of detail that OpenStreetMap has for your
+map's area, and the actual rendering style for your tiles.
+
+### The Map Scale Indicator
+
+La Mapería can render a popular style of map scale indicator.  By
+default it shows 1 Km subdivided in 100 m increments (the "small
+divisions"), followed by 4 Km subdivided in 1 Km increments (the
+"large divisions").  
+
+Just for illustrative purposes, here are eight few small divisions on
+the left, and two small divisions on the right:
+
+```
++---|---|---|---|---|---|---|---|---|-----------------------------------|-----------------------------------|
+|###|   |###|   |###|   |###|   |###|                                   |###################################|
++---|---|---|---|---|---|---|---|---|-----------------------------------|-----------------------------------|
+```
+
+So, to have 10 small divisions of 100 meters each, plus 4 large
+divisions of 1 Km each, you would use this:
+
+```
+    "scale-small-divisions-interval-m" : 100,
+    "scale-num-small-divisions" : 10,
+
+    "scale-large-divisions-interval-m" : 1000,
+    "scale-num-large-divisions" : 4,
+
+```
+
+In addition, the divisions get labels so that you can see what they
+refer to, but not all divisions get a label to avoid visual clutter.
+You can specify where to place the ticks and labels, and the actual
+label strings, with separate `scale-small-ticks-m` and
+`scale-large-ticks-m` parameters.  
+
+Let's look at an example of `scale-large-ticks-m` for the
+large-divisions section of the scale:
+
+```
+    "scale-large-ticks-m" : [ 0,    "0",
+                              1000, "1",
+                              2000, "2",
+                              3000, "3",
+                              4000, "4 Km" ],
+```
+
+This means that at zero meters, there will be a label of "0".  At 1000
+meters, there will be a label of "1".  And so on, until at 4000 meters
+there will be a label that says "4 Km".  Usually showing the units
+only once for each of the small-divisions or large-divisions sections
+of the scale indicator is enough.  If you specified "0 Km", "1 Km", "2
+Km", etc., the scale would look a lot more cluttered.
+
+Now, let's look at an example of `scale-small-ticks-m` for the
+small-divisions section of the scale, together with the parameters for
+that section's divisions:
+
+```
+    "scale-small-divisions-interval-m" : 100,
+    "scale-num-small-divisions" : 4,
+
+    "scale-small-ticks-m" : [ 0, "0 m",
+                              200, "200",
+                              400, "400" ],
+```
+
+At zero meters, there will be a label of "0 m".  At 200 meters, a
+label of "200", and at 400 meters, a label of "400".  So, while the
+scale has 4 small-divisions at every 100 meters, they are only
+labeled at every 200 meters, to avoid clutter.
