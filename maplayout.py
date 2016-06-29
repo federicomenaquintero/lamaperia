@@ -1,4 +1,3 @@
-import json
 from parsedegrees import *
 from units import *
 import testutils
@@ -81,9 +80,7 @@ class MapLayout:
         if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
-    def parse_json (self, str):
-        parsed = json.loads (str)
-
+    def parse_json (self, parsed):
         if "draw-map-frame" in parsed:
             self.draw_map_frame = parsed["draw-map-frame"]
 
