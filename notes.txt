@@ -365,6 +365,23 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
+** 2016/Jun/29
+
+Made road-rail and road-rail-tracks narrower.
+
+Re-colored road-motorway*, road-primary*, road-secondary*,
+road-tertiary* to match default OSM style.
+
+Removed casing for road-street* and road-service*; left them as plain
+black lines.  (Casing layers are hidden, not removed).
+
+Hid place-neighborhood layer; too many names.
+
+Made poi-parks-scalerank{1,2,3} labels larger, black; made their
+icons larger.  Same for mountain-peak-label.
+
+Enlarged the text halo of several layers.
+
 ** 2016/Jun/23
 
 Added new layer valleys, from Overpass Turbo "natural=*"
@@ -580,7 +597,7 @@ https://www.mapbox.com/help/an-open-platform/#mbtiles
 
 * Hackweek
 
-** Documentation for script
+** Documentation on setting up a TileStache cache
 
 ** Make fonts configurable
 
