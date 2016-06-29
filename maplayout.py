@@ -1,4 +1,3 @@
-import json
 from parsedegrees import *
 from units import *
 import testutils
@@ -81,9 +80,7 @@ class MapLayout:
         if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
-    def parse_json (self, str):
-        parsed = json.loads (str)
-
+    def parse_json (self, parsed):
         if "draw-map-frame" in parsed:
             self.draw_map_frame = parsed["draw-map-frame"]
 
@@ -308,7 +305,7 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertEqual (layout.scale_small_ticks_m, [ 0, "0 m",
                                                         500, "500",
                                                         1000, "1000" ])
-        
+
 
     def test_map_layout_parses_scale_parameters (self):
         layout = MapLayout ()

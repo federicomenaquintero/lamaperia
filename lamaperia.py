@@ -8,6 +8,7 @@ import tile_provider
 import argparse
 import math
 import cairo
+import json
 from units import *
 from parsedegrees import *
 import maplayout
@@ -21,16 +22,30 @@ mapbox_access_params = {
 
 ####################################################################
 
+def jsonfile (filename):
+    try:
+        file = open (filename)
+    except IOError as e:
+        raise argparse.ArgumentTypeError ("can't open '{0}': {1}".format (filename, e))
+
+    try:
+        data = json.load (open (filename))
+    except ValueError as e:
+        msg = "file {0} is not valid JSON: {1}".format (filename, e.args[0])
+        raise argparse.ArgumentTypeError (msg)
+
+    return data
+
 def main ():
     parser = argparse.ArgumentParser (description = "Makes a PDF or SVG map from Mapbox tiles.")
 
-    parser.add_argument ("--config",       type = str, required = True, metavar = "JSON-FILENAME")
-    parser.add_argument ("--format",       type = str, required = True, metavar = "STRING")
-    parser.add_argument ("--output",       type = str, required = True, metavar = "FILENAME")
+    parser.add_argument ("--config", type = jsonfile, required = True, metavar = "JSON-FILENAME")
+    parser.add_argument ("--format", type = str,      required = True, metavar = "STRING")
+    parser.add_argument ("--output", type = str,      required = True, metavar = "FILENAME")
 
     args = parser.parse_args ()
 
-    json_config = open (args.config).read ()
+    json_config = args.config
     map_layout = maplayout.MapLayout ()
     map_layout.parse_json (json_config)
 
