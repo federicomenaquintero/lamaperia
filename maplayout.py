@@ -22,8 +22,8 @@ default_paper_width_mm  = inch_to_mm (11)
 default_paper_height_mm = inch_to_mm (8.5)
 default_zoom            = 15
 
-default_center_lat      = -96.9040473
-default_center_lon      = 19.4621106
+default_center_lat      = 19.4621106
+default_center_lon      = -96.9040473
 default_map_scale_denom = 50000
 
 default_map_width_mm    = inch_to_mm (10)
@@ -308,7 +308,7 @@ class TestMapLayout (testutils.TestCaseHelper):
         self.assertEqual (layout.scale_small_ticks_m, [ 0, "0 m",
                                                         500, "500",
                                                         1000, "1000" ])
-        
+
 
     def test_map_layout_parses_scale_parameters (self):
         layout = MapLayout ()
