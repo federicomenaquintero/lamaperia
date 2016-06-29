@@ -72,7 +72,7 @@ same point (latitude = 19°20'30", longitude = -96°30').
     "center-lon" : "-96d30m",
 
     # decimal
-    "center-lat" : "19.3333333",
+    "center-lat" : "19.34166666",
     "center-lon" : "-96.5",
 ```
 
