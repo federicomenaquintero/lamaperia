@@ -185,7 +185,7 @@ divisions"), followed by 4 Km subdivided in 1 Km increments (the
 "large divisions").  
 
 Just for illustrative purposes, here are eight few small divisions on
-the left, and two small divisions on the right:
+the left, and two large divisions on the right:
 
 ```
 +---|---|---|---|---|---|---|---|---|-----------------------------------|-----------------------------------|
@@ -246,3 +246,39 @@ At zero meters, there will be a label of "0 m".  At 200 meters, a
 label of "200", and at 400 meters, a label of "400".  So, while the
 scale has 4 small-divisions at every 100 meters, they are only
 labeled at every 200 meters, to avoid clutter.
+
+#### Imperial scales
+
+I'm not very familiar with maps with Imperial units.  The following produces
+a map scale indicator with feet and miles, so that there are:
+
+* 10 small-divisions of 200 feet each, labeled as "2000 ft" and "0".
+
+* 3 large-divisions of 1 mile each, labeled as such.
+
+```
+    "scale-small-divisions-interval-m" : 60.96,
+    "scale-num-small-divisions" : 10,
+
+    "scale-large-divisions-interval-m" : 1609.344,
+    "scale-num-large-divisions" : 3,
+
+    "scale-small-ticks-m" : [ 0, "0",
+                              609.6, "2000 ft" ]
+
+    "scale-large-ticks-m" : [ 0, "0",
+			      1609.344, "1",
+                              3218.688, "2",
+			      4828.032, "3 miles" ],
+```
+
+If you know a better way to provide a printed map scale for Imperial
+maps, I'd love to know about it!
+
+
+Feedback
+--------
+
+I'm reachable at Federico Mena Quintero <federico@gnome.org>.
+
+Enjoy La Mapería!
