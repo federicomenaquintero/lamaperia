@@ -13,12 +13,7 @@ from units import *
 from parsedegrees import *
 import maplayout
 import chartgeometry
-
-mapbox_access_params = {
-    'access_token' : 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ',
-    'username'     : 'federicomenaquintero',
-    'style_id'     : 'cil44s8ep000c9jm18x074iwv'
-}
+from wizard import config_wizard
 
 ####################################################################
 
@@ -36,7 +31,7 @@ def jsonfile (filename):
 
     return data
 
-def main ():
+def main (config_data):
     parser = argparse.ArgumentParser (description = "Makes a PDF or SVG map from Mapbox tiles.")
 
     parser.add_argument ("--config", type = jsonfile, required = True, metavar = "JSON-FILENAME")
@@ -49,9 +44,9 @@ def main ():
     map_layout = maplayout.MapLayout ()
     map_layout.load_from_json (json_config)
 
-    provider = tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
-                                                 mapbox_access_params["username"],
-                                                 mapbox_access_params["style_id"])
+    provider_classname = '{}TileProvider'.format (config_data['provider'].capitalize())
+    provider_class = getattr(tile_provider, provider_classname)
+    provider = provider_class(config_data)
 
     geometry = chartgeometry.ChartGeometry (map_layout, provider)
 
@@ -68,4 +63,18 @@ def main ():
     paper_renderer.render (args.format, args.output, chart_renderer)
 
 if __name__ == "__main__":
-    main ()
+    data_file = os.path.join (os.path.expanduser ("~"), '.mkmaprc')
+    try:
+        mkmaprc = open (data_file)
+    except IOError as e:
+        print("You don't have a config yet.")
+        answ = input("Create one? [Y/n] ").lower ()
+        if answ.startswith('y') or not answ:
+            config_data = config_wizard ()
+        else:
+            print("I really need a config file...")
+            exit(0)
+    else:
+        config_data = json.load (open (data_file))
+
+    main (config_data)
