@@ -267,9 +267,9 @@ a map scale indicator with feet and miles, so that there are:
                               609.6, "2000 ft" ]
 
     "scale-large-ticks-m" : [ 0, "0",
-			      1609.344, "1",
+                              1609.344, "1",
                               3218.688, "2",
-			      4828.032, "3 miles" ],
+                              4828.032, "3 miles" ],
 ```
 
 If you know a better way to provide a printed map scale for Imperial
