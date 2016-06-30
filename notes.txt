@@ -631,3 +631,20 @@ https://www.mapbox.com/help/an-open-platform/#mbtiles
 ** Primary/secondary/tertiary roads for Xalapa (road hierarchy).
 
 ** Flatpak
+
+** Pretty Maps:
+*** L'Eroica Gaiole in Chianti:  
+
+top: Panzano 43.54631/11.31592
+43d33m 11d19m
+
+bottom: Montalcino 43.04957/11.49445
+43d03m 11d30m
+
+left: Castellina in Chianti 43.4701/11.2799
+43d28m 11d16m
+
+right: Lucignano D'Asso 43.12335/11.59787
+43d08m 11d36m
+
+http://www.eroicagaiole.com/routes
