@@ -365,6 +365,25 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
+** 2016/Jun/30
+
+Start tweaking z=16 for maps at 1:20,000 or so:
+
+For widths of roads and bridges, removed zoom stops above z=15.
+This should give us the same widths at zooms higher than that; we can
+fine-tune them as we progress to scales larger than 1:50,000.
+
+Made poi-scalerank4 visible from z=16 up.
+
+Changed size/color of labels at poi-scalerank4.
+
+Enabled poi-neighborhood for z=16 and up.
+
+Added contour lines at 10m intervals for z=16 and up; index lines at
+every 50 meters.
+
+Made place-neighborhood labels red; fixed their halo.
+
 ** 2016/Jun/29
 
 Made road-rail and road-rail-tracks narrower.
