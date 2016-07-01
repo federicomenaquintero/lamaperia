@@ -365,6 +365,7 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
+
 ** 2016/Jun/30
 
 Start tweaking z=16 for maps at 1:20,000 or so:
@@ -383,6 +384,10 @@ Added contour lines at 10m intervals for z=16 and up; index lines at
 every 50 meters.
 
 Made place-neighborhood labels red; fixed their halo.
+
+Made tertiary roads light yellow.
+
+Show road-label-large and road-label-medium for z=16 up; tweak colors/sizes.
 
 ** 2016/Jun/29
 
