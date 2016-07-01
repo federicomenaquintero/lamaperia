@@ -252,24 +252,48 @@ labeled at every 200 meters, to avoid clutter.
 I'm not very familiar with maps with Imperial units.  The following produces
 a map scale indicator with feet and miles, so that there are:
 
-* 10 small-divisions of 200 feet each, labeled as "2000 ft" and "0".
+* 4 small-divisions with ticks at 1000 feet each, labeled just as "4000 ft" and "0".
 
 * 3 large-divisions of 1 mile each, labeled as such.
 
 ```
-    "scale-small-divisions-interval-m" : 60.96,
-    "scale-num-small-divisions" : 10,
+    "scale-small-divisions-interval-m" : 304.8,
+    "scale-num-small-divisions" : 4,
 
     "scale-large-divisions-interval-m" : 1609.344,
     "scale-num-large-divisions" : 3,
 
     "scale-small-ticks-m" : [ 0, "0",
-                              609.6, "2000 ft" ],
+			      304.8, "",
+                              609.6, "",
+			      914.4, "",
+			      1219.2, "4000 ft" ],
 
     "scale-large-ticks-m" : [ 0, "0",
                               1609.344, "1",
                               3218.688, "2",
-                              4828.032, "3 miles" ],
+                              4828.032, "3 miles" ]
+```
+
+And the following produces small-divisions in quarter-mile increments, and large-divisions in 1 mile increments:
+
+```
+    "scale-small-divisions-interval-m" : 402.336,
+    "scale-num-small-divisions" : 4,
+
+    "scale-large-divisions-interval-m" : 1609.344,
+    "scale-num-large-divisions" : 3,
+
+    "scale-small-ticks-m" : [ 0, "0",
+			      402.336, "",
+			      804.672, "0.5",
+			      1207.008, "",
+			      1609.344, "1" ],
+
+    "scale-large-ticks-m" : [ 0, "0",
+                              1609.344, "1",
+                              3218.688, "2",
+                              4828.032, "3 miles" ]
 ```
 
 If you know a better way to provide a printed map scale for Imperial
