@@ -264,7 +264,7 @@ a map scale indicator with feet and miles, so that there are:
     "scale-num-large-divisions" : 3,
 
     "scale-small-ticks-m" : [ 0, "0",
-                              609.6, "2000 ft" ]
+                              609.6, "2000 ft" ],
 
     "scale-large-ticks-m" : [ 0, "0",
                               1609.344, "1",
