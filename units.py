@@ -38,9 +38,9 @@ def parse_units_str (str):
     return convert (v)
 
 def parse_units_value (value):
-    if type (value) == str:
+    if isinstance(value, str):
         return parse_units_str (value)
-    elif type (value) == float:
+    elif isinstance(value, float):
         return value
     else:
         raise ValueError ("value must be a float or a string")
