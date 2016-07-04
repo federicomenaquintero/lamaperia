@@ -47,9 +47,9 @@ def parse_degrees (value):
         return deg + decimals
 
 def parse_degrees_value (value):
-    if type (value) == str:
+    if isinstance(value, str):
         return parse_degrees (value)
-    elif type (value) == float:
+    elif isinstance(value, float):
         return value
     else:
         raise ValueError ("value must be a float or a string")
