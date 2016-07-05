@@ -24,11 +24,80 @@ style for rendering that your tile provider uses.
 Quick Start
 -----------
 
+You need to tell La Mapería how to download tiles, and how to render
+your map.  First you need a Mapbox account and a copy of the map style.
+
+### Create a Mapbox account if you don't have one
+
+If you don't have a Mapbox account, create one at 
+https://www.mapbox.com/studio/signup/
+
+### Create a copy of the map style
+
+Once you have your Mapbox account, go to
+https://www.mapbox.com/studio/ and click on the "New style button".
+In the window that appears, select "Upload a style".  Use the file
+`lamaperia/styles/mapbox-studio-cycle-topographic.json`.
+
+Once the style is uploaded, select it in Mapbox and then select the
+"Share, develop & use" option.  You will see something like
+
+```
+Develop with this style
+
+Style URL:     mapbox://styles/your_user_name/your_style_id
+Access token:  your_access_token
+```
+
+Copy those strings.  Now, you are ready to run La Mapería for the first time.
+
+### Configure La Mapería
+
+At first, just run `./lamaperia.py`.  It will ask you if you want to
+configure it, so say Y.  La Mapería puts its configuration file under
+the ~/.config/lamaperia directory.
+
+```
+$ ./lamaperia.py 
+La Mapería is not configured yet.
+Would you like to configure La Mapería right now? [Y/n] y
+```
+
+You will be asked if you want to use Tilestache, say N for now.  Later
+we will see how to set up a personal tile cache with Tilestache.  By
+saying N here, La Mapería will download tiles directly from Mapbox.
+
+```
+Use tilestache? [Y/n] n
+```
+
+You will be asked for your Mapbox access parameters.  Here you need to
+paste the strings that you got from the Mapbox web page.  Sorry,
+you'll have to take them apart by hand; the web page gives you a
+`mapbox://` URL and you have to extract your username and style ID
+from there.
+
+```
+mapbox access token: some_horribly_long_string
+mapbox username:     your_username
+mapbox style id:     some_not_so_long_string
+```
+
+Okay!  Now La Mapería complains mildly that you need to specify some
+arguments when calling it.  It complains a lot for a little script,
+doesn't it?
+
+```
+usage: lamaperia.py [-h] --config JSON-FILENAME --format STRING --output
+                    FILENAME
+lamaperia.py: error: the following arguments are required: --config, --format, --output
+```
+
+### For the impatient
+
 To create a map, you need to create a little configuration file that
 specifies how the map will look and which region it will show.  These
 configuration files are in JSON format.
-
-### For the impatient
 
 Here is a minimal configuration that will give you a map at 1:50,000
 scale for printing in US-letter paper.  That's the default paper size;
@@ -46,7 +115,7 @@ called `mymap.json`:
 Now, run this:
 
 ```
-python3 lamaperia.py --config mymap.json --format pdf --output mymap.pdf
+./lamaperia.py --config mymap.json --format pdf --output mymap.pdf
 ```
 
 If everything works well, you'll get a mymap.pdf with the area where I
@@ -55,6 +124,9 @@ like to ride my bike.
 Now you are ready to look at the `examples/` directory.  Most of the
 files there look the same, and they just change the paper size and the
 region to show in the map.
+
+Configuration for the Map
+-------------------------
 
 ### Choosing the Region to Show
 
