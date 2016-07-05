@@ -2,6 +2,7 @@ import os
 import json
 import unittest
 from unittest.mock import patch
+import config
 
 def question (string, default=None):
     """
@@ -39,7 +40,7 @@ def config_wizard ():
             'mapbox_style_id'     : question ('mapbox style id:'),
         }
 
-    json.dump (data, open (os.path.join (os.path.expanduser ("~"), '.mkmaprc'), 'w'))
+    json.dump (data, config.config_open_configuration_file_for_writing ())
 
     return data
 

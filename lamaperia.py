@@ -9,6 +9,7 @@ import argparse
 import math
 import cairo
 import json
+import config
 from units import *
 from parsedegrees import *
 import maplayout
@@ -63,18 +64,19 @@ def main (config_data):
     paper_renderer.render (args.format, args.output, chart_renderer)
 
 if __name__ == "__main__":
-    data_file = os.path.join (os.path.expanduser ("~"), '.mkmaprc')
     try:
-        mkmaprc = open (data_file)
+        config_data = config.config_load ()
     except IOError as e:
-        print("You don't have a config yet.")
-        answ = input("Create one? [Y/n] ").lower ()
-        if answ.startswith('y') or not answ:
+        print ("La Mapería is not configured yet.")
+        answ = input ("Would you like to configure La Mapería right now? [Y/n] ").lower ()
+        if answ.startswith ('y') or not answ:
             config_data = config_wizard ()
         else:
-            print("I really need a config file...")
-            exit(0)
-    else:
-        config_data = json.load (open (data_file))
+            print ("I'm not smart enough to work without a configuration.  Exiting...")
+            exit (1)
+    except ValueError as e:
+        print ("The configuration in {} is not valid: {}".format (config.config_get_configuration_filename (),
+                                                                  e.args[0]))
+        exit (1)
 
     main (config_data)
