@@ -1,5 +1,6 @@
 import math
 import cairo
+import json
 from tilecoords import *
 import tile_provider
 from units import *
@@ -136,7 +137,7 @@ class ChartGeometry:
 class TestChartGeometry (testutils.TestCaseHelper):
     def make_test_map_layout (self):
         layout = maplayout.MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
             {
                 "paper-width"  : "11 in",
                 "paper-height" : "8.5 in",
@@ -152,7 +153,7 @@ class TestChartGeometry (testutils.TestCaseHelper):
                 "map-to-left-margin" : "0.5 in",
                 "map-to-top-margin" : "0.375 in"
             }
-        """)
+        """))
 
         return layout
 

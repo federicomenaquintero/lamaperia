@@ -1,4 +1,5 @@
 import cairo
+import json
 import maplayout
 from units import *
 from cairoutils import *
@@ -140,7 +141,7 @@ if __name__ == "__main__":
     cr.scale (factor, factor)
 
     layout = maplayout.MapLayout ()
-    layout.parse_json ("""
+    layout.load_from_json (json.loads ("""
       { "scale-large-divisions-interval-m" : 1000,
         "scale-num-large-divisions" : 4,
 
@@ -156,7 +157,7 @@ if __name__ == "__main__":
                                   500, 500,
                                   1000, 1000 ]
       }
-    """)
+    """))
 
     scale_renderer = ScaleRenderer (layout)
     scale_renderer.render (cr, inch_to_mm (5.5), inch_to_mm (4))

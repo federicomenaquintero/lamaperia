@@ -47,7 +47,7 @@ def main ():
 
     json_config = args.config
     map_layout = maplayout.MapLayout ()
-    map_layout.parse_json (json_config)
+    map_layout.load_from_json (json_config)
 
     provider = tile_provider.MapboxTileProvider (mapbox_access_params["access_token"],
                                                  mapbox_access_params["username"],

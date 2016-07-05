@@ -1,3 +1,4 @@
+import json
 from parsedegrees import *
 from units import *
 import testutils
@@ -80,72 +81,72 @@ class MapLayout:
         if not (type (self.zoom) == int and self.zoom >= 0 and self.zoom <= 19):
             raise ValueError ("Zoom must be an integer in the range [0, 19]")
 
-    def parse_json (self, parsed):
-        if "draw-map-frame" in parsed:
-            self.draw_map_frame = parsed["draw-map-frame"]
+    def load_from_json (self, json_obj):
+        if "draw-map-frame" in json_obj:
+            self.draw_map_frame = json_obj["draw-map-frame"]
 
-        if "draw-ticks" in parsed:
-            self.draw_ticks = parsed["draw-ticks"]
+        if "draw-ticks" in json_obj:
+            self.draw_ticks = json_obj["draw-ticks"]
 
-        if "draw-map" in parsed:
-            self.draw_map = parsed["draw-map"]
+        if "draw-map" in json_obj:
+            self.draw_map = json_obj["draw-map"]
 
-        if "draw-scale" in parsed:
-            self.draw_scale = parsed["draw-scale"]
+        if "draw-scale" in json_obj:
+            self.draw_scale = json_obj["draw-scale"]
 
-        if "paper-width" in parsed:
-            self.paper_width_mm = parse_units_value (parsed["paper-width"])
+        if "paper-width" in json_obj:
+            self.paper_width_mm = parse_units_value (json_obj["paper-width"])
 
-        if "paper-height" in parsed:
-            self.paper_height_mm = parse_units_value (parsed["paper-height"])
+        if "paper-height" in json_obj:
+            self.paper_height_mm = parse_units_value (json_obj["paper-height"])
 
-        if "zoom" in parsed:
-            self.zoom = parsed["zoom"]
+        if "zoom" in json_obj:
+            self.zoom = json_obj["zoom"]
 
-        if "center-lon" in parsed:
-            self.center_lon = parse_degrees_value (parsed["center-lon"])
+        if "center-lon" in json_obj:
+            self.center_lon = parse_degrees_value (json_obj["center-lon"])
 
-        if "center-lat" in parsed:
-            self.center_lat = parse_degrees_value (parsed["center-lat"])
+        if "center-lat" in json_obj:
+            self.center_lat = parse_degrees_value (json_obj["center-lat"])
 
-        if "map-scale" in parsed:
-            self.map_scale_denom = parsed["map-scale"]
+        if "map-scale" in json_obj:
+            self.map_scale_denom = json_obj["map-scale"]
 
-        if "map-width" in parsed:
-            self.map_width_mm = parse_units_value (parsed["map-width"])
+        if "map-width" in json_obj:
+            self.map_width_mm = parse_units_value (json_obj["map-width"])
 
-        if "map-height" in parsed:
-            self.map_height_mm = parse_units_value (parsed["map-height"])
+        if "map-height" in json_obj:
+            self.map_height_mm = parse_units_value (json_obj["map-height"])
 
-        if "map-to-left-margin" in parsed:
-            self.map_to_left_margin_mm = parse_units_value (parsed["map-to-left-margin"])
+        if "map-to-left-margin" in json_obj:
+            self.map_to_left_margin_mm = parse_units_value (json_obj["map-to-left-margin"])
 
-        if "map-to-top-margin" in parsed:
-            self.map_to_top_margin_mm = parse_units_value (parsed["map-to-top-margin"])
+        if "map-to-top-margin" in json_obj:
+            self.map_to_top_margin_mm = parse_units_value (json_obj["map-to-top-margin"])
 
-        if "scale-xpos" in parsed:
-            self.scale_xpos_mm = parse_units_value (parsed["scale-xpos"])
+        if "scale-xpos" in json_obj:
+            self.scale_xpos_mm = parse_units_value (json_obj["scale-xpos"])
 
-        if "scale-ypos" in parsed:
-            self.scale_ypos_mm = parse_units_value (parsed["scale-ypos"])
+        if "scale-ypos" in json_obj:
+            self.scale_ypos_mm = parse_units_value (json_obj["scale-ypos"])
 
-        if "scale-large-divisions-interval-m" in parsed:
-            self.scale_large_divisions_interval_m = parsed["scale-large-divisions-interval-m"]
+        if "scale-large-divisions-interval-m" in json_obj:
+            self.scale_large_divisions_interval_m = json_obj["scale-large-divisions-interval-m"]
 
-        if "scale-num-large-divisions" in parsed:
-            self.scale_num_large_divisions = parsed["scale-num-large-divisions"]
+        if "scale-num-large-divisions" in json_obj:
+            self.scale_num_large_divisions = json_obj["scale-num-large-divisions"]
 
-        if "scale-small-divisions-interval-m" in parsed:
-            self.scale_small_divisions_interval_m = parsed["scale-small-divisions-interval-m"]
+        if "scale-small-divisions-interval-m" in json_obj:
+            self.scale_small_divisions_interval_m = json_obj["scale-small-divisions-interval-m"]
 
-        if "scale-num-small-divisions" in parsed:
-            self.scale_num_small_divisions = parsed["scale-num-small-divisions"]
+        if "scale-num-small-divisions" in json_obj:
+            self.scale_num_small_divisions = json_obj["scale-num-small-divisions"]
 
-        if "scale-large-ticks-m" in parsed:
-            self.scale_large_ticks_m = parsed["scale-large-ticks-m"]
+        if "scale-large-ticks-m" in json_obj:
+            self.scale_large_ticks_m = json_obj["scale-large-ticks-m"]
 
-        if "scale-small-ticks-m" in parsed:
-            self.scale_small_ticks_m = parsed["scale-small-ticks-m"]
+        if "scale-small-ticks-m" in json_obj:
+            self.scale_small_ticks_m = json_obj["scale-small-ticks-m"]
 
 #################### tests ####################
 
@@ -160,12 +161,12 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_what_to_render (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "draw-map-frame" : false,
             "draw-ticks"     : false,
             "draw-map"       : false,
             "draw-scale"     : false }
-        """)
+        """))
 
         self.assertEqual (layout.draw_map_frame, False)
         self.assertEqual (layout.draw_ticks, False)
@@ -187,7 +188,7 @@ class TestMapLayout (testutils.TestCaseHelper):
 """
 
         layout = MapLayout ()
-        layout.parse_json (paper_size_numeric)
+        layout.load_from_json (json.loads (paper_size_numeric))
 
         self.assertFloatEquals (layout.paper_width_mm, 50.8)
         self.assertFloatEquals (layout.paper_height_mm, 25.4)
@@ -201,7 +202,7 @@ class TestMapLayout (testutils.TestCaseHelper):
 """
 
         layout = MapLayout ()
-        layout.parse_json (paper_size_numeric)
+        layout.load_from_json (json.loads (paper_size_numeric))
 
         self.assertFloatEquals (layout.paper_width_mm, inch_to_mm (11))
         self.assertFloatEquals (layout.paper_height_mm, inch_to_mm (8.5))
@@ -213,27 +214,27 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_zoom (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "zoom" : 15 }
-        """)
+        """))
 
         self.assertEqual (layout.zoom, 15)
 
     def test_map_layout_parses_center_lon_and_lat (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "center-lat" : "19d27m43s",
             "center-lon" : -96.9040473 }
-        """)
+        """))
 
         self.assertFloatEquals (layout.center_lat, parse_degrees ("19d27m43s"))
         self.assertFloatEquals (layout.center_lon, -96.9040473)
 
     def test_map_layout_parses_map_scale (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "map-scale" : 50000 }
-        """)
+        """))
 
         self.assertFloatEquals (layout.map_scale_denom, 50000)
 
@@ -250,10 +251,10 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_map_width_and_height (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "map-width" : "100 mm",
             "map-height" : "200 mm" }
-        """)
+        """))
 
         self.assertFloatEquals (layout.map_width_mm, 100)
         self.assertFloatEquals (layout.map_height_mm, 200)
@@ -265,10 +266,10 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_map_to_top_left_margin (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "map-to-left-margin" : "100 mm",
             "map-to-top-margin" : "200 mm" }
-        """)
+        """))
 
         self.assertFloatEquals (layout.map_to_left_margin_mm, 100)
         self.assertFloatEquals (layout.map_to_top_margin_mm, 200)
@@ -280,10 +281,10 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_scale_position (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "scale-xpos" : "100 mm",
             "scale-ypos" : "200 mm" }
-        """)
+        """))
 
         self.assertFloatEquals (layout.scale_xpos_mm, 100)
         self.assertFloatEquals (layout.scale_ypos_mm, 200)
@@ -309,7 +310,7 @@ class TestMapLayout (testutils.TestCaseHelper):
 
     def test_map_layout_parses_scale_parameters (self):
         layout = MapLayout ()
-        layout.parse_json ("""
+        layout.load_from_json (json.loads ("""
           { "scale-large-divisions-interval-m" : 1000,
             "scale-num-large-divisions" : 4,
 
@@ -325,7 +326,7 @@ class TestMapLayout (testutils.TestCaseHelper):
                                       500, 500,
                                       1000, 1000 ]
           }
-        """)
+        """))
 
         self.assertEqual (layout.scale_large_divisions_interval_m, 1000)
         self.assertEqual (layout.scale_num_large_divisions, 4)
