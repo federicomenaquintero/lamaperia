@@ -45,9 +45,9 @@ def main (config_data):
     map_layout = maplayout.MapLayout ()
     map_layout.load_from_json (json_config)
 
-    provider_classname = '{}TileProvider'.format (config_data['provider'].capitalize())
-    provider_class = getattr(tile_provider, provider_classname)
-    provider = provider_class(config_data)
+    provider_classname = '{}TileProvider'.format (config_data['provider'])
+    provider_class = getattr (tile_provider, provider_classname)
+    provider = provider_class (config_data)
 
     geometry = chartgeometry.ChartGeometry (map_layout, provider)
 

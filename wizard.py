@@ -28,13 +28,13 @@ def config_wizard ():
     """
     if question ('Use tilestache?'):
         data = {
-            'provider'        : 'tilestache',
+            'provider'        : 'Tilestache',
             'tilestache_host' : question ('tilestache host:', '127.0.0.1'),
             'tilestache_port' : question ('tilestache port:', '8080'),
         }
     else:
         data = {
-            'provider'            : 'mapbox',
+            'provider'            : 'Mapbox',
             'mapbox_access_token' : question ('mapbox access token:'),
             'mapbox_username'     : question ('mapbox username:'),
             'mapbox_style_id'     : question ('mapbox style id:'),
