@@ -366,6 +366,22 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
 
+** 2016/Jul/07
+Made road-label* for streets bigger at z=17
+
+Removed icons for poi-parks-scalerank3 at z=16 and below; left them
+in for z=17.  Arranged the text alignment correspondingly.
+
+Same for poi-scalerank3.
+
+Changed line widths (same for bridges):
+
+road-motorway / road-trunk / road-primary: 24 -> 16
+road-secondary : 16 -> 12
+road-tertiary: 12 -> 10
+
+road-motorway-case / road : 6 -> 4
+
 ** 2016/Jun/30
 
 Start tweaking z=16 for maps at 1:20,000 or so:
