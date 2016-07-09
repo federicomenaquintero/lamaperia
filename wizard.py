@@ -35,9 +35,9 @@ def config_wizard ():
     else:
         data = {
             'provider'            : 'Mapbox',
-            'mapbox_access_token' : question ('mapbox access token:'),
-            'mapbox_username'     : question ('mapbox username:'),
-            'mapbox_style_id'     : question ('mapbox style id:'),
+            'mapbox_access_token' : question ('mapbox access token:', 'pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ'),
+            'mapbox_username'     : question ('mapbox username:', 'federicomenaquintero'),
+            'mapbox_style_id'     : question ('mapbox style id:', 'cil44s8ep000c9jm18x074iwv'),
         }
 
     json.dump (data, config.config_open_configuration_file_for_writing ())
