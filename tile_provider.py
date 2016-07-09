@@ -54,7 +54,7 @@ class MapboxTileProvider (TileProvider):
     def get_tile_size (self):
         return 512
 
-class TilestacheTileProvider (MapboxTileProvider):
+class TileStacheTileProvider (MapboxTileProvider):
 
     def get_uri_for_tile (self, z, x, y):
         uri = "http://{host}:{port}/fmq-mapbox/{z}/{x}/{y}.png".format (

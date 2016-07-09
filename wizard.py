@@ -26,9 +26,9 @@ def config_wizard ():
     """
     Ensures the existence of .mkmaprc
     """
-    if question ('Use tilestache?'):
+    if question ('Use TileStache?'):
         data = {
-            'provider'        : 'Tilestache',
+            'provider'        : 'TileStache',
             'tilestache_host' : question ('tilestache host:', '127.0.0.1'),
             'tilestache_port' : question ('tilestache port:', '8080'),
         }
