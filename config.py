@@ -9,7 +9,7 @@ def config_get_configuration_filename ():
     return os.path.join (config_get_configuration_path (), "config.json")
 
 def config_open_configuration_file_for_writing ():
-    os.makedirs (config_get_configuration_path ())
+    os.makedirs (config_get_configuration_path (), exist_ok = True)
     return open (config_get_configuration_filename (), 'w')
 
 def config_load ():
