@@ -21,37 +21,30 @@ zoom").  The amount of detail in the resulting maps depends on the
 OpenStreetMap zoom level that you choose, and of course, on the actual
 style for rendering that your tile provider uses.
 
+Requirements
+------------
+
+You need these packages:
+
+* python3
+
+* python3-requests
+
+* python3-gobject
+
+* python3-cairo
+
+* python3-pyproj
+
+* pango
+
 Quick Start
 -----------
 
 You need to tell La Mapería how to download tiles, and how to render
-your map.  First you need a Mapbox account and a copy of the map style.
+your map.
 
-### Create a Mapbox account if you don't have one
-
-If you don't have a Mapbox account, create one at 
-https://www.mapbox.com/studio/signup/
-
-### Create a copy of the map style
-
-Once you have your Mapbox account, go to
-https://www.mapbox.com/studio/ and click on the "New style button".
-In the window that appears, select "Upload a style".  Use the file
-`lamaperia/styles/mapbox-studio-cycle-topographic.json`.
-
-Once the style is uploaded, select it in Mapbox and then select the
-"Share, develop & use" option.  You will see something like
-
-```
-Develop with this style
-
-Style URL:     mapbox://styles/your_user_name/your_style_id
-Access token:  your_access_token
-```
-
-Copy those strings.  Now, you are ready to run La Mapería for the first time.
-
-### Configure La Mapería
+### Using my Mapbox style
 
 At first, just run `./lamaperia.py`.  It will ask you if you want to
 configure it, so say Y.  La Mapería puts its configuration file under
@@ -63,25 +56,28 @@ La Mapería is not configured yet.
 Would you like to configure La Mapería right now? [Y/n] y
 ```
 
-You will be asked if you want to use Tilestache, say N for now.  Later
-we will see how to set up a personal tile cache with Tilestache.  By
+You will be asked if you want to use TileStache, say N for now.  Later
+we will see how to set up a personal tile cache with TileStache.  By
 saying N here, La Mapería will download tiles directly from Mapbox.
 
 ```
-Use tilestache? [Y/n] n
+Use TileStache? [Y/n] n
 ```
 
-You will be asked for your Mapbox access parameters.  Here you need to
-paste the strings that you got from the Mapbox web page.  Sorry,
-you'll have to take them apart by hand; the web page gives you a
-`mapbox://` URL and you have to extract your username and style ID
-from there.
+You will be asked for Mapbox access parameters.  At first you can
+start using my public, printable style.  Later, if you have Mapbox
+styles of your own, you can use them, too.
 
 ```
-mapbox access token: some_horribly_long_string
-mapbox username:     your_username
-mapbox style id:     some_not_so_long_string
+mapbox access token: [pk.eyJ1IjoiZmVkZXJpY29tZW5hcXVpbnRlcm8iLCJhIjoiUEZBcTFXQSJ9.o19HFGnk0t3FgitV7wMZfQ]
+mapbox username: [federicomenaquintero]
+mapbox style id: [cil44s8ep000c9jm18x074iwv]
 ```
+
+Just hit Enter after each of those questions, and they will use the
+default values with my printable style.
+
+### Configure La Mapería
 
 Okay!  Now La Mapería complains mildly that you need to specify some
 arguments when calling it.  It complains a lot for a little script,
@@ -371,6 +367,89 @@ And the following produces small-divisions in quarter-mile increments, and large
 If you know a better way to provide a printed map scale for Imperial
 maps, I'd love to know about it!
 
+Choosing a tile provider
+------------------------
+
+You can make La Mapería download tiles directly from Mapbox, or
+preferably, you'll set up a TileStache cache to make downloading
+faster if you regenerate similar map areas frequently.
+
+### Using an arbitrary Mapbox style
+
+If you don't have a Mapbox account, create one at 
+https://www.mapbox.com/studio/signup/
+
+Once you have a Mapbox Studio account and some styles in it, you can
+select a style in Mapbox and then select the "Share, develop & use"
+option.  You will see something like
+
+```
+Develop with this style
+
+Style URL:     mapbox://styles/your_user_name/your_style_id
+Access token:  your_access_token
+```
+
+Copy those strings.
+
+You will have to delete ~/.config/lamaperia/config.json and start
+`./lamaperia.py` like the first time you ran it.  Then you can paste
+the strings from your Mapbox style into the configuration questions.
+
+### Setting up a TileStache cache
+
+TileStache (http://tilestache.org/) is a caching mechanism for
+arbitrary sources of map tiles.  It runs on Python 2.
+
+Download TileStache.  You don't need to install it; you can use it
+with an example configuration file provided with La Mapería.
+
+Go to `lamaperia/tilestache` and edit the tilestache-mapbox.cfg file
+there.  Change this line:
+
+```
+    "path": "/home/federico/.cache/tilestache",
+```
+
+to something that makes sense for your machine.
+
+Now, go to your downloaded `TileStache/scripts` directory and run
+
+```
+python tilestache-server.py --config=~/src/lamaperia/tilestache/tilestache-mapbox.cfg
+```
+
+using the correct configuration filename from your source directory
+for La Mapería.
+
+This will run the TileStache server with the same access parameters
+for Mapbox that La Mapería uses by default (i.e. my printable map
+style).
+
+Now, delete your ~/.config/lamaperia/config.json and run
+`./lamaperia.py` like the first time you ran it.  Say Y when asked if
+you want to use TileStache.  The default URL and port for the
+TileStache server should work.
+
+The first time you generate a map, TileStache will download the
+appropriate tiles.  If you regenerate that map, or make another map
+that shares tiles with that first one, only the missing tiles will be
+downloaded.  Magic!
+
+If you need to discard part of the TileStache cache, for example, if you
+modified data in OpenStreetMap, you can run
+
+```
+   cd ~/src/TileStache/scripts
+   python tilestache-clean.py --layer=fmq-mapbox --bbox=19.5526 -96.917263 19.621099 -96.860778 --config=~/src/lamaperia/tilestache/tilestache-mapbox.cfg 14 15 16
+```
+
+The `--bbox` argument is the bounding box to discard in the cache.  La
+Mapería prints the generated bounds of a map when you run it, so you
+can just cut and paste those values there.
+
+The last arguments (`14 15 16`) are the zoom levels to discard.  These
+correspond to the zoom levels from your JSON map files for La Mapería.
 
 Feedback
 --------
