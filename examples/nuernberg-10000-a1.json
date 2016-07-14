@@ -1,0 +1,18 @@
+{
+    "paper-width"  : "841 mm",
+    "paper-height" : "594 mm",
+
+    "zoom" : 17,
+
+    "center-lat" : "49d27m",
+    "center-lon" : "11d3m21s",
+    "map-scale"  : 10000,
+
+    "map-width"  : "791 mm",
+    "map-height" : "544 mm",
+    "map-to-left-margin" : "25 mm",
+    "map-to-top-margin" : "25 mm",
+
+    "scale-xpos" : "420.5 mm",
+    "scale-ypos" : "579 mm"
+}
