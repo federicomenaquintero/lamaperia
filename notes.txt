@@ -138,6 +138,12 @@ for x in `seq 7565 7568`; do for y in `seq 14576 14579`; do curl "https://api.ma
 
 * Elevation profiles
 
+** Mapzen stuff:
+
+https://mapzen.com/blog/sphere-maps/
+https://mapzen.com/blog/mapping-mountains/
+
+** Graphhopper for elevations along routes
 https://graphhopper.com/api/1/docs/routing/
 
 Use that one a one-time basis; it is limited access.
