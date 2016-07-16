@@ -372,6 +372,16 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
 
+** 2016/Jul/16
+
+Made road-street and corresponding bridge-* narrower for z=15 and z=16.
+
+Tweaked label positioning for those roads at those zooms.
+
+Removed icons from mountain-peak-label for now.
+
+Enabled road-label-large for major roads at z=15.
+
 ** 2016/Jul/07
 Made road-label* for streets bigger at z=17
 
