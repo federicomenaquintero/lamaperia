@@ -67,11 +67,11 @@ class FrameRenderer:
         bottom_bound_1 = map_layout.map_to_top_margin_mm + map_layout.map_height_mm
         bottom_bound_2 = map_layout.map_to_top_margin_mm + map_layout.map_height_mm + self.frame_width_mm
 
-        self.paint_horizontal_arc_minutes (cr, top_bound_1, top_bound_2, upper_left_coords[0], upper_left_coords[1], lower_right_coords[1], 1, True)
-        self.paint_horizontal_arc_minutes (cr, bottom_bound_1, bottom_bound_2, lower_right_coords[0], upper_left_coords[1], lower_right_coords[1], 1, False)
+        self.paint_arc_minutes (cr, top_bound_1, top_bound_2, upper_left_coords[0], upper_left_coords[1], lower_right_coords[1], 1, True, True)
+        self.paint_arc_minutes (cr, bottom_bound_1, bottom_bound_2, lower_right_coords[0], upper_left_coords[1], lower_right_coords[1], 1, True, False)
 
-        self.paint_vertical_arc_minutes (cr, left_bound_1, left_bound_2, upper_left_coords[1], upper_left_coords[0], lower_right_coords[0], 1, True)
-        self.paint_vertical_arc_minutes (cr, right_bound_1, right_bound_2, lower_right_coords[1], upper_left_coords[0], lower_right_coords[0], 1, False)
+        self.paint_arc_minutes (cr, left_bound_1, left_bound_2, upper_left_coords[1], upper_left_coords[0], lower_right_coords[0], 1, False, True)
+        self.paint_arc_minutes (cr, right_bound_1, right_bound_2, lower_right_coords[1], upper_left_coords[0], lower_right_coords[0], 1, False, False)
 
     # Creates an array of values:
     #   [ start_coord, x1, x2, x3, ..., end_coord ]
@@ -97,75 +97,68 @@ class FrameRenderer:
 
         return ticks
 
-    def paint_horizontal_arc_minutes (self, cr, top_mm, bottom_mm, lat, left_lon, right_lon, every_arc_minutes, labels_above):
-        ticks = self.generate_ticks (left_lon, right_lon, every_arc_minutes)
+    def paint_arc_minutes (self, cr, bound1_mm, bound2_mm, along_edge_coord, start_coord, end_coord, every_arc_minutes, is_horizontal, labels_above):
+        start = min (start_coord, end_coord)
+        end = max (start_coord, end_coord)
+
+        ticks = self.generate_ticks (start, end, every_arc_minutes)
         ticks_mm = []
 
         for i in range (len (ticks)):
-            lon = ticks[i]
-            (mm, dummy) = self.geometry.transform_lat_lon_to_page_mm (lat, lon)
+            c = ticks[i]
+            if is_horizontal:
+                (mm, dummy) = self.geometry.transform_lat_lon_to_page_mm (along_edge_coord, c)
+            else:
+                (dummy, mm) = self.geometry.transform_lat_lon_to_page_mm (c, along_edge_coord)
+
             ticks_mm.append (mm)
 
         for i in range (len (ticks_mm) - 1):
-            left = ticks_mm[i]
-            right = ticks_mm[i + 1]
+            start = ticks_mm[i]
+            end   = ticks_mm[i + 1]
 
             if i % 2 == 0:
-                cr.rectangle (left, top_mm, right - left, bottom_mm - top_mm)
+                if is_horizontal:
+                    x = start
+                    y = bound1_mm
+                    w = end - start
+                    h = bound2_mm - bound1_mm
+                    cr.rectangle (start, bound1_mm, end - start, bound2_mm - bound1_mm)
+                else:
+                    x = bound1_mm
+                    y = start
+                    w = bound2_mm - bound1_mm
+                    h = end - start
+                    cr.rectangle (bound1_mm, start, bound2_mm - bound1_mm, end - start)
+
+
+                cr.rectangle (x, y, w, h)
                 cr.fill ()
 
         if labels_above:
-            y = top_mm
-            anchor = "s"
+            fixed_anchor_coord = bound1_mm
+            if is_horizontal:
+                anchor = "s"
+            else:
+                anchor = "e"
         else:
-            y = bottom_mm
-            anchor = "n"
+            fixed_anchor_coord = bound2_mm
+            if is_horizontal:
+                anchor = "n"
+            else:
+                anchor = "w"
 
         fd = Pango.font_description_from_string ("Luxi Serif 6")
 
         for i in range (len (ticks_mm)):
-            lon = ticks[i]
-            if fmod_positive (degrees_to_arc_minutes (lon), every_arc_minutes) < 0.000001:
-                x = ticks_mm[i]
-                (minutes, degrees) = math.modf (lon)
+            c = ticks[i]
+            if fmod_positive (degrees_to_arc_minutes (c), every_arc_minutes) < 0.000001:
+                mm = ticks_mm[i]
+                (minutes, degrees) = math.modf (c)
                 minutes = int (math.fabs (minutes) * 60 + 0.5)
                 degrees = int (degrees)
                 if minutes % 5 == 0:
-                    render_text (cr, x, y, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
-
-    def paint_vertical_arc_minutes (self, cr, left_mm, right_mm, lon, top_lat, bottom_lat, every_arc_minutes, labels_left):
-        ticks = self.generate_ticks (bottom_lat, top_lat, every_arc_minutes)
-        ticks.reverse ()
-        ticks_mm = []
-
-        for i in range (len (ticks)):
-            lat = ticks[i]
-            (dummy, mm) = self.geometry.transform_lat_lon_to_page_mm (lat, lon)
-            ticks_mm.append (mm)
-
-        for i in range (len (ticks_mm) - 1):
-            top = ticks_mm[i]
-            bottom = ticks_mm[i + 1]
-
-            if i % 2 == 0:
-                cr.rectangle (left_mm, top, right_mm - left_mm, bottom - top)
-                cr.fill ()
-
-        if labels_left:
-            x = left_mm
-            anchor = "e"
-        else:
-            x = right_mm
-            anchor = "w"
-
-        fd = Pango.font_description_from_string ("Luxi Serif 6")
-
-        for i in range (len (ticks_mm)):
-            lat = ticks[i]
-            if fmod_positive (degrees_to_arc_minutes (lat), every_arc_minutes) < 0.000001:
-                y = ticks_mm[i]
-                (minutes, degrees) = math.modf (lat)
-                minutes = int (math.fabs (minutes) * 60 + 0.5)
-                degrees = int (degrees)
-                if minutes % 5 == 0:
-                    render_text (cr, x, y, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
+                    if is_horizontal:
+                        render_text (cr, mm, fixed_anchor_coord, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
+                    else:
+                        render_text (cr, fixed_anchor_coord, mm, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
