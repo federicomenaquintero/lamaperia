@@ -372,6 +372,11 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
 
+** 2016/Jul/18
+
+Added road widths for z=14, so we can have 1:100,000 maps.
+Modified all tunnels for consistency; they should be usable now.
+
 ** 2016/Jul/16
 
 Made road-street and corresponding bridge-* narrower for z=15 and z=16.
