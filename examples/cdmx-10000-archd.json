@@ -1,0 +1,36 @@
+{
+    "paper-width"  : "36 in",
+    "paper-height" : "24 in",
+
+    "zoom" : 17,
+
+    "center-lat" : "19.4326",
+    "center-lon" : "-99.1325",
+    "map-scale"  : 10000,
+
+    "map-width"  : "35 in",
+    "map-height" : "22.5 in",
+    "map-to-left-margin" : "0.5 in",
+    "map-to-top-margin" : "0.5 in",
+
+    "scale-xpos" : "18 in",
+    "scale-ypos" : "23.5 in",
+
+    "scale-large-divisions-interval-m" : 500,
+    "scale-num-large-divisions" : 8,
+
+    "scale-small-divisions-interval-m" : 100,
+    "scale-num-small-divisions" : 10,
+
+    "scale-large-ticks-m" : [ 0, "0",
+                              1000, "1000",
+			      2000, "2000",
+			      3000, "3000",
+			      4000, "4000 m" ],
+    "scale-small-ticks-m" : [ 0, "0 m",
+                              200, "200",
+                              400, "400",
+			      600, "600",
+			      800, "800",
+			      1000, "1000"]
+}
