@@ -147,15 +147,14 @@ class FrameRenderer:
 
         fd = Pango.font_description_from_string ("Luxi Serif 6")
 
-        for i in range (len (ticks_mm)):
+        for i in range (1, len (ticks_mm) - 1):
             c = ticks[i]
-            if fmod_positive (degrees_to_arc_minutes (c), every_arc_minutes) < 0.000001:
-                mm = ticks_mm[i]
-                (minutes, degrees) = math.modf (c)
-                minutes = int (math.fabs (minutes) * 60 + 0.5)
-                degrees = int (degrees)
-                if minutes % 5 == 0:
-                    if is_horizontal:
-                        render_text (cr, mm, fixed_anchor_coord, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
-                    else:
-                        render_text (cr, fixed_anchor_coord, mm, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
+            mm = ticks_mm[i]
+            (minutes, degrees) = math.modf (c)
+            minutes = int (math.fabs (minutes) * 60 + 0.5)
+            degrees = int (degrees)
+            if minutes % 1 == 0:
+                if is_horizontal:
+                    render_text (cr, mm, fixed_anchor_coord, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
+                else:
+                    render_text (cr, fixed_anchor_coord, mm, anchor, fd, "{0}°{1:02d}'".format (degrees, minutes))
