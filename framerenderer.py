@@ -123,14 +123,11 @@ class FrameRenderer:
                     y = bound1_mm
                     w = end - start
                     h = bound2_mm - bound1_mm
-                    cr.rectangle (start, bound1_mm, end - start, bound2_mm - bound1_mm)
                 else:
                     x = bound1_mm
                     y = start
                     w = bound2_mm - bound1_mm
                     h = end - start
-                    cr.rectangle (bound1_mm, start, bound2_mm - bound1_mm, end - start)
-
 
                 cr.rectangle (x, y, w, h)
                 cr.fill ()
