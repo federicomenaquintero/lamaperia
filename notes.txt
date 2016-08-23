@@ -358,6 +358,11 @@ La Trinitaria
 
 ** Pending
 
+See z=16 around Los Lagos - bridges need tweaking.  Bridges for paths
+need white background.
+
+Remove outer casing in bridges?  Look at Fahrradplan...
+
 Copy the widths to tunnels, as you did for bridges.
 Should tunnels be gray?  Or dashed?
 
