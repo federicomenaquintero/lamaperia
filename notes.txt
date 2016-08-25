@@ -358,10 +358,10 @@ La Trinitaria
 
 ** Pending
 
-See z=16 around Los Lagos - bridges need tweaking.  Bridges for paths
-need white background.
+Specialize road-path for steps; make *that* one dashed.  See
+Fußweg/Treppe "Rad verboten" in Fahrradplan.
 
-Remove outer casing in bridges?  Look at Fahrradplan...
+Copy poi-scalerank3 style to poi-scalerank2 and above (remove halo, etc.)
 
 Copy the widths to tunnels, as you did for bridges.
 Should tunnels be gray?  Or dashed?
@@ -376,6 +376,25 @@ Make proper icons for the wayside-shrine and wayside-cross layers.
 
 Research http://www.gdal.org/ - geospatial data abstraction library 
 
+
+** 2016/Aug/25
+
+Made road labels smaller; road-label-large Regular, not Bold.
+
+Made poi-scalerank3 and poi-parks-scalerank3 smaller, removed halo.
+
+Made neighborhood labels smaller, no halo.
+
+Made water labels smaller, no halo.
+
+** 2016/Aug/23
+
+Hid the bridge layers.  We'll show roads as they are over water; it
+is not really necessary to show bridge markings.
+
+Added road-footway and road-footway-case, to differentiate from
+road-path.  Tweaked road-pedestrian-area and road-pedestrian-area-case
+accordingly.
 
 ** 2016/Jul/18
 
