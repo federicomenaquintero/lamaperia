@@ -35,7 +35,7 @@ class ScaleRenderer:
         self.rule_width_mm = 2.0
         self.tick_length_mm = 0.5
 
-        self.font_description_str = "Luxi Serif 6"
+        self.font_description_str = "Luxi Sans 4"
         self.font_description = Pango.font_description_from_string (self.font_description_str)
 
     def render_alternate_divisions (self, cr, num_divisions, left, top, division_length, division_height):
@@ -162,6 +162,6 @@ if __name__ == "__main__":
     scale_renderer = ScaleRenderer (layout)
     scale_renderer.render (cr, inch_to_mm (5.5), inch_to_mm (4))
 
-    font_desc = Pango.font_description_from_string ("Luxi Serif 6")
+    font_desc = Pango.font_description_from_string ("Luxi Sans 4")
 
     render_text (cr, inch_to_mm (5.5), inch_to_mm (4), "s", font_desc, "Hola mundo")

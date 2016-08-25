@@ -145,7 +145,7 @@ class FrameRenderer:
             else:
                 anchor = "w"
 
-        fd = Pango.font_description_from_string ("Luxi Serif 6")
+        fd = Pango.font_description_from_string ("Luxi Sans 4")
 
         for i in range (1, len (ticks_mm) - 1):
             c = ticks[i]

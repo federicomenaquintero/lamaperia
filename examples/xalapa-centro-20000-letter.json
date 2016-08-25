@@ -11,10 +11,10 @@
     "map-width"  : "10 in",
     "map-height" : "7.375 in",
     "map-to-left-margin" : "0.5 in",
-    "map-to-top-margin" : "0.375 in",
+    "map-to-top-margin" : "0.4 in",
 
     "scale-xpos" : "5.5 in",
-    "scale-ypos" : "8.125 in",
+    "scale-ypos" : "8.05 in",
 
     "scale-large-divisions-interval-m" : 500,
     "scale-num-large-divisions" : 3,
